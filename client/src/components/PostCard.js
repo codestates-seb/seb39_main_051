@@ -1,0 +1,84 @@
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+
+const PostCard = (props) => {
+  const themeState = useSelector((state) => state.themeSlice).theme;
+  return (
+    <PostCardLayout themeState={themeState}>
+      <PostCardWrapper>
+        <PostCardTitle>{props.title}</PostCardTitle>
+        <PostCardInfo>
+          <CategoryWrapper>{props.category}</CategoryWrapper>
+          <WriterCreatedAt>
+            <div>❤️ {props.likes}</div>
+            <div>{props.writer}</div>
+            <div>{props.createdAt}</div>
+          </WriterCreatedAt>
+        </PostCardInfo>
+      </PostCardWrapper>
+    </PostCardLayout>
+  );
+};
+const PostCardLayout = styled.div`
+  font-size: 2rem;
+  border-bottom: 1px solid #8d8d8d;
+  background-color: ${(props) =>
+    props.themeState === 'light' ? '#FFE57A' : '#393939'};
+  padding: 0.3rem 0;
+  width: 80rem;
+  padding: 1rem;
+  @media screen and (max-width: 767px) {
+    width: 70rem;
+    height: 10rem;
+  }
+`;
+const PostCardWrapper = styled.div`
+  display: flex;
+  @media screen and (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+`;
+const PostCardTitle = styled.a`
+  flex: 4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media screen and (max-width: 767px) {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    flex: 9;
+  }
+`;
+
+const PostCardInfo = styled.div`
+  display: flex;
+  font-weight: bold;
+  @media screen and (max-width: 767px) {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
+const WriterCreatedAt = styled.div`
+  display: flex;
+  div {
+    margin: 0 1rem;
+  }
+`;
+
+const CategoryWrapper = styled.div`
+  margin: 0 1rem;
+  @media screen and (max-width: 767px) {
+    margin: 0;
+  }
+`;
+
+
+
+export default PostCard;
