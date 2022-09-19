@@ -15,4 +15,3 @@ public class AnswerDTO {
         int size;
         String category;
     }
-}
