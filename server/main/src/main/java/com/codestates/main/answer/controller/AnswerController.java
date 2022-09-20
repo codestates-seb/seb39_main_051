@@ -17,6 +17,7 @@ public class AnswerController {
     }
 
     @GetMapping("/b")
+    @GetMapping
     public String getAnswer(){
         return "answer";
     }
