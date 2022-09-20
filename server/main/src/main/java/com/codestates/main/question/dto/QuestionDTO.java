@@ -1,11 +1,11 @@
-package com.codestates.main.answer.dto;
+package com.codestates.main.question.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public class AnswerDTO {
+public class QuestionDTO {
     @Getter
     @Setter
     @AllArgsConstructor
