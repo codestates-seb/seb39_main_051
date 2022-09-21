@@ -10,15 +10,19 @@ export const GlobalStyle = createGlobalStyle`
         --color-gray : #393939;
         --color-dark-bg-color : #2D2D2D;
         --color-navy : #13264E;
+        --color-white : #FFFFFF;
+        --color-black : #000000;
     }
     html {
-        font-size:62.5%;
+        font-size: 62.5%;
     }
     * {
         box-sizing: border-box;
     }
     body{
-    background: ${({ theme }) => theme.bgColor};
-    color: ${({ theme }) => theme.textColor};
+        width: 100vw;
+        height: 100vh;
+        background: ${({ theme }) => theme.bgColor};
+        color: ${({ theme }) => theme.textColor};
     }
 `;

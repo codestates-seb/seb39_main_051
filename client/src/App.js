@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Router from './Router';
 import { GlobalStyle } from './styles/GlobalStyle';
 import { useSelector } from 'react-redux';
-import { darkTheme, lightTheme } from './components/NavigationBar';
+import { darkTheme, lightTheme } from './styles/theme';
 
 function App() {
   const state = useSelector((state) => state.themeSlice);
