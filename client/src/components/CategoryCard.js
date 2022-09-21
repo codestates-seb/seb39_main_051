@@ -3,10 +3,9 @@ import SubscribeMark from "../assets/SubscribeMark";
 import {
     faReact,
     faJava,
-    faPython,
     faSquareJs,
 }from'@fortawesome/free-brands-svg-icons';
-import {faWindowMaximize, faNetworkWired,faLightbulb, faDatabase} from '@fortawesome/free-solid-svg-icons'
+import {faNetworkWired,faLightbulb, faDatabase, faLeaf, faFolderTree} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 
@@ -14,30 +13,29 @@ import { useSelector } from 'react-redux';
 const CategoryCard = (props) => {
     const themeState = useSelector((state) => state.themeSlice).theme
     let content = null
-    // <FontAwesomeIcon icon={faJava} />
     switch (props.name){
-        case 'React':
+        case '리액트':
             content = <FontAwesomeIcon icon={faReact} size='2x' />
             break
-        case 'JavaScript':
+        case '자바스크립트':
             content = <FontAwesomeIcon icon={faSquareJs} size='2x' />
             break
-        case 'Java':
+        case '자바':
             content = <FontAwesomeIcon icon={faJava} size='2x' />
             break
-        case 'Python':
-                content = <FontAwesomeIcon icon={faPython} size='2x' />
+        case '스프링':
+                content = <FontAwesomeIcon icon={faLeaf} size='2x' />
                 break
-        case 'Browser':
-                content = <FontAwesomeIcon icon={faWindowMaximize} size='2x' />
+        case '자료구조':
+                content = <FontAwesomeIcon icon={faFolderTree} size='2x' />
                 break
-        case 'Algorithm':
+        case '알고리즘':
                 content = <FontAwesomeIcon icon={faLightbulb} size='2x' />
                 break
-        case 'Databse':
+        case '데이터베이스':
                 content = <FontAwesomeIcon icon={faDatabase} size='2x'/>
                 break
-        case 'Network':
+        case '네트워크':
                 content = <FontAwesomeIcon icon={faNetworkWired} size='2x'/>
                 break
     }
@@ -86,12 +84,12 @@ const CategoryCardWrapper = styled.div`
     min-width: 18.5rem;
     height: 7.5rem;
     cursor: pointer;
-    background-color :  ${(props) => props.themeState==='light' ? '#FEDD89': '#000000'};
+    background-color :  ${(props) => props.themeState==='light' ? 'var(--color-yellow)': 'var(--color-black)'};
     #subscribe-mobile{
         display:none
     }
     :hover{
-        background-color :  ${(props) => props.themeState==='light' ? '#FFE57A': '#13264E'};
+        background-color :  ${(props) => props.themeState==='light' ? '#FFE57A': 'var(--color-navy)'};
     }
     border-radius:1.5rem;
     #name {

@@ -20,15 +20,15 @@ const PostCard = (props) => {
   );
 };
 const PostCardLayout = styled.div`
-  font-size: 2rem;
+  font-size: 1.3rem;
   border-bottom: 1px solid #8d8d8d;
   background-color: ${(props) =>
-    props.themeState === 'light' ? '#FFE57A' : '#393939'};
+    props.themeState === 'light' ? '#FFE57A' : 'var(--color-gray )'};
   padding: 0.3rem 0;
   width: 80rem;
   padding: 1rem;
   @media screen and (max-width: 767px) {
-    width: 70rem;
+    width: 36rem;
     height: 10rem;
   }
 `;
@@ -50,7 +50,7 @@ const PostCardTitle = styled.a`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     flex: 9;
   }
@@ -62,6 +62,7 @@ const PostCardInfo = styled.div`
   @media screen and (max-width: 767px) {
     display: flex;
     justify-content: space-between;
+    font-size: 1.2rem;
   }
 `;
 
