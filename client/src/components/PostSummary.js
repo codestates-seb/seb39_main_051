@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-const PostCard = (props) => {
+const PostSummary = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   return (
     <PostCardLayout themeState={themeState}>
@@ -25,16 +25,17 @@ const PostCardLayout = styled.div`
   background-color: ${(props) =>
     props.themeState === 'light' ? '#FFE57A' : 'var(--color-gray )'};
   padding: 0.3rem 0;
-  width: 80rem;
+  /* width: 80rem; */
+  width:100%;
   padding: 1rem;
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 412px) {
     width: 36rem;
     height: 10rem;
   }
 `;
 const PostCardWrapper = styled.div`
   display: flex;
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 412px) {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -45,7 +46,7 @@ const PostCardTitle = styled.a`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 412px) {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -59,7 +60,7 @@ const PostCardTitle = styled.a`
 const PostCardInfo = styled.div`
   display: flex;
   font-weight: bold;
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 412px) {
     display: flex;
     justify-content: space-between;
     font-size: 1.2rem;
@@ -75,11 +76,11 @@ const WriterCreatedAt = styled.div`
 
 const CategoryWrapper = styled.div`
   margin: 0 1rem;
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 412px) {
     margin: 0;
   }
 `;
 
 
 
-export default PostCard;
+export default PostSummary;
