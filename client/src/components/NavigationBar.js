@@ -6,7 +6,7 @@ const NavigationBar = (props) => {
 
   return (
     <>
-      <NavBar>
+      <NavBar themeState={props.themeState}>
         <NavBarLogo themeState={props.themeState}>로고</NavBarLogo>
         <DropDown mobile>
           <img
@@ -44,13 +44,19 @@ const NavigationBar = (props) => {
 
 const NavBar = styled.div`
   position: fixed;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 4rem;
   display: flex;
   justify-content: space-between;
+  background-color: ${(props) =>
+    props.themeState === 'light'
+      ? 'var(--color-light-bg-color)'
+      : 'var(--color-dark-bg-color)'};
   color: var(--color-white);
 
-  @media screen and (min-width: 701px) {
+  @media screen and (min-width: 413px) {
     justify-content: space-around;
     .mobile {
       display: none;
@@ -69,7 +75,7 @@ const NavBarLogo = styled.div`
   width: 28rem;
   height: 4rem;
 
-  @media screen and (min-width: 701px) {
+  @media screen and (min-width: 413px) {
     width: 38.3rem;
   }
 `;
@@ -88,7 +94,7 @@ const NavBarMenu = styled.div`
     cursor: pointer;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 412px) {
     ${(props) => {
       if (props.web) {
         return css`
@@ -113,7 +119,7 @@ const NavBarRight = styled.div`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 412px) {
     ${(props) => {
       if (props.web) {
         return css`
@@ -147,7 +153,7 @@ const DropDown = styled.div`
     }
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 412px) {
     ${(props) => {
       if (props.web) {
         return css`
@@ -157,7 +163,7 @@ const DropDown = styled.div`
     }}
   }
 
-  @media screen and (min-width: 701px) {
+  @media screen and (min-width: 413px) {
     ${(props) => {
       if (props.mobile) {
         return css`
