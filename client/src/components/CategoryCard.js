@@ -43,19 +43,16 @@ const CategoryCard = (props) => {
         <CategoryCardLayout onClick={props.handleClick}>
             <CategoryCardWrapper themeState={themeState}>
                 <SubscribeMark />
-                <Logo>
-                    <div id="wrapper">
-                        <ContentWrapper>
+                <LogoLayout>
+                        <div>
                         {content}
-                        </ContentWrapper>
+                        </div>
                         <NameWrapper>
                         {props.name}
                         </NameWrapper>
-                    </div>
-                    <div id='subscribe-mobile'>구독 중</div>
-                </Logo>
+                </LogoLayout>
             </CategoryCardWrapper>
-            <div id="subscribe-web">구독 중</div>
+            <div className='subscribe-web'>구독 중</div>
         </CategoryCardLayout>
     )
 }
@@ -65,13 +62,13 @@ const CategoryCardLayout = styled.div`
     font-weight: bold;
     position:relative;
     width: 18.5rem;
-    #subscribe-web{
+    .subscribe-web{
         text-align: center;
         margin-top: 1rem;
     }
         @media screen and (max-width:767px) {
         display:flex;
-        #subscribe-web {
+        .subscribe-web {
             display:none;
         }
 }
@@ -83,34 +80,23 @@ const CategoryCardWrapper = styled.div`
     text-align:center;
     min-width: 18.5rem;
     height: 7.5rem;
+    border-radius:1.5rem;
     cursor: pointer;
     background-color :  ${(props) => props.themeState==='light' ? 'var(--color-yellow)': 'var(--color-black)'};
-    #subscribe-mobile{
+    .subscribe-mobile{
         display:none
     }
     :hover{
         background-color :  ${(props) => props.themeState==='light' ? '#FFE57A': 'var(--color-navy)'};
     }
-    border-radius:1.5rem;
-    #name {
-        margin-top: 0.5rem;
-    }
 `
-const Logo = styled.div`
+const LogoLayout = styled.div`
 @media screen and (max-width:767px){
-    display:flex;
-    align-items:center;
-    #wrapper{
-        margin-right:1rem;
-    }
-    #subscribe-mobile{
+    .subscribe-mobile{
         display:block;
         margin-right: -2rem;
     }
 }
-`
-const ContentWrapper = styled.div`
-
 `
 const NameWrapper = styled.div`
     padding-top: 0.5rem;

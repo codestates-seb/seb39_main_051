@@ -1,164 +1,186 @@
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import BasicButton from "./BasicButton";
-import Comment from "./Comment";
-import { useState } from "react";
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import BasicButton from './BasicButton';
+import Comment from './Comment';
+import { useState } from 'react';
 const AnswerCard = (props) => {
-  const themeState = useSelector((state) => state.themeSlice).theme
-  const [isCommentShow, setIsCommentShow] = useState(false)
-
+  const themeState = useSelector((state) => state.themeSlice).theme;
+  const [isCommentShow, setIsCommentShow] = useState(false);
   const toggleCommentShow = () => {
-    setIsCommentShow(!isCommentShow)
-    return 
-  }
-    return (
-        <Layout themeState>
-            <div id='answer-info'>
-                <div id='answer-writer'><img src={props.profileImg}/>{props.writer}</div>
-                <div id='answer-modifiedAt'>{props.modifiedAt}</div>
-            </div>
-            <div id='answer'>
-            <div id='answer-content'>
-                  {props.content}
-              </div>
-              <div id='answer-content-event'>
-                  <div>
-                      <div>❤️{props.likes}</div>
-                  </div>
-                  <div className='edit'>
-                      수정
-                  </div>
-                  <div className='edit'>
-                      삭제
-                  </div>
-            </div>
-            </div>
-            <div id='answer-comment-input'>
-                <label id='comment' />
-                <input placeholder="댓글을 입력하세요"/>
-                <BasicButton text='댓글등록' backGroundColor='#ff6c02' color='#ffffff' />
-            </div>
-            {
-            isCommentShow ? (
-              <>
-              <ToggleComment themeState onClick={()=>toggleCommentShow()}>댓글 숨기기</ToggleComment>
-              {props.comment.map((el)=><Comment commentWriter={el.commentWriter} content={el.content} modifiedAt={el.modifiedAt} likes={el.likes} profileImg={el.profileImg}/>)}</>
-            ) : (
-              <>
-            <ToggleComment themeState onClick={()=>toggleCommentShow()}>{`총 ${props.comment.length} 개의 댓글이 있습니다.`}</ToggleComment>
-            </>
-            )
-            }
-                
-        </Layout>
-    )
-}
+    setIsCommentShow(!isCommentShow);
+    return;
+  };
+  
+  return (
+    <Layout themeState={themeState}>
+      <AnswerInfo>
+        <AnswerWriter>
+          <img src={props.profileImg} />
+          {props.writer}
+        </AnswerWriter>
+        <AnswerEvent>
+          <div className='answerDate'>{props.modifiedAt}</div>
+          <div className='answerEdit'>수정</div>
+          <div className='answerEdit'>삭제</div>
+          </AnswerEvent>
+      </AnswerInfo>
+      <AnswerLayout themeState={themeState}>
+        <AnswerContent themeState={themeState}>
+          <div className='answerContent'>{props.content}</div>
+          <div className='answerlikes'>❤️{props.likes}</div>
+        </AnswerContent>
+      </AnswerLayout>
+      <AnswerCommentInput themeState={themeState}>
+        <label id='comment' />
+        <input placeholder='댓글을 입력하세요' />
+        <BasicButton
+          text='댓글등록'
+          backGroundColor='#ff6c02'
+          color='#ffffff'
+        />
+      </AnswerCommentInput>
+      {isCommentShow ? (
+        <>
+          <ToggleComment themeState onClick={() => toggleCommentShow()}>
+            댓글 숨기기
+          </ToggleComment>
+          {props.comment.map((el) => (
+            <Comment
+              commentWriter={el.commentWriter}
+              content={el.content}
+              modifiedAt={el.modifiedAt}
+              likes={el.likes}
+              profileImg={el.profileImg}
+            />
+          ))}
+        </>
+      ) : (
+        <>
+          <ToggleComment
+            themeState
+            onClick={() => toggleCommentShow()}
+          >{`총 ${props.comment.length} 개의 댓글이 있습니다.`}</ToggleComment>
+        </>
+      )}
+    </Layout>
+  );
+};
 
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem;
   font-size: 1.3rem;
-  background-color: ${(props)=> props.themeState==='light' ? '#ffffff' : '#2d2d2d'};
-  width: 130rem;
+  background-color: ${(props) =>
+    props.themeState === 'light' ? '#ffffff' : '#2d2d2d'};
+  width: 100%;
   border: 1px solid #d4d4d4;
-  #answer-info{
-    display:flex;
-    width:120rem;
-    margin-bottom: 0.3rem;
-    #answer-writer{
-      font-weight: bold;
-      margin-right: auto;
-        img{
-          height: 2.4rem;
-          width: 2.4rem;
-          margin-right:0.3rem;
-          border-radius: 0.3rem;
-        }
-    }
-    #answer-modifiedAt{
-      font-size: 1.2rem;;
-    }
+  margin-bottom: 1rem;
+`;
+const AnswerInfo = styled.div`
+  display: flex;
+  width: 100%;
+  margin-bottom: 0.3rem;
+`;
+const AnswerWriter = styled.div`
+  font-weight: bold;
+  width: 90%;
+  img {
+    height: 2.4rem;
+    width: 2.4rem;
+    margin-right: 0.3rem;
+    border-radius: 0.3rem;
+  } 
+`;
+const AnswerEvent = styled.div`
+  display:flex;
+  font-size: 1.2rem; 
+  .answerDate{
+    margin-right:0.5rem;
   }
-  #answer{
-    display:flex;
-  }
-  #answer-content{
-    width:120rem;
-    margin-right: 1rem;
-    background: ${(props)=>props.themeState === 'light' ? 'var(--color-white)':'var(--color-gray)'}
-  }
-  #answer-content-event{
-    display:flex;
-    flex-direction: column;
-    font-size: 1.2rem;
+  .answerEdit{
+    color: #d4d4d4;
+    margin-right:0.5rem;
     cursor: pointer;
-    .edit{
-      color: #d4d4d4;
-      cursor: pointer;
+  }
+  @media screen and (max-width: 413px){
+      flex-direction:column;
+      vertical-align: bottom;
     }
-  }
-  #answer-comment-input{
-    display:flex;
-    margin: 1rem 0;
-    input{
-      width:120rem;
-      margin-right: 1rem;
-      border : 1px solid #d4d4d4;
-      background: ${(props)=>props.themeState === 'light' ? 'var(--color-white)':'var(--color-gray)'};
-      border-radius: 0.3rem;
+`;
+const AnswerLayout = styled.div`
+  display: flex;
+  width: 100%;
+`;
+const AnswerContent = styled.div`
+  display: flex;
+  width: 100%;
+  /* margin-right: 1rem; */
+  background: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
+    .answerContent{
+      width:90%;
+      margin-right: 0.5%;
     }
-  }
-
-  @media screen and (max-width: 767px) {
-      width: 36rem;
-      font-size: 1.5rem;
-      #answer-info{
-    width: 27.6rem;
-    #answer-writer{
-      margin-right: auto;
-        img{
-          height: 2.4rem;
-          width: 2.4rem;
-          border-radius: 0.3rem;
-        }
+    .answerLikes{
+      width:5%;
     }
-  }
-  #answer{
-    display:flex;
-  }
-  #answer-content{
-    width: 27.6rem;
+  @media screen and (max-width: 413px) {
     margin-right: 1rem;
-    border : 1px solid #d4d4d4;
+    border: 1px solid #d4d4d4;
   }
-  #answer-content-event{
-    display:flex;
+`;
+const AnswerEventWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+  width: 5%;
+  cursor: pointer;
+  .edit {
+    color: #d4d4d4;
+    cursor: pointer;
+  }
+  @media screen and (max-width: 413px) {
+    display: flex;
     flex-direction: column;
   }
-  #answer-comment-input{
-    display:flex;
+`;
+const AnswerCommentInput = styled.div`
+  display: flex;
+  margin: 1rem 0;
+  input {
+    width: 90%;
+    margin-right: 0.5%;
+    border: 1px solid #d4d4d4;
+    background: ${(props) =>
+      props.themeState === 'light'
+        ? 'var(--color-white)'
+        : 'var(--color-gray)'};
+    border-radius: 0.3rem;
+  }
+  button {
+    width: 5%;
+  }
+  @media screen and (max-width: 413px) {
+    display: flex;
     margin: 1rem 0;
-    input{
-      width: 27.6rem;
+    input {
+      /* width: 27.6rem; */
       margin-right: 1rem;
-      border : 1px solid #d4d4d4;
+      border: 1px solid #d4d4d4;
     }
-    button{
-      width:3rem;
+    button {
+      /* width:3rem; */
       font-size: 1rem;
-      padding:0.3rem;
+      padding: 0.3rem;
     }
   }
-  }
-`
+`;
+
 const ToggleComment = styled.div`
-  font-size: 1.2rem;;
-  cursor:pointer;
-  color:#d2d2d2;
-  :hover{
-    color:var(--color-white);
-  }
-`
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #d2d2d2;
+`;
 
 export default AnswerCard;

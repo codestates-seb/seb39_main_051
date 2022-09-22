@@ -74,47 +74,50 @@ const Form = (props) => {
 
 
     return(
-        <Layout themeState>
-            <div id='title'>
-                {props.status === 'login' ? '로그인' : '회원가입'}
-            </div>
+        <Layout themeState={themeState}>
+          <Title>
+                  {props.status === 'login' ? '로그인' : '회원가입'}
+          </Title>
             <form>
                 {props.status === 'login' ? (
                     <> 
-                    <InputWrapper themeState>
-                    <label id='email'>이메일</label>
-                    <input id='email' name='email' type='email'  onChange={handleInput} required/>
+                    <InputWrapper themeState={themeState}>
+                      <label id='email'>이메일</label>
+                      <input id='email' name='email' type='email'  onChange={handleInput} required/>
                     </InputWrapper>
-                    <InputWrapper themeState>
-                    <label id='password' >비밀번호</label>
-                    <input id='password' name='password' onChange={handleInput} type='password' required/>
+                    <InputWrapper themeState={themeState}>
+                      <label id='password' >비밀번호</label>
+                      <input id='password' name='password' onChange={handleInput} type='password' required/>
                     </InputWrapper>
                     </>
                 ) : (
                     <>
-                    <InputWrapper themeState>
-                    <label id='nickName' >닉네임</label>
-                    <input id='nickName' name='nickName' onChange={handleInput} required/> 
+                    <InputWrapper themeState={themeState}>
+                      <label id='nickName' >닉네임</label>
+                      <input id='nickName' name='nickName' onChange={handleInput} required/> 
                     </InputWrapper>
-                    <InputWrapper themeState>
-                    <label id='email'>이메일</label>
-                    <span>{emailDesc}</span>
-                    <input id='email' name='email' type='email'  onChange={handleInput} onKeyUp={emailValidation} required/>
+                    <InputWrapper themeState={themeState}>
+                      <label id='email'>이메일</label>
+                      <span>{emailDesc}</span>
+                      <input id='email' name='email' type='email'  onChange={handleInput} onKeyUp={emailValidation} required/>
                     </InputWrapper>
-                    <InputWrapper themeState>
-                    <label id='password'>비밀번호</label>
-                    <span>{passwordDesc}</span>
-                    <input id='password' name='password' type='password' onChange={handleInput} onKeyUp={passwordValidation} required/>
+                    <InputWrapper themeState={themeState}>
+                      <label id='password'>비밀번호</label>
+                      <span>{passwordDesc}</span>
+                      <input id='password' name='password' type='password' onChange={handleInput} onKeyUp={passwordValidation} required/>
                     </InputWrapper>
-                    <InputWrapper themeState>
-                    <label id='rePassword'>비밀번호 확인</label>
-                    <span>{rePasswordDesc}</span>
-                    <input id='rePassword' name='rePassword' type='password' onChange={handleInput} onKeyUp={rePasswordValidation} required/> 
+                    <InputWrapper themeState={themeState}>
+                      <label id='rePassword'>비밀번호 확인</label>
+                      <span>{rePasswordDesc}</span>
+                      <input id='rePassword' name='rePassword' type='password' onChange={handleInput} onKeyUp={rePasswordValidation} required/> 
                     </InputWrapper>
                     </>
                 )} 
                 <BasicButton padding= '1rem 4rem;'  text={props.status ==='login' ? '로그인하기' : '회원가입하기'} backGroundColor='#FF6C02' color='#ffffff' />
-                    {props.status==='login' ? (<div id='redirect' ><a href='/signup'><FontAwesomeIcon icon={faGoogle} size='2x' />회원가입하러가기 </a><a href='/'>구글계정으로 가입하기</a></div>) : (<div id='redirect' ><a href='/login'>로그인하러가기 </a><a href='/'><FontAwesomeIcon icon={faGoogle} size='2x' />구글계정으로 로그인하기</a></div>)}
+                    {props.status==='login' ? (
+                    <Redirect themeState={themeState}><a href='/signup'><FontAwesomeIcon icon={faGoogle} size='2x' />회원가입하러가기 </a><a href='/'>구글계정으로 가입하기</a></Redirect>
+                    ) : (
+                    <Redirect themeState={themeState}><a href='/login'>로그인하러가기 </a><a href='/'><FontAwesomeIcon icon={faGoogle} size='2x' />구글계정으로 로그인하기</a></Redirect>)}
             </form>
         </Layout>
     )
@@ -131,23 +134,6 @@ const Layout = styled.div`
     align-items:center;
     font-size: 1.3rem;
     font-weight:bold;
-    #title {
-        font-size: 2rem;
-        margin-bottom: 3rem;
-    }
-    #redirect{
-        text-align:center;
-        a{
-            display:block;
-            text-decoration:none;
-            text-align:center;
-            color: ${(props)=>props.themeState === 'light' ? 'var(--color-blacr)' : 'var(--color-white)'};
-            margin-bottom:1.5rem;
-        }
-        svg{
-          margin-right: 0.3rem;
-        }
-    }
     label{
         display:block;
     }
@@ -162,6 +148,10 @@ const Layout = styled.div`
     @media screen and (max-width: 767px) {
       width: 34rem;
     }
+`
+const Title = styled.div`
+          font-size: 2rem;
+        margin-bottom: 3rem;
 `
 
 const InputWrapper = styled.div`
@@ -182,5 +172,18 @@ const InputWrapper = styled.div`
       border : 1px solid  #d2d2d2;
       border-radius: 0.3rem;;
       }
+`
+const Redirect = styled.div`
+        text-align:center;
+        a{
+            display:block;
+            text-decoration:none;
+            text-align:center;
+            color: ${(props)=>props.themeState === 'light' ? 'var(--color-blacr)' : 'var(--color-white)'};
+            margin-bottom:1.5rem;
+        }
+        svg{
+          margin-right: 0.3rem;
+        }
 `
 export default Form
