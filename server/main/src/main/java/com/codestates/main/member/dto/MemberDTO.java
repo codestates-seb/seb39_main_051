@@ -27,7 +27,7 @@ public class MemberDTO {
         private long id;
         private String email;
         private String nickname;
-        //private Member.ROLE role;
+        private Member.ROLE role;
     }
 
     @Getter

@@ -45,17 +45,17 @@ public class MemberMapperImpl implements MemberMapper{
         long memberId = 0L;
         String email = null;
         String nickname = null;
-        //Member.ROLE role = null;
+        Member.ROLE role = null;
 
         if ( member.getMemberId()!=0L ) {
             memberId = member.getMemberId();
         }
         email = member.getEmail();
         nickname = member.getNickname();
-        //role = member.getRole();
+        role = member.getRole();
 
-        //return new MemberDTO.Response(memberId, email, nickname, role);
-        return new MemberDTO.Response(memberId, email, nickname);
+        return new MemberDTO.Response(memberId, email, nickname, role);
+        //return new MemberDTO.Response(memberId, email, nickname);
     }
 
     @Override

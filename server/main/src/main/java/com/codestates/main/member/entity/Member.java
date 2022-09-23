@@ -37,42 +37,42 @@ public class Member {
 
     @Column(name="PICTURE", columnDefinition = "BLOB")
     private String picture;
-    /*
-        @Column(nullable = false, name="CREATED_AT")
-        @CreatedDate
-        private LocalDateTime createdAt;
 
-        @Column(name="MODIFIED_AT")
-        @LastModifiedDate
-        private LocalDateTime modifiedAt;
+    @Column(nullable = false, name="CREATED_AT")
+    @CreatedDate
+    private LocalDateTime createdAt;
 
-
-        @Enumerated(value = EnumType.STRING)
-        @Column(length=20,nullable = false)
-        private ROLE role = ROLE.MEMBER_GENERAL;
-
-        public enum ROLE implements GrantedAuthority {
-            MEMBER_ADMIN("관리자"),
-            MEMBER_GENERAL("일반유저");
-
-            @Getter
-            private String role;
+    @Column(name="MODIFIED_AT")
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
 
 
-            ROLE(String role){
-                this.role=role;
-            }
+    @Enumerated(value = EnumType.STRING)
+    @Column(length=20,nullable = false)
+    private ROLE role = ROLE.MEMBER_GENERAL;
 
-            @Override
-            public String getAuthority() {
-                return name();
-            }
-        }*/
-    public String roles;
-    public List<String> getRoleList() {
-        if(this.roles.length() > 0) {
-            return Arrays.asList(this.roles.split(","));
+    public enum ROLE implements GrantedAuthority {
+        MEMBER_ADMIN("관리자"),
+        MEMBER_GENERAL("일반유저");
+
+        @Getter
+        private String role;
+
+
+        ROLE(String role){
+            this.role=role;
         }
-        return new ArrayList<>();
+
+        @Override
+        public String getAuthority() {
+            return name();
+        }
     }
+//    public String roles;
+//    public List<String> getRoleList() {
+//        if(this.roles.length() > 0) {
+//            return Arrays.asList(this.roles.split(","));
+//        }
+//        return new ArrayList<>();
+//    }
 }
