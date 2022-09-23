@@ -1,40 +1,40 @@
+import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import DropDownMenu from './DropDownMenu';
 
-const NavigationBar = (props) => {
+const NavigationBar = () => {
+  const themeState = useSelector((state) => state.themeSlice).theme;
   const isLoggedin = true;
 
   return (
     <>
-      <NavBar themeState={props.themeState}>
-        <NavBarLogo themeState={props.themeState}>로고</NavBarLogo>
+      <NavBar themeState={themeState}>
+        <NavBarLogo themeState={themeState}>로고</NavBarLogo>
         <DropDown mobile>
           <img
             className='mobile'
             width='35rem'
             src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Font_Awesome_5_solid_bars.svg'
           />
-          <DropDownMenu mobile themeState={props.themeState} />
+          <DropDownMenu mobile themeState={themeState} />
         </DropDown>
         <DropDown web>
-          <NavBarMenu web themeState={props.themeState}>
+          <NavBarMenu web themeState={themeState}>
             <span>질문 답변 공유 게시판</span>
             <span>자유 게시판</span>
             <span>건의 게시판</span>
           </NavBarMenu>
-          <DropDownMenu themeState={props.themeState} />
+          <DropDownMenu themeState={themeState} />
         </DropDown>
         {isLoggedin ? (
-          <NavBarRight web themeState={props.themeState}>
-            <NavBarButton themeState={props.themeState}>
-              마이페이지
-            </NavBarButton>
+          <NavBarRight web themeState={themeState}>
+            <NavBarButton themeState={themeState}>마이페이지</NavBarButton>
             <span>닉네임</span>
           </NavBarRight>
         ) : (
           <NavBarRight web>
-            <NavBarButton themeState={props.themeState}>로그인</NavBarButton>
-            <NavBarButton themeState={props.themeState}>회원가입</NavBarButton>
+            <NavBarButton themeState={themeState}>로그인</NavBarButton>
+            <NavBarButton themeState={themeState}>회원가입</NavBarButton>
           </NavBarRight>
         )}
       </NavBar>
