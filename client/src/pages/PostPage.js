@@ -34,7 +34,7 @@ const PostPage = (props) => {
             </InputWrapper>
             <BasicButton
               themeState={themeState}
-              width='fit-content'
+              width='5.5rem'
               height='4rem'
               color='var(--color-white)'
               backGroundColor='var(--color-orange)'
@@ -62,7 +62,7 @@ const FormWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 95%;
+  width: 85%;
   min-height: 80rem;
   color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
