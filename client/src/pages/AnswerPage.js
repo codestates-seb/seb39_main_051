@@ -1,9 +1,8 @@
 import AnswerCard from "../components/AnswerCard";
 import { useSelector } from 'react-redux';
 import styled from "styled-components"
-import NavigationBar from "../components/NavigationBar"
 import BorderLayout from "../components/BorderLayout";
-const Answer = () => {
+const AnswerPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
     const comment = [{
         commentWriter : 'changhoon',
@@ -85,4 +84,4 @@ const CommentToTal = styled.div`
   margin-bottom: 0.5%;
   color: ${(props)=>props.themeState === 'light' ? 'var(--color-black)' :'var(--color-white)' };
 `
-export default Answer
+export default AnswerPage
