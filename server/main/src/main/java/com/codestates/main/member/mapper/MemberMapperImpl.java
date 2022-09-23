@@ -2,7 +2,9 @@ package com.codestates.main.member.mapper;
 
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MemberMapperImpl implements MemberMapper{
 
     @Override
@@ -10,21 +12,15 @@ public class MemberMapperImpl implements MemberMapper{
         if(member==null){
             return null;
         }
-        long memberId = 0L;
         String email = null;
         String password = null;
         String nickname = null;
-        Member.ROLE role = null;
 
-        if ( member.getMemberId()!=0L ) {
-            memberId = member.getMemberId();
-        }
         email = member.getEmail();
         nickname = member.getNickname();
         password = member.getPassword();
-        role = member.getRole();
 
-        return new MemberDTO.Post( memberId, email, nickname, password, role);
+        return new MemberDTO.Post(email, nickname, password);
     }
 
     @Override
@@ -33,11 +29,61 @@ public class MemberMapperImpl implements MemberMapper{
             return null;
         }
         Member member = new Member();
-        member.setMemberId(memberPostDTO.getId());
+        //member.setMemberId(memberPostDTO.getId());
         member.setEmail(memberPostDTO.getEmail());
         member.setPassword(memberPostDTO.getPassword());
         member.setNickname(memberPostDTO.getNickname());
-        member.setRole(memberPostDTO.getRole());
+        //member.setRole(memberPostDTO.getRole());
+        return member;
+    }
+
+    @Override
+    public MemberDTO.Response memberToMemberResponseDTO(Member member) {
+        if(member==null){
+            return null;
+        }
+        long memberId = 0L;
+        String email = null;
+        String nickname = null;
+        //Member.ROLE role = null;
+
+        if ( member.getMemberId()!=0L ) {
+            memberId = member.getMemberId();
+        }
+        email = member.getEmail();
+        nickname = member.getNickname();
+        //role = member.getRole();
+
+        //return new MemberDTO.Response(memberId, email, nickname, role);
+        return new MemberDTO.Response(memberId, email, nickname);
+    }
+
+    @Override
+    public Member memberPatchDTOToMember(MemberDTO.Patch memberPatchDTO) {
+
+        if(memberPatchDTO==null){
+            return null;
+        }
+        Member member = new Member();
+        //member.setMemberId(memberPostDTO.getId());
+        member.setEmail(memberPatchDTO.getEmail());
+        member.setPassword(memberPatchDTO.getPassword());
+        member.setNickname(memberPatchDTO.getNickname());
+        //member.setRole(memberPostDTO.getRole());
+        return member;
+
+    }
+
+    @Override
+    public Member memberLoginDTOToMember(MemberDTO.Login memberLoginDTO) {
+        if(memberLoginDTO==null){
+            return null;
+        }
+        Member member = new Member();
+        //member.setMemberId(memberPostDTO.getId());
+        member.setEmail(memberLoginDTO.getEmail());
+        member.setPassword(memberLoginDTO.getPassword());
+        //member.setRole(memberPostDTO.getRole());
         return member;
     }
 }

@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Form = (props) => {
+    console.log(props)
     const themeState = useSelector((state)=> state.themeSlice).theme;
     const [inputValue, setInputValue] = useState({
         nickName: '',
@@ -134,6 +135,7 @@ const Layout = styled.div`
     align-items:center;
     font-size: 1.3rem;
     font-weight:bold;
+    margin-left:auto;
     label{
         display:block;
     }
@@ -145,7 +147,7 @@ const Layout = styled.div`
             margin: 2rem 0;
     }
     }
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 412px) {
       width: 34rem;
     }
 `

@@ -103,7 +103,7 @@ const AnswerEvent = styled.div`
     margin-right:0.5rem;
     cursor: pointer;
   }
-  @media screen and (max-width: 413px){
+  @media screen and (max-width: 412px){
       flex-direction:column;
       vertical-align: bottom;
     }
@@ -125,7 +125,7 @@ const AnswerContent = styled.div`
     .answerLikes{
       width:5%;
     }
-  @media screen and (max-width: 413px) {
+  @media screen and (max-width: 412px) {
     margin-right: 1rem;
     border: 1px solid #d4d4d4;
   }
@@ -140,7 +140,7 @@ const AnswerEventWrapper = styled.div`
     color: #d4d4d4;
     cursor: pointer;
   }
-  @media screen and (max-width: 413px) {
+  @media screen and (max-width: 412px) {
     display: flex;
     flex-direction: column;
   }
@@ -161,7 +161,7 @@ const AnswerCommentInput = styled.div`
   button {
     width: 5%;
   }
-  @media screen and (max-width: 413px) {
+  @media screen and (max-width: 412px) {
     display: flex;
     margin: 1rem 0;
     input {

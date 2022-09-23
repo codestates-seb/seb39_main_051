@@ -2,56 +2,28 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import NavigationBar from '../components/NavigationBar';
 import TapMenu from '../components/TapMenu';
-import CategoryCard from "../components/CategoryCard";
-import PostCard from "../components/PostCard";
-import Form from '../components/Form'
-import AnswerCard from "../components/AnswerCard";
+import CategoryCard from '../components/CategoryCard';
+import PostCard from '../components/PostSummary';
+import Form from '../components/Form';
+import AnswerCard from '../components/AnswerCard';
+import SubscribeBanner from '../components/SubscribeBanner';
+import BorderLayout from '../components/BorderLayout';
 
 const HomePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const arr = ['리액트', '자바스크립트', '자바', '스프링', '자료구조', '알고리즘', '네트워크', '데이터베이스']
-  const comment = [{
-    commentWriter : 'changhoon',
-    content : '댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용',
-    profileImg : 'https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png',
-    modifiedAt : '2022.09.20',
-    likes:'33'
-  },
-  {
-    commentWriter : 'changhoon',
-    content : '댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용',
-    profileImg : 'https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png',
-    modifiedAt : '2022.09.20',
-    likes:'33'
-  }]
   return (
-    <>
-      <NavigationBar themeState={themeState} />
-      <ContentWrapper>
-        <TapMenu
-          themeState={themeState}
-          backGroundColor='var(--color-orange)'
-          color='var(--color-white)'
-          fontSize='1.8rem'
-          padding='0 2rem'
-        />
-        {arr.map((el)=><CategoryCard  name={el} />)}
-      <PostCard title='게시글 제목 입니다. 게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.게시글 제목 입니다.' category='React' likes='3' writer = '글쓴이입니다!' createdAt = '2022.02.09' />
-      <Form status='signUp'/>
-      <AnswerCard profileImg='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png' writer='작성자' modifiedAt='2022년09월20일' content='JavaScript에서 호이스팅(hoisting)이란, 인터프리터가 변수와 함수의 메모리 공간을 선언 전에 미리 할당하는 것을 
-  의미합니다.' likes='33' comment={comment}/>
-      </ContentWrapper>
-    </>
+    <BorderLayout>
+      {/* <div>
+        학교수업 듣고 부트캠프, 프로젝트 이직 준비하는 회사원 매일 아침 면접
+        질문과 최신 IT동향을 이메일로 받아보세요! [ 구독서비스 바로가기 ] 자신의
+        생각을 모범 답안과 동료들의 답변을 참고하여 자신만의 스토리를
+        만들어보세요! [모범답안게시판 바로가기] 함께 공부할 동료가 필요하다면
+        파티원 모집을 통해 자신이 원하는 스터디 혹은, 프로젝트에 참여해보세요!
+        [스터디 모집 서비스 바로가기]
+      </div> */}
+      <SubscribeBanner />
+    </BorderLayout>
   );
 };
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: none;
-  display: flex;
-  flex-direction: column;
-  padding-top: 4rem;
-`;
 
 export default HomePage;
