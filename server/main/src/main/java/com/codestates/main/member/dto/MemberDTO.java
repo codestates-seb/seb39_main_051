@@ -13,11 +13,10 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Post{
-        private long id;
         private String email;
         private String password;
         private String nickname;
-        private Member.ROLE role;
+        //private Member.ROLE role;
     }
 
     @Getter
@@ -25,6 +24,26 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response{
+        private long id;
+        private String email;
+        private String nickname;
+        //private Member.ROLE role;
+    }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Patch {
+        private String email;
+        private String password;
+        private String nickname;
+    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Login {
+        private String email;
+        private String password;
     }
 }
