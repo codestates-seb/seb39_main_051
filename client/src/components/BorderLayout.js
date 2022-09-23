@@ -18,23 +18,22 @@ const BorderLayout = ({ children }) => {
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding-top: 4rem;
+  padding-top: 8rem;
   font-size: 1.3rem;
   border-radius: 1.5rem;
   display: flex;
   justify-content: center;
-
 `;
 const Wrapper = styled.div`
-  height: auto;
-  margin: 2rem 0;
-  padding:5%;
-  width:85%;
-  height: auto;
+  padding: 5%;
+  width: 85%;
+  height: 100%;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-black)'};
-  border: ${(props)=>props.themeState==='light'? '1rem solid var(--color-orange);' : '1rem solid var(--color-gray);' };
+  border: ${(props) =>
+    props.themeState === 'light'
+      ? '1rem solid var(--color-orange);'
+      : '1rem solid var(--color-gray);'};
   border-radius: 1.5rem;
-
 `;
 export default BorderLayout;
