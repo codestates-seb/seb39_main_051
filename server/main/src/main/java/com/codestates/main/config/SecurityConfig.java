@@ -2,6 +2,9 @@ package com.codestates.main.config;
 
 import com.codestates.main.filter.JwtAuthenticationFilter;
 import com.codestates.main.filter.JwtAuthorizationFilter;
+import com.codestates.main.handler.MemberAuthenticationFailureHandler;
+import com.codestates.main.handler.MemberAuthenticationSuccessHandler;
+import com.codestates.main.jwt.JwtTokenizer;
 import com.codestates.main.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -21,6 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig{
     private final CorsFilter corsFilter;
     private final MemberRepository memberRepository;
+    private final JwtTokenizer jwtTokenizer;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //http.addFilterBefore(new FirstFilter(), BasicAuthenticationFilter.class); // BasicAuthenticationFilter 이전에 내가 만든 FirstFilter 적용
@@ -44,9 +49,13 @@ public class SecurityConfig{
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+            JwtAuthenticationFilter jwtAuthenticationFilter =new JwtAuthenticationFilter(authenticationManager,jwtTokenizer);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
             builder
-                    .addFilter(corsFilter)
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager))
+                    //.addFilter(corsFilter)
+                    .addFilter(jwtAuthenticationFilter)
                     .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository));;
         }
     }
