@@ -35,7 +35,7 @@ public class MemberController {
                 .email("admin@naver.com")
                 .nickname("관리자")
                 .password("1234")
-                .role(Member.ROLE.MEMBER_ADMIN)
+                .role(Member.ROLE.ROLE_ADMIN)
                 .build();
         memberService.createMember(member);
     }

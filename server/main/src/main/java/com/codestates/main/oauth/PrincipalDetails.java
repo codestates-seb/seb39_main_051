@@ -41,6 +41,21 @@ public class PrincipalDetails extends Member implements UserDetails {
     }
 
     @Override
+    public long getMemberId() {
+        return member.getMemberId();
+    }
+
+    @Override
+    public ROLE getRole() {
+        return member.getRole();
+    }
+
+    @Override
+    public String getNickname() {
+        return member.getNickname();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }

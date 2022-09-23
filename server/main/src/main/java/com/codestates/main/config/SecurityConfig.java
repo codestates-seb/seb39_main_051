@@ -2,21 +2,22 @@ package com.codestates.main.config;
 
 import com.codestates.main.filter.JwtAuthenticationFilter;
 import com.codestates.main.filter.JwtAuthorizationFilter;
+import com.codestates.main.filter.JwtVerificationFilter;
 import com.codestates.main.handler.MemberAuthenticationFailureHandler;
 import com.codestates.main.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.main.jwt.JwtTokenizer;
+import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -35,8 +36,12 @@ public class SecurityConfig{
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(new CustomDsl()); // 추가
-                //.and()
+                .apply(new CustomDsl()) // 추가
+                .and()
+                .authorizeHttpRequests(authorize -> authorize  // (3) 추가
+                                .antMatchers(HttpMethod.GET, "/member/get").hasRole("ROLE_USER")
+                                //.antMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("MEMBER_USER", "MEMBER_ADMIN")  // (4) 추가
+                                .anyRequest().permitAll());
                 //.authorizeRequests()
                 //.antMatchers("/answer/**")
                 //.access("hasRole('관리자') or hasRole('일반 유저')")
@@ -53,10 +58,15 @@ public class SecurityConfig{
             jwtAuthenticationFilter.setFilterProcessesUrl("/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer);  // (2) 추가
+
+
             builder
                     //.addFilter(corsFilter)
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository));;
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    //.addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository, jwtTokenizer));;
         }
     }
 }

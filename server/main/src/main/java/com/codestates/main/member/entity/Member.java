@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,12 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,24 +52,26 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     @Column(length=20,nullable = false)
-    private ROLE role = ROLE.MEMBER_GENERAL;
+    private ROLE role = ROLE.ROLE_USER;
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public enum ROLE implements GrantedAuthority {
-        MEMBER_ADMIN("관리자"),
-        MEMBER_GENERAL("일반유저");
+        ROLE_ADMIN("ROLE_ADMIN"),
+        ROLE_USER("ROLE_USER");
 
         @Getter
         private String role;
-
-
-        ROLE(String role){
-            this.role=role;
-        }
 
         @Override
         public String getAuthority() {
             return name();
         }
+    }
+
+    public String getUsername(){
+        return this.email;
     }
 //    public String roles;
 //    public List<String> getRoleList() {

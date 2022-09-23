@@ -28,7 +28,7 @@ public class MemberService{
         }
         String password = member.getPassword();
         member.setPassword(bCryptPasswordEncoder.encode(password));
-        member.setRole(Member.ROLE.MEMBER_GENERAL);
+        member.setRole(Member.ROLE.ROLE_USER);
         return memberRepository.save(member);
     }
 

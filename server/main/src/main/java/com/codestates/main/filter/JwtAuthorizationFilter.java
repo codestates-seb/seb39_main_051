@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import com.codestates.main.jwt.JwtTokenizer;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,9 +20,11 @@ import java.io.IOException;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final MemberRepository memberRepository;
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager,MemberRepository memberRepository) {
+    private final JwtTokenizer jwtTokenizer;
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, JwtTokenizer jwtTokenizer) {
         super(authenticationManager);
         this.memberRepository=memberRepository;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
 
@@ -38,7 +41,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String jwtToken = jwtHeader.replace("Bearer ", "");
 
-        String username = JWT.require(Algorithm.HMAC512("cos_jwt_token")).build().verify(jwtToken).getClaim("email").asString();
+        String username = JWT.require(
+                Algorithm.HMAC512(jwtTokenizer.getSecretKey()))
+                .build()
+                .verify(jwtToken)
+                .getClaim("email")
+                .asString();
 
         if (username != null) {
             Member memberEntity = memberRepository.findByEmail(username);
