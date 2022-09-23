@@ -48,7 +48,7 @@ const CommentEvent = styled.div`
     margin-right:0.5rem;
     cursor: pointer;
   }
-  @media screen and (max-width: 413px) {
+  @media screen and (max-width: 412px) {
     flex-direction:column;
     vertical-align: bottom;
     .commentDate {
