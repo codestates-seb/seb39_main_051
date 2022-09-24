@@ -36,10 +36,10 @@ public class PostService {
     public Post updatePost(Post post) {
         Post findPost = findVerifiedPost(post.getPostId());
 
-        Optional.ofNullable(post.getTitle())
-                .ifPresent(title -> findPost.updateTitle(title));
         Optional.ofNullable(post.getContent())
                 .ifPresent(content -> findPost.updateContent(content));
+        Optional.ofNullable(post.getCategory())
+                .ifPresent(category -> findPost.updateCategory(category));
 
         return postRepository.save(findPost);
     }
@@ -55,8 +55,12 @@ public class PostService {
         return findVerifiedPost(postId);
     }
 
-    public Page<Post> findPosts(int page, int size) {
-        return postRepository.findAll(PageRequest.of(page,size));
+    public Page<Post> findPostsByType(int page, int size, String type) {
+        return postRepository.findAllByType(PageRequest.of(page,size), type);
+    }
+
+    public Page<Post> findPostsByCategory(int page, int size, String category) {
+        return postRepository.findAllByCategory(PageRequest.of(page,size), category);
     }
 
     public void deletePost(Long postId) {
