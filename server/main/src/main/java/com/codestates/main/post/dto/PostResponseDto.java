@@ -1,6 +1,5 @@
 package com.codestates.main.post.dto;
 
-import com.codestates.main.post.entity.BoardType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,13 +17,12 @@ public class PostResponseDto {
     private String title;
 
     private String content;
-//    private BoardType boardType;
+
+    private String type;
+
+    private String category;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
-
-/*    public String getBoardType() {
-        return boardType.getName();
-    }*/
 }
