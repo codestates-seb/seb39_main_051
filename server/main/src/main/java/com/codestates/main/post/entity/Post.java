@@ -25,10 +25,9 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @Builder.Default
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private BoardType boardType = BoardType.FREE;
+    private String type;
+
+    private String category;
 
     public void updateTitle(String title) {
         this.title = title;
@@ -38,7 +37,7 @@ public class Post extends BaseEntity {
         this.content = content;
     }
 
-    public void updateBoardType(BoardType boardType) {
-        this.boardType = boardType;
+    public void updateCategory(String category) {
+        this.category = category;
     }
 }
