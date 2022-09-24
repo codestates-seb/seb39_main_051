@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -68,9 +69,17 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity getPosts(@RequestParam int page,
-                                   @RequestParam int size) {
+                                   @RequestParam int size,
+                                   @RequestParam Optional<String> type,
+                                   @RequestParam Optional<String> category) {
         System.out.println("PostController.getPosts");
-        Page<Post> pagePosts = postService.findPosts(page - 1, size);
+        Page<Post> pagePosts;
+        if (type.isPresent()) {
+            pagePosts = postService.findPostsByType(page - 1, size, type.get());
+        }
+        else {
+            pagePosts = postService.findPostsByCategory(page - 1, size, category.get());
+        }
         List<Post> posts = pagePosts.getContent();
         List<PostResponseDto> postResponseDtos = mapper.postsToPostResponses(posts);
 
