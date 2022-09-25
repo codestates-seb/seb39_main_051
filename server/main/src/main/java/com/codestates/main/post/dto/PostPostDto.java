@@ -1,26 +1,21 @@
 package com.codestates.main.post.dto;
 
-import com.codestates.main.post.entity.BoardType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 public class PostPostDto {
-
-//    private Long postId;
 
     private String title;
 
     private String content;
 
-//    private BoardType boardType;
+    private String type;
 
-//    public String getBoardType() {
-//        return boardType.getName();
-//    }
+    private String category;
+
+//    private Long memberId;
 }
