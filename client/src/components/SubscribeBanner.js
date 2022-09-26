@@ -19,7 +19,7 @@ const SubscribeBanner = () => {
 };
 
 const SubscribeBtn = styled.div`
-  bottom:10%;
+  bottom:5%;
   left:50%;
   transform: translate(-50%, 0);
   font-size: 2rem;
@@ -32,7 +32,10 @@ const SubscribeBtn = styled.div`
     props.themeState === 'light' ? '#FEDD89' : 'var(--color-gray)'};
   color: white;
   cursor: pointer;
-
+  :hover{
+    background: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-black)'};
+  }
 `;
 
 export default SubscribeBanner;

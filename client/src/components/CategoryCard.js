@@ -5,7 +5,7 @@ import {
     faJava,
     faSquareJs,
 }from'@fortawesome/free-brands-svg-icons';
-import {faNetworkWired,faLightbulb, faDatabase, faLeaf, faFolderTree} from '@fortawesome/free-solid-svg-icons'
+import {faNetworkWired,faLightbulb, faDatabase, faLeaf, faFolderTree,faGear} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import { useState } from "react";
@@ -47,6 +47,12 @@ const CategoryCard = (props) => {
                 break
         case '네트워크':
                 content = <FontAwesomeIcon icon={faNetworkWired} size='2x'/>
+                break
+        case '운영체제':
+            content = <FontAwesomeIcon icon={faGear} size='2x'/>
+            break
+        default:
+            content = null;
                 break
     }
     return(

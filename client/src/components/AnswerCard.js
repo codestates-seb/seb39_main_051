@@ -119,6 +119,7 @@ const AnswerContent = styled.div`
   background: ${(props) =>
     props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
     .answerContent{
+      font-size: 2rem;
       width:90%;
       margin-right: 0.5%;
     }
