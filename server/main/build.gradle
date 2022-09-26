@@ -40,6 +40,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 }
 
 tasks.named('test') {
