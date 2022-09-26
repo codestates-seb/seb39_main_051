@@ -1,29 +1,119 @@
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import NavigationBar from '../components/NavigationBar';
-import TapMenu from '../components/TapMenu';
-import CategoryCard from '../components/CategoryCard';
-import PostCard from '../components/PostSummary';
-import Form from '../components/Form';
-import AnswerCard from '../components/AnswerCard';
 import SubscribeBanner from '../components/SubscribeBanner';
 import BorderLayout from '../components/BorderLayout';
+import { Animator, Fade, ScrollContainer, ScrollPage, Sticky,batch, MoveOut, StickyIn, FadeIn, ZoomIn, Move, MoveIn} from 'react-scroll-motion'
+import {faGithub}from'@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const HomePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   return (
     <BorderLayout>
-      {/* <div>
-        학교수업 듣고 부트캠프, 프로젝트 이직 준비하는 회사원 매일 아침 면접
-        질문과 최신 IT동향을 이메일로 받아보세요! [ 구독서비스 바로가기 ] 자신의
-        생각을 모범 답안과 동료들의 답변을 참고하여 자신만의 스토리를
-        만들어보세요! [모범답안게시판 바로가기] 함께 공부할 동료가 필요하다면
-        파티원 모집을 통해 자신이 원하는 스터디 혹은, 프로젝트에 참여해보세요!
-        [스터디 모집 서비스 바로가기]
-      </div> */}
+      <ScrollContainer>
+        <ScrollPage page={0}>
+          <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200))}>
+            <Message>
+            <span>개발자를 꿈꾸는 <br/>누구나</span>
+            </Message>
+          </Animator>
+        </ScrollPage>
+        <ScrollPage page={1}>
+          <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200)) }>
+            <Message className='imgSection'>
+            <img src={'img/webSubscribe.png'} className='web'/>
+            <img src={'img/mobileSubscribe.png'} className='mobile'/>
+            <div>매일 자신이 구독한 <br/>주제의 면접 질문을<br/>메일로 받아보세요</div>
+            </Message>
+          </Animator>
+        </ScrollPage>
+        <ScrollPage page={2}>
+          <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200))}>
+            <Message className='imgSection'>
+              <img src='img/webAnswer.png' className='web'/>
+              <img src={'img/mobileAnswer.png'} className='mobile'/>
+              <div>동료들과 답변을<br />공유하며 함께<br />성장하세요!</div>
+            </Message>
+          </Animator>
+        </ScrollPage>
+        <ScrollPage page={3}>
+          <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200))}>
+            <Message>
+            <div>당신을 위한<br />맞춤 면접 서비스</div>
+            </Message>
+          </Animator>
+        </ScrollPage>
+
+        <ScrollPage page={4}>
+          <ProjectInfo themeState={themeState}>
+            <Animator><ProjectName>CODESTATES SEB 39기 <br/> 51조 Main Project 매일매일<a href='https://github.com/codestates-seb/seb39_main_051'><FontAwesomeIcon icon={faGithub}/></a></ProjectName></Animator>
+            <Animator className='member'  animation={MoveIn(-1000, 0)}>FE 이창훈<a href='https://github.com/anotheranotherhoon' ><FontAwesomeIcon icon={faGithub}/></a></Animator>
+            <Animator className='member' animation={MoveIn(1000,0)}>FE 한정윤<a href='https://github.com/JungYunHan' ><FontAwesomeIcon icon={faGithub}/></a></Animator>
+            <Animator className='member'  animation={MoveIn(-1000,0)}>BE 김충섭<a href='https://github.com/kchs94' ><FontAwesomeIcon icon={faGithub}/></a></Animator>
+            <Animator className='member'animation={MoveIn(1000,0)}>BE 김수빈<a href='https://github.com/soobinkim-kor' ><FontAwesomeIcon icon={faGithub}/></a></Animator>
+          </ProjectInfo>
+        </ScrollPage>
+      </ScrollContainer>
       <SubscribeBanner />
     </BorderLayout>
   );
 };
+
+const Message = styled.div`
+	font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  height:100%;
+  img{
+    width:100%;
+    height:100%;
+  }
+  span{ 
+  font-size: 500%;
+  font-weight: bold;
+}
+div{
+  font-size: 250%;
+}
+a{
+    color:var(--color-black)
+  }
+  .mobile {
+    display:none
+  }
+  @media screen and (max-width: 412px) {
+    font-size: 1rem;
+  .web{
+    display: none;
+  }
+  .mobile {
+    display:block
+  }
+  }
+`
+
+const ProjectInfo = styled.div`
+  display:flex;
+  align-items: center;
+  flex-direction:column;
+  justify-content:center;
+  color:${(props)=>props.themeState==='light' ? 'var(--color-black)' : 'var(--color-white)'};
+  font-size:2rem;
+  font-weight:bold;
+  height:100%;
+  svg{
+    margin-left: 0.5rem;
+    background-color:${(props)=>props.themeState==='light' ? 'var(--color-white)' : 'var(--color-black)'};
+    color:${(props)=>props.themeState==='light' ? 'var(--color-black)' : 'var(--color-white)'};
+  }
+`
+
+const ProjectName = styled.div`
+  margin-bottom: 1rem;
+  font-size:300%;
+  @media screen and (max-width: 412px){
+    font-size: 100%;
+  }
+`
 
 export default HomePage;
