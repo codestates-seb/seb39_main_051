@@ -28,7 +28,7 @@ public class MemberService{
         }
         String password = member.getPassword();
         member.setPassword(bCryptPasswordEncoder.encode(password));
-        //member.setRole(Member.ROLE.MEMBER_GENERAL);
+        member.setRole(Member.ROLE.ROLE_USER);
         return memberRepository.save(member);
     }
 
@@ -36,15 +36,15 @@ public class MemberService{
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getEmail())
-                .ifPresent(email -> findMember.setEmail(email));
+                .ifPresent(email -> findMember.setEmail(member.getEmail()));
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(password));
+                .ifPresent(password -> findMember.setPassword(member.getPassword()));
         Optional.ofNullable(member.getNickname())
-                .ifPresent(nickname -> findMember.setNickname(nickname));
+                .ifPresent(nickname -> findMember.setNickname(member.getNickname()));
         Optional.ofNullable(member.getPicture())
-                .ifPresent(picture -> findMember.setPicture(picture));
+                .ifPresent(picture -> findMember.setPicture(member.getPicture()));
 
-        return memberRepository.save(member);
+        return memberRepository.save(findMember);
     }
 
     public Member findVerifiedMember(long memberId){

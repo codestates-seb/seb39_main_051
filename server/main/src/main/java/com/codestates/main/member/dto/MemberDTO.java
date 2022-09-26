@@ -27,7 +27,7 @@ public class MemberDTO {
         private long id;
         private String email;
         private String nickname;
-        //private Member.ROLE role;
+        private Member.ROLE role;
     }
 
     @Getter
@@ -35,6 +35,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Patch {
+        private long id;
         private String email;
         private String password;
         private String nickname;

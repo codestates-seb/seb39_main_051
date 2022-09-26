@@ -21,11 +21,11 @@ const SubscribeMark = () => {
 };
 const Layout = styled.div`
   position: absolute;
-  left: 0.5rem;
-  top: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  margin: 1rem;
+  left:2.75%;
+  top:2.75%;
+  margin:5.5%;
+  width:11%;
+  height:11%;
 `
 
 export default SubscribeMark;

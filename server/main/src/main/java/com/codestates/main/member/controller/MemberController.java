@@ -1,6 +1,7 @@
 package com.codestates.main.member.controller;
 
 import com.codestates.main.exception.BusinessLogicException;
+import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.filter.JwtAuthenticationFilter;
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
@@ -15,6 +16,7 @@ import org.springframework.security.config.web.servlet.headers.HeadersSecurityMa
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +30,6 @@ public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    private final MemberRepository memberRepository;
     @PostConstruct
     public void init(){
         Member member = Member.builder()
@@ -38,8 +37,7 @@ public class MemberController {
                 .email("admin@naver.com")
                 .nickname("관리자")
                 .password("1234")
-                //.role(Member.ROLE.MEMBER_ADMIN)
-                .roles("ROLE_USER")
+                .role(Member.ROLE.ROLE_ADMIN)
                 .build();
         memberService.createMember(member);
     }
@@ -60,7 +58,7 @@ public class MemberController {
         try{
             createdMember = memberService.createMember(member);
         }catch (BusinessLogicException businessLogicException ){
-            return new ResponseEntity<>("USER EXISTS",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ExceptionCode.MEMBER_EXISTS,HttpStatus.NOT_FOUND);
         }
 
         MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(createdMember);
@@ -69,40 +67,6 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/patch")
-    public ResponseEntity patchMember(@RequestBody MemberDTO.Patch requestBody){
-        Member member = memberMapper.memberPatchDTOToMember(requestBody);
-        Member updatedAnswer = memberService.updateMember(member);
-        MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(updatedAnswer);
 
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
 
-//    @PostMapping("/login")
-//    public ResponseEntity login(@RequestBody MemberDTO.Login requestBody){
-//        Member member = memberService.findMember(requestBody.getEmail());
-//        if(member==null){
-//            return new ResponseEntity<>("존재하지 않는 유저 입니다.",HttpStatus.NOT_FOUND);
-//        }
-//        if (!bCryptPasswordEncoder.matches(requestBody.getPassword(), member.getPassword())) {
-//            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.",HttpStatus.NOT_FOUND);
-//        }
-//        Date expiredAt = new Date(System.currentTimeMillis()+1000*60*10);
-//        Map<String,Object> claims = new HashMap<>();
-//        claims.put("email",member.getEmail());
-//        String jwtToken = jwtTokenizer.generateAccessToken(claims,
-//                                        "jwtToken"
-//                                        ,expiredAt
-//                                        ,jwtTokenizer.encodeBase64SecretKey(secretKey));
-//        MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(member);
-//        return new ResponseEntity<>("hi",HttpStatus.OK);
-//    }
-    @PostMapping("/join")
-    public String join(@RequestBody Member member) {
-        member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
-        //member.setRole(Member.ROLE.MEMBER_ADMIN);
-        member.setRoles("ROLE_USER");
-        memberRepository.save(member);
-        return "회원 가입 완료";
-    }
 }

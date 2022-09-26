@@ -5,13 +5,23 @@ import {
     faJava,
     faSquareJs,
 }from'@fortawesome/free-brands-svg-icons';
-import {faNetworkWired,faLightbulb, faDatabase, faLeaf, faFolderTree} from '@fortawesome/free-solid-svg-icons'
+import {faNetworkWired,faLightbulb, faDatabase, faLeaf, faFolderTree,faGear} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
+import { useState } from "react";
 
 
 const CategoryCard = (props) => {
     const themeState = useSelector((state) => state.themeSlice).theme
+    const [isHovering, setIsHovering] = useState(false);
+
+    const handleMouseOver = () => {
+        setIsHovering(true);
+    }
+    const handleMouseOut = () => {
+        setIsHovering(false)
+    }
+
     let content = null
     switch (props.name){
         case '리액트':
@@ -38,10 +48,34 @@ const CategoryCard = (props) => {
         case '네트워크':
                 content = <FontAwesomeIcon icon={faNetworkWired} size='2x'/>
                 break
+        case '운영체제':
+            content = <FontAwesomeIcon icon={faGear} size='2x'/>
+            break
+        default:
+            content = null;
+                break
     }
     return(
-        <CategoryCardLayout onClick={props.handleClick}>
+        <>
+        <CategoryCardLayout onClick={() => props.handleClick(props.name)} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+            {isHovering ? 
+            <>
             <CategoryCardWrapper themeState={themeState}>
+                <SubscribeMark />
+                <LogoLayout>
+                        <div>
+                        {props.name}
+                        </div>
+                        <div>
+                        구독하기
+                        </div>
+                </LogoLayout>
+            </CategoryCardWrapper>
+            <div className='subscribe-web'>ㅤ</div>
+            </>
+            :
+            <>
+                        <CategoryCardWrapper themeState={themeState}>
                 <SubscribeMark />
                 <LogoLayout>
                         <div>
@@ -53,7 +87,10 @@ const CategoryCard = (props) => {
                 </LogoLayout>
             </CategoryCardWrapper>
             <div className='subscribe-web'>구독 중</div>
+            </>
+            }
         </CategoryCardLayout>
+        </>
     )
 }
 
@@ -62,11 +99,12 @@ const CategoryCardLayout = styled.div`
     font-weight: bold;
     position:relative;
     width: 18.5rem;
+    //회전 애니메이션
     .subscribe-web{
         text-align: center;
         margin-top: 1rem;
     }
-        @media screen and (max-width:767px) {
+        @media screen and (max-width:412px) {
         display:flex;
         .subscribe-web {
             display:none;
@@ -83,19 +121,12 @@ const CategoryCardWrapper = styled.div`
     border-radius:1.5rem;
     cursor: pointer;
     background-color :  ${(props) => props.themeState==='light' ? 'var(--color-yellow)': 'var(--color-black)'};
-    .subscribe-mobile{
-        display:none
-    }
     :hover{
         background-color :  ${(props) => props.themeState==='light' ? '#FFE57A': 'var(--color-navy)'};
     }
 `
 const LogoLayout = styled.div`
-@media screen and (max-width:767px){
-    .subscribe-mobile{
-        display:block;
-        margin-right: -2rem;
-    }
+@media screen and (max-width:412px){
 }
 `
 const NameWrapper = styled.div`
