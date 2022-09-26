@@ -16,6 +16,7 @@ const SubscribePage = () => {
     '알고리즘',
     '네트워크',
     '데이터베이스',
+    '운영체제'
   ];
   const handleSubscribe = (category) => {
     toast.success(`${category}를 구독합니다!`,{
@@ -41,6 +42,7 @@ const StyledContainer = styled(ToastContainer)`
   }
   .Toastify__toast {
     background-color: ${(props)=>props.themeState==='light'? 'var(--color-orange)' : 'var(--color-gray)'};
+    color:var(--color-white);
   }
   .Toastify__toast-body {
   }
