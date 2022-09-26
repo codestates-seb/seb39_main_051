@@ -1,11 +1,13 @@
 package com.codestates.main.post.dto;
 
+import com.codestates.main.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -25,4 +27,6 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
+    private List<Comment> comments;
 }
