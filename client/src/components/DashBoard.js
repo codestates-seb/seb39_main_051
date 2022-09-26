@@ -32,15 +32,13 @@ const DashBoard = () => {
 const Title = styled.div`
   font-size: 2rem;
   font-weight: bold;
+  margin-bottom: 5%;
 `;
 
 const Category = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-
-  & div {
-    margin: 1rem 0;
-  }
+  grid-row-gap: 2%;
 
   @media screen and (max-width: 800px) {
     grid-template-columns: 1fr;
@@ -48,6 +46,7 @@ const Category = styled.div`
 
   @media screen and (min-width: 1400px) {
     grid-template-columns: 1fr 1fr 1fr;
+    grid-row-gap: 20%;
   }
 `;
 
