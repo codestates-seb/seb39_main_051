@@ -1,9 +1,6 @@
 package com.codestates.main.question.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class QuestionPatchDto {
 
+    @Setter
     private Long questionId;
     private String content;
 }
