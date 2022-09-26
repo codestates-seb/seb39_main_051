@@ -17,11 +17,11 @@ const UserName = () => {
           />
           <BasicButton
             themeState={themeState}
-            width='30%'
-            height='4rem'
+            width='20%'
+            height='3rem'
             color='var(--color-white)'
             backGroundColor='var(--color-orange)'
-            fontSize='1.8rem'
+            fontSize='1.3rem'
             text='변경하기'
           />
         </div>
@@ -52,21 +52,21 @@ const ContentWrapper = styled.div`
 `;
 
 const UserProfileImage = styled.img`
-  width: 35%;
+  width: 30%;
   height: 40%;
   border-radius: 1.5rem;
   margin-bottom: 2rem;
 `;
 
 const UserNameInput = styled.input`
-  width: 70%;
-  height: 4rem;
+  width: 65%;
+  height: 3rem;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   color: var(--color-white);
   border: none;
   border-radius: 1.5rem;
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   margin-bottom: 5rem;
   padding-left: 1rem;
   ::placeholder {

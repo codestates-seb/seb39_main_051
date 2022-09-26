@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 
 const BasicButton = (props) => {
@@ -13,6 +13,7 @@ const BasicButton = (props) => {
       fontSize={props.fontSize}
       padding={props.padding}
       onClick={props.onClick}
+      selected={props.selected}
     >
       {props.text}
     </Btn>
@@ -29,6 +30,21 @@ const Btn = styled.button`
   color: ${(props) => props.color};
   padding: ${(props) => props.padding};
   cursor: pointer;
+
+  ${(props) => {
+    if (props.selected) {
+      return css`
+        background-color: ${(props) =>
+          props.themeState === 'light'
+            ? 'var(--color-yellow)'
+            : 'var(--color-navy)'};
+        color: ${(props) =>
+          props.themeState === 'light'
+            ? 'var(--color-black)'
+            : 'var(--color-white)'}; ;
+      `;
+    }
+  }}
 `;
 
 export default BasicButton;

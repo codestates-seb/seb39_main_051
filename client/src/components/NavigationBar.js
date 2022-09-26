@@ -9,7 +9,9 @@ const NavigationBar = () => {
   return (
     <>
       <NavBar themeState={themeState}>
-        <NavBarLogo themeState={themeState}>로고</NavBarLogo>
+        <NavBarLogo themeState={themeState} href='/'>
+          매일 메일
+        </NavBarLogo>
         <DropDown mobile>
           <img
             className='mobile'
@@ -20,21 +22,27 @@ const NavigationBar = () => {
         </DropDown>
         <DropDown web>
           <NavBarMenu web themeState={themeState}>
-            <span>질문 답변 공유 게시판</span>
-            <span>자유 게시판</span>
-            <span>건의 게시판</span>
+            <a href='/answer'>질문 답변 공유 게시판</a>
+            <a href='/free'>자유 게시판</a>
+            <a href='/suggestion'>건의 게시판</a>
           </NavBarMenu>
           <DropDownMenu themeState={themeState} />
         </DropDown>
         {isLoggedin ? (
           <NavBarRight web themeState={themeState}>
-            <NavBarButton themeState={themeState}>마이페이지</NavBarButton>
-            <span>닉네임</span>
+            <a href='/mypage'>
+              <NavBarButton themeState={themeState}>마이페이지</NavBarButton>
+            </a>
+            <NavBarButton themeState={themeState}>로그아웃</NavBarButton>
           </NavBarRight>
         ) : (
           <NavBarRight web>
-            <NavBarButton themeState={themeState}>로그인</NavBarButton>
-            <NavBarButton themeState={themeState}>회원가입</NavBarButton>
+            <a href='/login'>
+              <NavBarButton themeState={themeState}>로그인</NavBarButton>
+            </a>
+            <a href='/signup'>
+              <NavBarButton themeState={themeState}>회원가입</NavBarButton>
+            </a>
           </NavBarRight>
         )}
       </NavBar>
@@ -51,9 +59,7 @@ const NavBar = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: ${(props) =>
-    props.themeState === 'light'
-      ? 'var(--color-light-bg-color)'
-      : 'var(--color-dark-bg-color)'};
+    props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   color: var(--color-white);
 
   @media screen and (min-width: 413px) {
@@ -64,16 +70,18 @@ const NavBar = styled.div`
   }
 `;
 
-const NavBarLogo = styled.div`
+const NavBarLogo = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
   word-break: keep-all;
+  color: var(--color-white);
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   font-size: 1.6rem;
   width: 28rem;
   height: 4rem;
+  text-decoration: none;
 
   @media screen and (min-width: 413px) {
     width: 38.3rem;
@@ -90,8 +98,10 @@ const NavBarMenu = styled.div`
   width: 52.5rem;
   height: 4rem;
 
-  & span {
+  & a {
     cursor: pointer;
+    color: var(--color-white);
+    text-decoration: none;
   }
 
   @media screen and (max-width: 412px) {

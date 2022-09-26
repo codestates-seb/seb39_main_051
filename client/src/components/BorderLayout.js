@@ -29,7 +29,9 @@ const Wrapper = styled.div`
   width: 85%;
   height: 100%;
   background-color: ${(props) =>
-    props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-black)'};
+    props.themeState === 'light'
+      ? 'var(--color-white)'
+      : 'var(--color-dark-bg-color)'};
   border: ${(props) =>
     props.themeState === 'light'
       ? '1rem solid var(--color-orange);'
