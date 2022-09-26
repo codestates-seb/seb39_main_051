@@ -27,5 +27,8 @@ public class AnswerController {
         return "answer";
     }
 
-
+    @PostMapping("/post/")
+    public String postPost(@RequestParam String type){
+        return null;
+    }
 }
