@@ -65,7 +65,6 @@ public class MemberMapperImpl implements MemberMapper{
             return null;
         }
         Member member = new Member();
-        member.setMemberId(memberPatchDTO.getId());
         member.setEmail(memberPatchDTO.getEmail());
         member.setPassword(memberPatchDTO.getPassword());
         member.setNickname(memberPatchDTO.getNickname());
