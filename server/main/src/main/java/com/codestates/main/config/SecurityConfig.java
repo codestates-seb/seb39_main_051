@@ -39,8 +39,8 @@ public class SecurityConfig{
                 .apply(new CustomDsl()) // 추가
                 .and()
                 .authorizeHttpRequests(authorize -> authorize  // (3) 추가
-                                .antMatchers(HttpMethod.GET, "/member/get").hasRole("ROLE_USER")
-                                //.antMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("MEMBER_USER", "MEMBER_ADMIN")  // (4) 추가
+                                .antMatchers(HttpMethod.GET, "/member/get").hasRole("USER")
+                                .antMatchers(HttpMethod.GET, "/my-page").hasAnyRole("USER", "ADMIN")  // (4) 추가
                                 .anyRequest().permitAll());
                 //.authorizeRequests()
                 //.antMatchers("/answer/**")

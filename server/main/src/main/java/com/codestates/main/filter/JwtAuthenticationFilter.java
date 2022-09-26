@@ -45,51 +45,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throw new RuntimeException(e);
         }
 
-        // (3-3)
 
 
-//        try {
-//            ObjectMapper om = new ObjectMapper();
-//            Member member = om.readValue(request.getInputStream(), Member.class);
-//
-//            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
-//
-//            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-//
-//            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//            return authentication;
-//        } catch (IOException e) {
-//            e.printStackTrace();;
-//        }
-//        return null;
     }
-//    @Override
-//    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-//
-//        System.out.println("successfulAuthentication");
-//        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-//
-//        String jwtToken = JWT.create()
-//                .withSubject("jwt token")
-//                .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 10)))
-//                .withIssuedAt(new Date(System.currentTimeMillis()))
-//                .withClaim("id", principalDetails.getMember().getMemberId())
-//                .withClaim("email", principalDetails.getMember().getEmail())
-//                .sign(Algorithm.HMAC512("cos_jwt_token"));
-//        response.addHeader("Authorization", "Bearer " + jwtToken);
-//    }
+
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) {
-        Member member = (Member) authResult.getPrincipal();  // (4-1)
-        String accessToken = delegateAccessToken(member);   // (4-2)
-        String refreshToken = delegateRefreshToken(member); // (4-3)
+        Member member = (Member) authResult.getPrincipal();
+        String accessToken = delegateAccessToken(member);
+        String refreshToken = delegateRefreshToken(member);
 
-        response.setHeader("Authorization", "Bearer " + accessToken);  // (4-4)
-        response.setHeader("Refresh", refreshToken);                   // (4-5)
+        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Refresh", refreshToken);
     }
 
     // (5)

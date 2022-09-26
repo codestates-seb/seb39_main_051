@@ -1,6 +1,7 @@
 package com.codestates.main.member.controller;
 
 import com.codestates.main.exception.BusinessLogicException;
+import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.filter.JwtAuthenticationFilter;
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
@@ -15,6 +16,7 @@ import org.springframework.security.config.web.servlet.headers.HeadersSecurityMa
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +58,7 @@ public class MemberController {
         try{
             createdMember = memberService.createMember(member);
         }catch (BusinessLogicException businessLogicException ){
-            return new ResponseEntity<>("USER EXISTS",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ExceptionCode.MEMBER_EXISTS,HttpStatus.NOT_FOUND);
         }
 
         MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(createdMember);
@@ -65,13 +67,6 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/patch")
-    public ResponseEntity patchMember(@RequestBody MemberDTO.Patch requestBody){
-        Member member = memberMapper.memberPatchDTOToMember(requestBody);
-        Member updatedAnswer = memberService.updateMember(member);
-        MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(updatedAnswer);
 
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
 
 }
