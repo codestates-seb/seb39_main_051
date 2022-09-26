@@ -27,6 +27,7 @@ const DashBoardPage = () => {
                 onClick={handleClick}
                 selected
               />
+              <SubscribeWrapper themeState={themeState}></SubscribeWrapper>
             </a>
             <a href='/userimg'>
               <BasicButton
@@ -140,5 +141,7 @@ const RightContent = styled.div`
     display: none;
   }
 `;
+
+const SubscribeWrapper = styled.div``;
 
 export default DashBoardPage;
