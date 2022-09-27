@@ -11,8 +11,8 @@ const UserImg = () => {
       <ContentWrapper>
         <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
         <div>
+          <span>사진을 드래그해주세요.</span>
           <InputImgWrapper themeState={themeState}>
-            <span>사진을 드래그해주세요.</span>
             <InputImg type='file' accept='image/*' />
           </InputImgWrapper>
           <BasicButton
@@ -33,14 +33,15 @@ const UserImg = () => {
 const Title = styled.div`
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 5%;
+  margin-bottom: 2rem;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: 60rem;
 
   & div {
     display: flex;
@@ -49,6 +50,13 @@ const ContentWrapper = styled.div`
     height: 100%;
     justify-content: center;
     align-items: flex-end;
+
+    & span {
+      position: relative;
+      top: 45%;
+      right: 45%;
+      color: var(--color-white);
+    }
   }
 `;
 
@@ -67,12 +75,6 @@ const InputImgWrapper = styled.div`
   color: var(--color-white);
   border-radius: 1.5rem;
   margin-bottom: 2%;
-
-  & span {
-    position: relative;
-    top: 50%;
-    right: 45%;
-  }
 `;
 
 const InputImg = styled.input`
