@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import DarkModeSwitch from './DarkModeSwitch';
 const DropDownMenu = (props) => {
   return (
     <>
@@ -11,6 +11,7 @@ const DropDownMenu = (props) => {
             <span>건의 게시판</span>
             <span>로그인</span>
             <span>회원가입</span>
+            <DarkModeSwitch />
           </ItemList>
         </ItemListWrapper>
       ) : (

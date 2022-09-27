@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import DropDownMenu from './DropDownMenu';
+import DarkModeSwitch from './DarkModeSwitch';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -30,6 +31,7 @@ const NavigationBar = () => {
         </DropDown>
         {isLoggedin ? (
           <NavBarRight web themeState={themeState}>
+                      <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/mypage'>
               <NavBarButton themeState={themeState}>마이페이지</NavBarButton>
             </a>
@@ -37,6 +39,7 @@ const NavigationBar = () => {
           </NavBarRight>
         ) : (
           <NavBarRight web>
+                      <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/login'>
               <NavBarButton themeState={themeState}>로그인</NavBarButton>
             </a>
