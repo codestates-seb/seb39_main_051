@@ -6,32 +6,8 @@ import { useEffect, useState } from 'react';
 import {useInterval} from 'react-use';
 const LoginPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const messageArr = ['리액트', '자바스크립트', '자바', '스프링', '부터']
-  const changeMessageArr = ['운영체제','네트워크','알고리즘','자료구조', '데이터베이스까지']
+  const messageArr = ['실력을', '기르는', '습관', '매일메일과', '함께']
   const [items, setItems] = useState(messageArr)
-  const [count, setCount] = useState(0)
-  const[play, setPlay] = useState(false)
-
-  useInterval(
-    ()=>{
-      setItems(messageArr)
-      setCount(count+1)
-      if(count == 1){
-        setCount(0)
-        setItems(changeMessageArr)
-      }
-    }, 
-    play ? 6000 : null
-  )
-
-  useEffect(()=> {
-    const timer = setTimeout(() => {
-      setItems(changeMessageArr)
-      setPlay(true)
-    }, 4000)
-
-    return () => clearTimeout(timer)
-  }, [])
 
   return (
     <>
@@ -96,17 +72,17 @@ const MessageWrapper =styled.div`
 `
 
 const animation = keyframes `
-  50% { opacity: 0; transform: translateY(-100px) skewY(10deg) skewX(10deg) rotateZ(30deg); filter: blur(10px)}
-  60% {opacity: 1; transform: translateY(0) skewY(0deg) skewX(0deg) rotateZ(0deg); filter: blur(0px)}
-  70% {opacity: 1; transform: translateY(0) skewY(0deg) skewX(0deg) rotateZ(0deg); filter: blur(0px)}
-  80% {opacity: 0; transform: translateY(-100px) skewY(10deg) skewX(10deg) rotateZ(30deg); filter: blur(10px)}
+  0% { opacity: 0; transform: translateY(-100px) skewX(10deg) skewY(10deg); filter: blur(10px)}
+  25% {opacity: 1; transform:  translateY(0px) skewX(0deg)  skewY(0deg) ; filter: blur(0px)}
+  75% {opacity: 1; transform:  translateY(0px) skewX(0deg)  skewY(0deg)  ; filter: blur(0px)}
+  100% {opacity: 0; transform: translateY(-100px) skewX(10deg)  skewY(10deg); filter: blur(10px)}
 `
 
 const AnimationWrapper = styled.span`
   display:inline-block;
   flex-direction:row;
   font-weight:bold;
-  width: 70%;
+  width:80%;
   span{
   display:inline-block;
   opacity: 0;
@@ -115,6 +91,8 @@ const AnimationWrapper = styled.span`
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  /* animation-direction: alternate; */
+  margin:1%
   }
   span:nth-child(1){
     animation-delay: 0.1s;
