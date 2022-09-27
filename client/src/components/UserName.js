@@ -37,6 +37,7 @@ const Title = styled.div`
 
 const ContentWrapper = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
@@ -44,7 +45,7 @@ const ContentWrapper = styled.div`
   & div {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 60%;
     height: 100%;
     justify-content: center;
     align-items: flex-end;
@@ -52,14 +53,14 @@ const ContentWrapper = styled.div`
 `;
 
 const UserProfileImage = styled.img`
-  width: 30%;
-  height: 40%;
+  width: 25rem;
+  height: 25rem;
   border-radius: 1.5rem;
   margin-bottom: 2rem;
 `;
 
 const UserNameInput = styled.input`
-  width: 65%;
+  width: 50%;
   height: 3rem;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};

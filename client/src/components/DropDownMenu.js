@@ -48,7 +48,6 @@ const ItemListWrapper = styled.div`
   position: absolute;
   width: ${(props) => (props.mobile ? 'fit-content' : '52.5rem')};
   padding-left: ${(props) => (props.mobile ? '0' : '2rem')};
-  z-index: 1;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   right: 0px;

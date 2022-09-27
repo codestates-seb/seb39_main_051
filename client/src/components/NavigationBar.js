@@ -4,7 +4,7 @@ import DropDownMenu from './DropDownMenu';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const isLoggedin = true;
+  const isLoggedin = false;
 
   return (
     <>
@@ -56,6 +56,7 @@ const NavBar = styled.div`
   top: 0;
   width: 100%;
   height: 4rem;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   background-color: ${(props) =>
