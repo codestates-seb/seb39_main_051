@@ -15,7 +15,6 @@ const TapMenu = ({ type }) => {
             <div>리액트</div>
             <div>스프링</div>
             <div>자료구조</div>
-            <div>알고리즘</div>
             <div>운영체제</div>
             <div>데이터베이스</div>
             <div>네트워크</div>

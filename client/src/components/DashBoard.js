@@ -11,7 +11,6 @@ const DashBoard = () => {
     '리액트',
     '스프링',
     '자료구조',
-    '알고리즘',
     '운영체제',
     '데이터베이스',
     '네트워크',
@@ -39,6 +38,7 @@ const Category = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-row-gap: 2%;
+  place-items: center;
 
   @media screen and (max-width: 800px) {
     grid-template-columns: 1fr;

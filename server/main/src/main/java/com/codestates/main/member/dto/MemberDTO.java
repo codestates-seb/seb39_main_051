@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 public class MemberDTO {
 
     @Getter
@@ -28,6 +30,7 @@ public class MemberDTO {
         private String email;
         private String nickname;
         private Member.ROLE role;
+        private LocalDateTime createdDate;
     }
 
     @Getter
@@ -35,7 +38,6 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Patch {
-        private long id;
         private String email;
         private String password;
         private String nickname;

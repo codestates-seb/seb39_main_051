@@ -1,3 +1,16 @@
+import {
+  faReact,
+  faJava,
+  faSquareJs,
+} from '@fortawesome/free-brands-svg-icons';
+import {
+  faNetworkWired,
+  faDatabase,
+  faLeaf,
+  faFolderTree,
+  faGear,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
@@ -7,6 +20,17 @@ import DashBoard from '../components/DashBoard';
 const DashBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
+  const category = [
+    faSquareJs,
+    faJava,
+    faReact,
+    faLeaf,
+    faFolderTree,
+    faGear,
+    faDatabase,
+    faNetworkWired,
+  ];
+
   const handleClick = (e) => {};
 
   return (
@@ -15,7 +39,7 @@ const DashBoardPage = () => {
         <Layout>
           <LeftContent themeState={themeState}>
             <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
-            <a href='/mypage'>
+            <a href='/mypage' className='web'>
               <BasicButton
                 themeState={themeState}
                 width='100%'
@@ -27,8 +51,14 @@ const DashBoardPage = () => {
                 onClick={handleClick}
                 selected
               />
-              <SubscribeWrapper themeState={themeState}></SubscribeWrapper>
             </a>
+            <SubscribeWrapper themeState={themeState}>
+              {category.map((el) => (
+                <LogoWrapper themeState={themeState}>
+                  <FontAwesomeIcon icon={el} size='2x' />
+                </LogoWrapper>
+              ))}
+            </SubscribeWrapper>
             <a href='/userimg'>
               <BasicButton
                 themeState={themeState}
@@ -106,7 +136,7 @@ const LeftContent = styled.div`
     margin: 2rem 0;
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     width: 100%;
     margin: 0;
 
@@ -115,13 +145,17 @@ const LeftContent = styled.div`
       height: 4rem;
       margin: 2rem 0;
     }
+
+    .web {
+      display: none;
+    }
   }
 `;
 
 const UserProfileImage = styled.img`
   display: block;
   width: 25rem;
-  height: 30rem;
+  height: 25rem;
   border-radius: 1.5rem;
   margin-bottom: 2rem;
 `;
@@ -135,13 +169,50 @@ const RightContent = styled.div`
       props.themeState === 'light'
         ? 'var(--color-orange)'
         : 'var(--color-gray)'};
+  border-radius: 1.5rem;
   padding: 5rem;
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     display: none;
   }
 `;
 
-const SubscribeWrapper = styled.div``;
+const SubscribeWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-row-gap: 1rem;
+  place-items: center;
+  width: 100%;
+  height: fit-content;
+  background-color: ${(props) =>
+    props.themeState === 'light'
+      ? 'var(--color-white)'
+      : 'var(--color-dark-bg-color)'};
+  border: 0.7rem solid
+    ${(props) =>
+      props.themeState === 'light'
+        ? 'var(--color-orange)'
+        : 'var(--color-gray)'};
+  border-radius: 1rem;
+  padding: 1rem 0;
+
+  @media screen and (min-width: 1026px) {
+    display: none;
+  }
+`;
+
+const LogoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 4rem;
+  background-color: ${(props) =>
+    props.themeState === 'light'
+      ? 'var(--color-orange)'
+      : 'var(--color-black)'};
+  border-radius: 1rem;
+`;
 
 export default DashBoardPage;

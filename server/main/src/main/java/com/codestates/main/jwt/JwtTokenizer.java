@@ -1,5 +1,9 @@
 package com.codestates.main.jwt;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.codestates.main.exception.BusinessLogicException;
+import com.codestates.main.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -93,5 +97,18 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+    public long getMemberIdFromJwtHeader(String jwtHeader){
+        String jwtToken = jwtHeader.replace("Bearer ", "");
+
+        long id = JWT.require(
+                        Algorithm.HMAC512(secretKey))
+                .build()
+                .verify(jwtToken)
+                .getClaim("memberId")
+                .asLong();
+
+        return id;
     }
 }

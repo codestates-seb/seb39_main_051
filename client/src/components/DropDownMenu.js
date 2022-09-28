@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import DarkModeSwitch from './DarkModeSwitch';
 const DropDownMenu = (props) => {
   return (
     <>
@@ -11,6 +11,7 @@ const DropDownMenu = (props) => {
             <span>건의 게시판</span>
             <span>로그인</span>
             <span>회원가입</span>
+            <DarkModeSwitch />
           </ItemList>
         </ItemListWrapper>
       ) : (
@@ -48,7 +49,6 @@ const ItemListWrapper = styled.div`
   position: absolute;
   width: ${(props) => (props.mobile ? 'fit-content' : '52.5rem')};
   padding-left: ${(props) => (props.mobile ? '0' : '2rem')};
-  z-index: 1;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   right: 0px;

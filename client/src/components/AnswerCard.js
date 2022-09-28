@@ -3,31 +3,64 @@ import { useSelector } from 'react-redux';
 import BasicButton from './BasicButton';
 import Comment from './Comment';
 import { useState } from 'react';
-const AnswerCard = (props) => {
+const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isCommentShow, setIsCommentShow] = useState(false);
+  //답변 수정
+  const [isAnswerEditMode, setIsAnswerEditMode] = useState(false) 
+  const [editedAnswer, setEditedAnswer] = useState(content)
+  const handleEditAnswer = (e) => {
+    setEditedAnswer(e.target.value)
+  }
+  const handleEditMode = () => {
+    setIsAnswerEditMode(!isAnswerEditMode)
+    setEditedAnswer(content)
+  }
   const toggleCommentShow = () => {
     setIsCommentShow(!isCommentShow);
-    return;
   };
   
   return (
     <Layout themeState={themeState}>
       <AnswerInfo>
         <AnswerWriter>
-          <img src={props.profileImg} />
-          {props.writer}
+          <img src={profileImg} />
+          {writer}
         </AnswerWriter>
         <AnswerEvent>
-          <div className='answerDate'>{props.modifiedAt}</div>
-          <div className='answerEdit'>수정</div>
+          <div className='answerDate'>{modifiedAt}</div>
+          {isAnswerEditMode ? (
+          <>
+          <div className='answerEdit'>등록</div>
+          <div className='answerEdit' onClick={()=>handleEditMode()}>취소</div>
+          </>
+          ) : (
+          <>
+            <div className='answerEdit' onClick={()=>handleEditMode()}>수정</div>
           <div className='answerEdit'>삭제</div>
+          </>)
+          }
           </AnswerEvent>
       </AnswerInfo>
       <AnswerLayout themeState={themeState}>
         <AnswerContent themeState={themeState}>
-          <div className='answerContent'>{props.content}</div>
-          <div className='answerlikes'>❤️{props.likes}</div>
+          {isAnswerEditMode ? (
+          <div className='formWrapper'>
+          <form>
+            <label id='editAnswer' />
+            <textarea
+            id='editAnswer'
+            value={editedAnswer}
+            onChange={handleEditAnswer}
+            />
+          </form>
+          </div>
+          ) : (
+            <>
+                      <div className='answerContent'>{content}</div>
+            </>
+          )}
+          <div className='answerLikes'>❤️{likes}</div>
         </AnswerContent>
       </AnswerLayout>
       <AnswerCommentInput themeState={themeState}>
@@ -44,7 +77,7 @@ const AnswerCard = (props) => {
           <ToggleComment themeState onClick={() => toggleCommentShow()}>
             댓글 숨기기
           </ToggleComment>
-          {props.comment.map((el) => (
+          {comment.map((el) => (
             <Comment
               commentWriter={el.commentWriter}
               content={el.content}
@@ -59,7 +92,7 @@ const AnswerCard = (props) => {
           <ToggleComment
             themeState
             onClick={() => toggleCommentShow()}
-          >{`총 ${props.comment.length} 개의 댓글이 있습니다.`}</ToggleComment>
+          >{`총 ${comment.length} 개의 댓글이 있습니다.`}</ToggleComment>
         </>
       )}
     </Layout>
@@ -115,9 +148,19 @@ const AnswerLayout = styled.div`
 const AnswerContent = styled.div`
   display: flex;
   width: 100%;
-  /* margin-right: 1rem; */
   background: ${(props) =>
     props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
+    .formWrapper{
+      display:flex;
+      width:90%;
+    }
+    form{
+      width:100%;
+    }
+    textarea{
+      width:100%;
+      border: 1px solid #d4d4d4;
+    }
     .answerContent{
       font-size: 2rem;
       width:90%;
@@ -125,25 +168,11 @@ const AnswerContent = styled.div`
     }
     .answerLikes{
       width:5%;
+      cursor: pointer;
     }
   @media screen and (max-width: 412px) {
     margin-right: 1rem;
     border: 1px solid #d4d4d4;
-  }
-`;
-const AnswerEventWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 1.2rem;
-  width: 5%;
-  cursor: pointer;
-  .edit {
-    color: #d4d4d4;
-    cursor: pointer;
-  }
-  @media screen and (max-width: 412px) {
-    display: flex;
-    flex-direction: column;
   }
 `;
 const AnswerCommentInput = styled.div`
@@ -166,12 +195,11 @@ const AnswerCommentInput = styled.div`
     display: flex;
     margin: 1rem 0;
     input {
-      /* width: 27.6rem; */
       margin-right: 1rem;
       border: 1px solid #d4d4d4;
     }
     button {
-      /* width:3rem; */
+      width:10%;
       font-size: 1rem;
       padding: 0.3rem;
     }

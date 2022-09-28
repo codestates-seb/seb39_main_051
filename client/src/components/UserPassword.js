@@ -36,7 +36,7 @@ const UserPassword = () => {
           </InputWrapper>
           <BasicButton
             themeState={themeState}
-            width='20%'
+            width='30%'
             height='3rem'
             color='var(--color-white)'
             backGroundColor='var(--color-orange)'
@@ -66,12 +66,12 @@ const ContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    width: 100%;
+    width: 80%;
   }
 `;
 
 const UserPasswordInput = styled.input`
-  width: 50%;
+  width: 100%;
   height: 3rem;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
@@ -97,8 +97,10 @@ const InputWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-right: 1rem;
-    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
+    white-space: nowrap;
   }
 `;
 

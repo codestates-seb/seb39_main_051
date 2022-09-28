@@ -8,7 +8,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Form = (props) => {
-    console.log(props)
     const themeState = useSelector((state)=> state.themeSlice).theme;
     const [inputValue, setInputValue] = useState({
         nickName: '',
@@ -128,7 +127,7 @@ const Layout = styled.div`
     display: flex;
     flex-direction: column;
     background-color: ${(props)=>props.themeState==='light' ? 'var(--color-white)' : 'var(--color-dark-bg-color )'};
-    width:47rem;
+    min-width:47rem;
     height: 70rem;
     border-radius:1.5rem;
     justify-content:center;

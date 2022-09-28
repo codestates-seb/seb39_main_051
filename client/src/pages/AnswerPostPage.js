@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
 import NavigationBar from '../components/NavigationBar';
 
-const PostPage = () => {
+const AnswerPostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
 
   return (
     <>
@@ -13,35 +16,42 @@ const PostPage = () => {
       <ContentWrapper>
         <FormWrapper themeState={themeState}>
           <form>
-          <h1>게시판이름</h1>
+          <h1>답변 작성</h1>
             <InputWrapper themeState={themeState}>
-              <input
-                id='title'
-                name='title'
-                type='text'
-                placeholder='제목'
-                required
-              />
+              <Title themeState={themeState}><div>호이스팅이란?</div></Title>
             </InputWrapper>
-            <DropDownList type='free' category='잡담' />
+            <CategoryWrapper themeState={themeState}>
+              <div>리액트</div>
+            </CategoryWrapper>
             <InputWrapper themeState={themeState}>
               <textarea
                 id='body'
                 name='body'
                 type='text'
-                placeholder='내용'
+                placeholder='답변 내용'
                 required
               />
             </InputWrapper>
-            <BasicButton
-              themeState={themeState}
-              width='5.5rem'
-              height='4rem'
-              color='var(--color-white)'
-              backGroundColor='var(--color-orange)'
-              fontSize='1.8rem'
-              text='등록'
-            />
+            <ButtonWrapper>solid
+              <BasicButton
+                themeState={themeState}
+                width='5.5rem'
+                height='4rem'
+                color='var(--color-white)'
+                backGroundColor='var(--color-orange)'
+                fontSize='1.8rem'
+                text='취소'
+              />
+              <BasicButton
+                themeState={themeState}
+                width='11rem'
+                height='4rem'
+                color='var(--color-white)'
+                backGroundColor='var(--color-orange)'
+                fontSize='1.8rem'
+                text='답변등록'
+              />
+            </ButtonWrapper>
           </form>
         </FormWrapper>
       </ContentWrapper>
@@ -57,6 +67,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 8rem;
+
 `;
 
 const FormWrapper = styled.div`
@@ -73,81 +84,41 @@ const FormWrapper = styled.div`
       : 'var(--color-dark-bg-color)'};
   border: ${(props) =>
     props.themeState === 'light'
-      ? '1.5rem var(--color-orange) solid'
-      : '1.5rem var(--color-gray) solid'};
+      ? '1.5rem solid var(--color-orange) '
+      : '1.5rem solid var(--color-gray) '};
   border-radius: 1rem;
   padding: 4rem 0;
-
+  
   & form {
     display: flex;
     flex-direction: column;
     width: 95%;
-    h1{
+    h1 {
       font-size: 300%;
       font-weight:bold;
       color: ${(props) =>props.themeState === 'light'? 'var(--color-black)' : '#D2D2D2'};
     }
-    select {
-      max-width: 20rem;
-      height: 4rem;
-      font-size: 1.8rem;
-      border: none;
-      background-color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-orange)'
-          : 'var(--color-gray)'};
-      color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-white)'
-          : 'var(--color-white)'};
-      border-radius: 1rem;
-      margin: 2rem 0;
-      -webkit-appearance: none; /* 네이티브 외형 감추기 */
-      -moz-appearance: none;
-      appearance: none;
-    }
-
-    option {
-      background-color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-orange)'
-          : 'var(--color-gray)'};
-      color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-white)'
-          : 'var(--color-gray)'};
-      -webkit-appearance: none; /* 네이티브 외형 감추기 */
-      -moz-appearance: none;
-      appearance: none;
-    }
-
     button {
-      margin: 2rem 0;
-      margin-left: auto;
+      margin: 2rem 0 2rem 2rem;
     }
   }
+`;
+const CategoryWrapper = styled.div`
+  font-size: 1.8rem;
+  width: 20rem;
+  height: 4rem;
+  padding: 0.5rem 1rem;
+  background-color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: ${(props) =>props.themeState === 'light' ? 'var(--color-white)' : '#D2D2D2'};
 `;
 
 const InputWrapper = styled.div`
   margin: 1rem 0;
-
-  & input {
-    width: 100%;
-    height: 4rem;
-    font-size: 1.8rem;
-    margin: 0.5rem 0;
-    color: ${(props) =>
-      props.themeState === 'light'
-        ? 'var(--color-black)'
-        : 'var(--color-white)'};
-    background-color: ${(props) =>
-      props.themeState === 'light'
-        ? 'var(--color-white)'
-        : 'var(--color-gray)'};
-    border: 1px solid #d2d2d2;
-    border-radius: 0.3rem;
-  }
-
   & textarea {
     width: 100%;
     height: 25rem;
@@ -167,4 +138,26 @@ const InputWrapper = styled.div`
   }
 `;
 
-export default PostPage;
+const Title = styled.div`
+    width: 100%;
+    height: 4rem;
+    font-size: 1.8rem;
+    font-weight:bold;
+    margin: 0.5rem 0;
+    color: ${(props) =>props.themeState === 'light'? 'var(--color-black)' : '#D2D2D2'};
+    background-color:${(props)=>props.themeState === 'light'? 'var(--color-white)' : 'var(--color-gray)'};
+    border-radius: 0.3rem;
+    border: 1px solid #d2d2d2;
+    align-items:center;
+    display:flex;
+  div{
+    align-items:center;
+  }
+`
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export default AnswerPostPage;
