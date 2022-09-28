@@ -25,6 +25,8 @@ public class AnswerResponseDto2 {
     private Long memberId;
     private String nickname;
 
+    private long likeCount;
+
     private LocalDateTime createdAt;
 
     private List<CommentResponseDto> comments;
@@ -35,6 +37,7 @@ public class AnswerResponseDto2 {
         this.memberId = answer.getMember().getMemberId();
         this.content = answer.getContent();
         this.nickname = answer.getMember().getNickname();
+        this.likeCount = answer.getLikeCount();
         this.createdAt = answer.getCreatedAt();
         this.comments = answer.getComments()
                 .stream()
