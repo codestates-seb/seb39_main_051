@@ -2,9 +2,12 @@ package com.codestates.main.post.controller;
 
 import com.codestates.main.dto.MultiResponseDto;
 import com.codestates.main.dto.SingleResponseDto;
+import com.codestates.main.member.entity.Member;
+import com.codestates.main.member.service.MemberService;
 import com.codestates.main.post.dto.PostPatchDto;
 import com.codestates.main.post.dto.PostPostDto;
 import com.codestates.main.post.dto.PostResponseDto;
+import com.codestates.main.post.dto.PostResponseDto2;
 import com.codestates.main.post.entity.Post;
 import com.codestates.main.post.mapper.PostMapper;
 import com.codestates.main.post.service.PostService;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -29,17 +33,21 @@ public class PostController {
 
     private final PostService postService;
     private final PostMapper mapper;
+    private final MemberService memberService;
+
 
     @PostMapping
     public ResponseEntity postPost(@Valid @RequestBody PostPostDto postPostDto) {
         System.out.println("PostController.postPost");
-
+        Long memberId = postPostDto.getMemberId();
+        Member findMember = memberService.findVerifiedMember(memberId);
         Post post = mapper.postPostDtoToPost(postPostDto);
+        post.addMember(findMember);
         Post createdPost = postService.createPost(post);
-        PostResponseDto postResponseDto = mapper.postToPostResponseDto(createdPost);
+        PostResponseDto postResponseDto = new PostResponseDto(createdPost);
 
         return new ResponseEntity(
-                new SingleResponseDto<>(postResponseDto), HttpStatus.CREATED);
+               postResponseDto, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{post-id}")
@@ -50,10 +58,10 @@ public class PostController {
         postPatchDto.setPostId(postId);
         Post post = mapper.postPatchDtoToPost(postPatchDto);
         Post updatedPost = postService.updatePost(post);
-        PostResponseDto postResponseDto = mapper.postToPostResponseDto(updatedPost);
+        PostResponseDto postResponseDto = new PostResponseDto(updatedPost);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(postResponseDto), HttpStatus.OK);
+                postResponseDto, HttpStatus.OK);
     }
 
     @GetMapping("/{post-id}")
@@ -61,10 +69,10 @@ public class PostController {
         System.out.println("PostController.getPost");
 
         Post findPost = postService.findPost(postId);
-        PostResponseDto postResponseDto = mapper.postToPostResponseDto(findPost);
+        PostResponseDto2 response = new PostResponseDto2(findPost);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(postResponseDto), HttpStatus.OK);
+                response, HttpStatus.OK);
     }
 
     @GetMapping
@@ -81,11 +89,12 @@ public class PostController {
             pagePosts = postService.findPostsByCategory(page - 1, size, category.get());
         }
         List<Post> posts = pagePosts.getContent();
-        List<PostResponseDto> postResponseDtos = mapper.postsToPostResponses(posts);
+        List<PostResponseDto> response = posts.stream().map(post -> new PostResponseDto(post))
+                .collect(Collectors.toList());
 
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(postResponseDtos, pagePosts), HttpStatus.OK
+                new MultiResponseDto<>(response, pagePosts), HttpStatus.OK
         );
     }
 
