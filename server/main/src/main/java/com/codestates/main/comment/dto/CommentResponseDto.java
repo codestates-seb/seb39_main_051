@@ -22,7 +22,7 @@ public class CommentResponseDto {
     private Long memberId;
     private String content;
 
-    private int likes = 5;
+    private long likeCount;
     private LocalDateTime createdAt;
 
     public CommentResponseDto(Comment comment) {
@@ -31,6 +31,7 @@ public class CommentResponseDto {
         this.email = comment.getMember().getEmail();
         this.memberId = comment.getMember().getMemberId();
         this.content = comment.getContent();
+        this.likeCount = comment.getLikeCount();
         this.createdAt = comment.getCreatedAt();
     }
 }
