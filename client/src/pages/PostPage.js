@@ -13,6 +13,7 @@ const PostPage = (props) => {
       <ContentWrapper>
         <FormWrapper themeState={themeState}>
           <form>
+          <h1>게시판이름</h1>
             <InputWrapper themeState={themeState}>
               <input
                 id='title'
@@ -81,7 +82,11 @@ const FormWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 95%;
-
+    h1{
+      font-size: 300%;
+      font-weight:bold;
+      color: ${(props) =>props.themeState === 'light'? 'var(--color-black)' : '#D2D2D2'};
+    }
     select {
       max-width: 20rem;
       height: 4rem;
