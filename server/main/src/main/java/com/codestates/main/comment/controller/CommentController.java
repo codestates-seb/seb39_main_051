@@ -55,9 +55,7 @@ public class CommentController {
         Comment comment = mapper.commentPatchDtoToComment(commentPatchDto);
         Comment updatedComment = commentService.updateComment(comment);
         CommentResponseDto commentResponseDto = mapper.commentToCommentResponseDto(updatedComment);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(commentResponseDto),
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
     /**

@@ -17,5 +17,5 @@ public class PostPostDto {
 
     private String category;
 
-//    private Long memberId;
+    private Long memberId;
 }

@@ -8,6 +8,7 @@ import com.codestates.main.member.service.MemberService;
 import com.codestates.main.question.dto.QuestionPatchDto;
 import com.codestates.main.question.dto.QuestionPostDto;
 import com.codestates.main.question.dto.QuestionResponseDto;
+import com.codestates.main.question.dto.QuestionResponseDto2;
 import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.mapper.QuestionMapper;
 import com.codestates.main.question.service.QuestionService;
@@ -54,9 +55,9 @@ public class QuestionController {
     public ResponseEntity getQuestionByQuestionId(@PathVariable("question-id") long questionId){
         System.out.println("QuestionController.getQuestionByQuestionId");
         Question findQuestion = questionService.findQuestion(questionId);
-        QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(findQuestion);
+//        QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(findQuestion);
         return new ResponseEntity(
-                new SingleResponseDto<>(responseDto), HttpStatus.OK);
+                new QuestionResponseDto2(findQuestion), HttpStatus.OK);
     }
 
     @GetMapping
@@ -85,7 +86,7 @@ public class QuestionController {
                 new SingleResponseDto<>(responseDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("{question-id}")
+    @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId){
         questionService.deleteQuestion(questionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
