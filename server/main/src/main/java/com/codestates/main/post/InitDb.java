@@ -1,11 +1,15 @@
 package com.codestates.main.post;
 
+import com.codestates.main.answer.entity.Answer;
+import com.codestates.main.answer.service.AnswerService;
 import com.codestates.main.comment.entity.Comment;
 import com.codestates.main.comment.service.CommentService;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.service.MemberService;
 import com.codestates.main.post.entity.Post;
 import com.codestates.main.post.service.PostService;
+import com.codestates.main.question.entity.Question;
+import com.codestates.main.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +22,9 @@ public class InitDb {
     private final MemberService memberService;
     private final PostService postService;
     private final CommentService commentService;
+    private final QuestionService questionService;
+
+    private final AnswerService answerService;
 
     @PostConstruct
     public void init() {
@@ -61,6 +68,34 @@ public class InitDb {
                     .build();
             commentService.creatComment(comment, post.getPostId(), member2.getMemberId());
             commentService.creatComment(comment1, post.getPostId(), member2.getMemberId());
+
+            Question question = Question.builder()
+                    .content("MYSQL 고립 종류에 대해 설명해주세요")
+                    .member(member1)
+                    .build();
+            questionService.creatQuestion(question);
+
+            Answer answer = Answer.builder()
+                    .content("고립에의 종류는 3가지가 있습니다.")
+                    .member(member2)
+                    .question(question)
+                    .build();
+
+            answerService.createAnswer(answer);
+
+            Comment comment2 = Comment.builder()
+                    .content("고립의 종류는 2가지 입니다.")
+                    .answer(answer)
+                    .member(member1)
+                    .build();
+            Comment comment3 = Comment.builder()
+                    .content("제 생각에는 고립의 종류는 5가지라고 생각합니다.")
+                    .answer(answer)
+                    .member(member2)
+                    .build();
+            commentService.creatAnswerComment(comment2, answer.getAnswerId(), member1.getMemberId());
+            commentService.creatAnswerComment(comment3, answer.getAnswerId(), member2.getMemberId());
+
         }
     }
 }
