@@ -1,5 +1,7 @@
 package com.codestates.main.comment.service;
 
+import com.codestates.main.answer.entity.Answer;
+import com.codestates.main.answer.repository.AnswerRepository;
 import com.codestates.main.comment.entity.Comment;
 import com.codestates.main.comment.repository.CommentRepository;
 import com.codestates.main.exception.BusinessLogicException;
@@ -9,11 +11,9 @@ import com.codestates.main.member.repository.MemberRepository;
 import com.codestates.main.post.entity.Post;
 import com.codestates.main.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final AnswerRepository answerRepository;
 
     public Comment creatComment(Comment comment, Long postId, Long memberId) {
         System.out.println("CommentService.creatComment");
@@ -36,6 +37,20 @@ public class CommentService {
                 new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
         comment.addMember(findMember);
         comment.addPost(findPost);
+        return commentRepository.save(comment);
+    }
+
+    public Comment creatAnswerComment(Comment comment, Long answerId, Long memberId) {
+        System.out.println("CommentService.creatAnswerComment");
+
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
+        Member findMember = optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Answer findAnswer = optionalAnswer.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
+        comment.addMember(findMember);
+        comment.addAnswer(findAnswer);
         return commentRepository.save(comment);
     }
 
