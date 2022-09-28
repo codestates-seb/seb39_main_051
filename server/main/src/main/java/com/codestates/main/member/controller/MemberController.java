@@ -47,7 +47,7 @@ public class MemberController {
                 .password("1234")
                 .role(Member.ROLE.ROLE_ADMIN)
                 .build();
-        memberService.createMember(member);
+        memberService.createAdmin(member);
     }
 
     @PostMapping("/post")
