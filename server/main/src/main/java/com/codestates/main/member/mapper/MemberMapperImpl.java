@@ -4,6 +4,8 @@ import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class MemberMapperImpl implements MemberMapper{
 
@@ -46,15 +48,15 @@ public class MemberMapperImpl implements MemberMapper{
         String email = null;
         String nickname = null;
         Member.ROLE role = null;
-
+        LocalDateTime createdDate = null;
         if ( member.getMemberId()!=0L ) {
             memberId = member.getMemberId();
         }
         email = member.getEmail();
         nickname = member.getNickname();
         role = member.getRole();
-
-        return new MemberDTO.Response(memberId, email, nickname, role);
+        createdDate = member.getCreatedAt();
+        return new MemberDTO.Response(memberId, email, nickname, role,createdDate);
         //return new MemberDTO.Response(memberId, email, nickname);
     }
 
@@ -65,7 +67,6 @@ public class MemberMapperImpl implements MemberMapper{
             return null;
         }
         Member member = new Member();
-        member.setMemberId(memberPatchDTO.getId());
         member.setEmail(memberPatchDTO.getEmail());
         member.setPassword(memberPatchDTO.getPassword());
         member.setNickname(memberPatchDTO.getNickname());
