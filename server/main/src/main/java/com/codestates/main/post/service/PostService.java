@@ -20,18 +20,17 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-//    private final MemberService memberService;
+    private final MemberService memberService;
 
     public Post createPost(Post post) {
-        verifyPost(post);
-
+//        verifyPost(post);
         return postRepository.save(post);
     }
 
-    private void verifyPost(Post post) {
-        // 회원이 존재하는지 확인
-        // userService.findVerifiedUser(post.getUser().getUserId());
-    }
+    /*private void verifyPost(Post post) {
+//         회원이 존재하는지 확인
+        memberService.findVerifiedMember(post);
+    }*/
 
     public Post updatePost(Post post) {
         Post findPost = findVerifiedPost(post.getPostId());

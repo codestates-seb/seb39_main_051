@@ -1,30 +1,39 @@
 package com.codestates.main.answer.entity;
 
+import com.codestates.main.auditing.BaseEntity;
+import com.codestates.main.member.entity.Member;
+import com.codestates.main.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Answer {
+public class Answer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long answerId;
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public enum BoardType{
-        FREE_BOARD("고민상담,취업정보,유머,잡담 등,기타"),
-        BOARD("질문 추가 요청/ 질문 수정 요청/ 기타");
-        private String category;
+    @Column(nullable = false)
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "QUESTION_ID")
+    private Question question;
+
+    public void addQuestion(Question question) {
+        this.question = question;
+        question.getAnswers().add(this);
     }
 }
