@@ -1,7 +1,6 @@
 package com.codestates.main.answer.dto;
 
 import com.codestates.main.answer.entity.Answer;
-가import com.codestates.main.comment.dto.CommentResponseDto;
 import com.codestates.main.comment.dto.CommentResponseDto;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.question.entity.Question;
