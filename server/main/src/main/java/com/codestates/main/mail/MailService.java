@@ -21,7 +21,7 @@ public class MailService {
     private JavaMailSender javaMailSender;
     private MemberService memberService;
     private SubscriptionService subscriptionService;
-    @Scheduled(cron = "*/20 * * * * *")
+    //@Scheduled(cron = "*/20 * * * * *")
     public void scheduleTest(){
         List<Member> members = memberService.findMembers();
 

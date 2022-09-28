@@ -41,13 +41,18 @@ public class MemberController {
     @PostConstruct
     public void init(){
         Member member = Member.builder()
-                .memberId(1)
-                .email("admin@naver.com")
+                .email("shb03207@gmail.com")
                 .nickname("관리자")
                 .password("1234")
                 .role(Member.ROLE.ROLE_ADMIN)
                 .build();
         memberService.createAdmin(member);
+        member = Member.builder()
+                .email("shb03207@naver.com")
+                .nickname("유저")
+                .password("1234")
+                .build();
+        memberService.createMember(member);
     }
 
     @PostMapping("/post")
