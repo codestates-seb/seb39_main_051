@@ -33,13 +33,13 @@ public class Question extends BaseEntity {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-//    @OneToMany(mappedBy = "question")
-//    private List<Answer> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
-//    public void addAnswer(Answer answer) {
-//        this.answers.add(answer);
+    public void addAnswer(Answer answer) {
+        this.answers.add(answer);
 
-//    }
+    }
     public void setQuestionCategory(QuestionCategory questionCategory) {
         this.questionCategory = questionCategory;
     }

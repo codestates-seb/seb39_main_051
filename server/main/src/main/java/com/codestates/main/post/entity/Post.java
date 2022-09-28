@@ -2,6 +2,7 @@ package com.codestates.main.post.entity;
 
 import com.codestates.main.auditing.BaseEntity;
 import com.codestates.main.comment.entity.Comment;
+import com.codestates.main.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,14 @@ public class Post extends BaseEntity {
     private String type;
 
     private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    public void addMember(Member member) {
+        this.member = member;
+    }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
     @JsonIgnore
