@@ -85,7 +85,6 @@ public class MyPageController {
         memberService.updateMember(member);
         //multipartFile.transferTo(newFile);
 
-        return null;
-
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
