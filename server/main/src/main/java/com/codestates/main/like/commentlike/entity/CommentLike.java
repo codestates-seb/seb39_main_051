@@ -1,9 +1,7 @@
-package com.codestates.main.like.commentLike.entity;
+package com.codestates.main.like.commentlike.entity;
 
 import com.codestates.main.comment.entity.Comment;
-import com.codestates.main.like.postlike.entity.PostLike;
 import com.codestates.main.member.entity.Member;
-import com.codestates.main.post.entity.Post;
 import lombok.*;
 
 import javax.persistence.*;

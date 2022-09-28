@@ -1,4 +1,4 @@
-package com.codestates.main.like.commentLike.dto;
+package com.codestates.main.like.commentlike.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

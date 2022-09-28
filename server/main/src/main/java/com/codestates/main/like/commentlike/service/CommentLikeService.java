@@ -1,9 +1,9 @@
-package com.codestates.main.like.commentLike.service;
+package com.codestates.main.like.commentlike.service;
 
 import com.codestates.main.comment.entity.Comment;
 import com.codestates.main.comment.service.CommentService;
-import com.codestates.main.like.commentLike.entity.CommentLike;
-import com.codestates.main.like.commentLike.repository.CommentLikeRepository;
+import com.codestates.main.like.commentlike.entity.CommentLike;
+import com.codestates.main.like.commentlike.repository.CommentLikeRepository;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

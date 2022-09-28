@@ -1,19 +1,16 @@
 package com.codestates.main.member.entity;
 
-import com.codestates.main.like.commentLike.entity.CommentLike;
+import com.codestates.main.like.commentlike.entity.CommentLike;
 import com.codestates.main.like.postlike.entity.PostLike;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

@@ -1,9 +1,7 @@
-package com.codestates.main.like.commentLike.controller;
+package com.codestates.main.like.commentlike.controller;
 
-import com.codestates.main.like.commentLike.dto.CommentLikePostDto;
-import com.codestates.main.like.commentLike.service.CommentLikeService;
-import com.codestates.main.like.postlike.dto.PostLikePostDto;
-import com.codestates.main.like.postlike.service.PostLikeService;
+import com.codestates.main.like.commentlike.dto.CommentLikePostDto;
+import com.codestates.main.like.commentlike.service.CommentLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class commentLikeController {
+public class CommentLikeController {
 
     private final CommentLikeService commentLikeService;
 
