@@ -1,5 +1,6 @@
 package com.codestates.main.member.entity;
 
+import com.codestates.main.like.commentLike.entity.CommentLike;
 import com.codestates.main.like.postlike.entity.PostLike;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -87,5 +88,12 @@ public class Member {
 
     public void setPostLikes(PostLike postLike) {
         this.postLikes.add(postLike);
+    }
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikes = new ArrayList<>();
+
+    public void setCommentLikes(CommentLike commentLike) {
+        this.commentLikes.add(commentLike);
     }
 }
