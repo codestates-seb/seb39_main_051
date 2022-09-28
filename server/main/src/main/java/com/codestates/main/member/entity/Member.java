@@ -1,5 +1,6 @@
 package com.codestates.main.member.entity;
 
+import com.codestates.main.like.postlike.entity.PostLike;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,7 +42,7 @@ public class Member {
     @Column(name="PICTURE", columnDefinition = "BLOB")
     private String picture;
 
-    @Column(nullable = false, name="CREATED_AT")
+    @Column(name="CREATED_AT")
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -80,4 +81,11 @@ public class Member {
 //        }
 //        return new ArrayList<>();
 //    }
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    public void setPostLikes(PostLike postLike) {
+        this.postLikes.add(postLike);
+    }
 }
