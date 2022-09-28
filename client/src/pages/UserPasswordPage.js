@@ -133,7 +133,7 @@ const Layout = styled.div`
   width: 100%;
   height: 100%;
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     height: 70rem;
   }
 `;
@@ -152,7 +152,7 @@ const LeftContent = styled.div`
     margin: 2rem 0;
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     width: 100%;
     margin: 0;
 
@@ -181,7 +181,7 @@ const LeftContent = styled.div`
     }
   }
 
-  @media screen and (min-width: 413px) {
+  @media screen and (min-width: 1026px) {
     .mobile {
       display: none;
     }
@@ -215,7 +215,7 @@ const RightContent = styled.div`
   border-radius: 1.5rem;
   padding: 5rem;
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     display: none;
   }
 `;
