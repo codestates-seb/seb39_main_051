@@ -8,10 +8,14 @@ import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.mapper.MemberMapper;
 import com.codestates.main.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 
 @RequiredArgsConstructor
@@ -22,6 +26,9 @@ public class MyPageController {
     private final MemberService memberService;
 
     private final JwtTokenizer jwtTokenizer;
+
+    @Value("src\\main\\resources\\file\\images")
+    private String filePath;
 
     @PatchMapping("/patch")
     public ResponseEntity patchMember(@RequestBody MemberDTO.Patch requestBody,
@@ -40,7 +47,42 @@ public class MyPageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile) {
+    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile) throws IOException {
+                                    //@RequestHeader(value = "Authorization") String jwtHeader) {
+//        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
+//            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
+//        }
+//
+//        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
+        long memberId=3;
+        String originName = multipartFile.getOriginalFilename();
+        String type = originName.split("\\.")[1];
+        String path = System.getProperty("user.dir")
+                        +File.separator
+                        +filePath;
+        System.out.println(path);
+        //System.out.println(path+"\\resources\\file\\images");
+
+        File newFile = new File(path, memberId+"."+type); // 경로/파일.type\
+        if(!newFile.exists()){
+            try {
+                if (newFile.createNewFile()){
+                    System.out.println("파일 생성 성공");
+                    multipartFile.transferTo(newFile);
+                }
+                else
+                    System.out.println("파일 생성 실패");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {	// 파일이 존재한다면
+            if(newFile.delete()){
+                multipartFile.transferTo(newFile);
+            }
+        }
+
+        //multipartFile.transferTo(newFile);
+
         return null;
 
     }

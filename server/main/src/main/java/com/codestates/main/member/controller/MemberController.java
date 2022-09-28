@@ -8,6 +8,11 @@ import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.mapper.MemberMapper;
 import com.codestates.main.member.repository.MemberRepository;
 import com.codestates.main.member.service.MemberService;
+import com.codestates.main.questionCategory.entity.QuestionCategory;
+import com.codestates.main.questionCategory.service.QuestionCategoryService;
+import com.codestates.main.subscription.dto.SubscriptionDTO;
+import com.codestates.main.subscription.entity.Subscription;
+import com.codestates.main.subscription.service.SubscriptionService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +35,9 @@ public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
 
+    private final QuestionCategoryService questionCategoryService;
+
+    private final SubscriptionService subscriptionService;
     @PostConstruct
     public void init(){
         Member member = Member.builder()
@@ -40,15 +48,6 @@ public class MemberController {
                 .role(Member.ROLE.ROLE_ADMIN)
                 .build();
         memberService.createMember(member);
-    }
-    @GetMapping("/get")
-    public String get(){
-        return "hello";
-    }
-
-    @PostMapping("/token")
-    public String P(){
-        return "hello";
     }
 
     @PostMapping("/post")
@@ -67,6 +66,17 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
+    @PostMapping("/subscription")
+    public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody){
+        long memberId = 1;
+        long questionCategoryId = requestBody.getQuestionCategoryId();
+        Member member = memberService.findVerifiedMember(memberId);
+        QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
+        Subscription subscription = new Subscription();
+        subscription.setMember(member);
+        subscription.setQuestionCategory(questionCategory);
+        subscriptionService.createSubscription(subscription);
+        return new ResponseEntity<>("",HttpStatus.CREATED);
+    }
 
 }
