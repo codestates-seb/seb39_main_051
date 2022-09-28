@@ -14,7 +14,22 @@ const AnswerBoardPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([
+    {
+      title: '질문1',
+      category: '자바',
+      likes: 1,
+      writer: '작성자1',
+      createdAt: '22.01.24',
+    },
+    {
+      title: '질문2',
+      category: '자바',
+      likes: 10,
+      writer: '작성자2',
+      createdAt: '22.02.14',
+    },
+  ]);
 
   return (
     <>
@@ -36,7 +51,16 @@ const AnswerBoardPage = () => {
           />
         </ButtonWrapper>
         <PostSummaryWrapper>
-          <PostSummary themeState={themeState} />
+          {data.map((el) => (
+            <PostSummary
+              themeState={themeState}
+              title={el.title}
+              category={el.category}
+              likes={el.likes}
+              writer={el.writer}
+              createdAt={el.createdAt}
+            />
+          ))}
         </PostSummaryWrapper>
         <Pagination
           themeState={themeState}

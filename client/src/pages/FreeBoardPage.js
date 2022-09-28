@@ -36,7 +36,16 @@ const FreeBoardPage = () => {
           />
         </ButtonWrapper>
         <PostSummaryWrapper>
-          <PostSummary themeState={themeState} />
+          {data.map((el) => (
+            <PostSummary
+              themeState={themeState}
+              title={el.title}
+              category={el.category}
+              likes={el.likes}
+              writer={el.writer}
+              createdAt={el.createdAt}
+            />
+          ))}
         </PostSummaryWrapper>
         <Pagination
           themeState={themeState}
