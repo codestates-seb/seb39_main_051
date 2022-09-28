@@ -12,6 +12,8 @@ import com.codestates.main.question.dto.QuestionResponseDto2;
 import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.mapper.QuestionMapper;
 import com.codestates.main.question.service.QuestionService;
+import com.codestates.main.questionCategory.entity.QuestionCategory;
+import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -30,21 +32,18 @@ public class QuestionController {
     private final QuestionMapper mapper;
 
     private final MemberService memberService;
-
-
-
-
-
-    // Question CRUD
-
+    private final QuestionCategoryService questionCategoryService;
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto){
         System.out.println("QuestionController.postQuestion");
 
         Long memberId = questionPostDto.getMemberId();
         Member findMember = memberService.findVerifiedMember(memberId);
+        Long questionCategoryId = questionPostDto.getQuestionCategoryId();
+        QuestionCategory findQuestionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
         Question question = mapper.questionPostDtoToQuestion(questionPostDto);
         question.setMember(findMember);
+        question.addQuestionCategory(findQuestionCategory);
         Question findQuestion = questionService.creatQuestion(question);
         QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(findQuestion);
         return new ResponseEntity(

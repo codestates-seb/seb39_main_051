@@ -38,10 +38,10 @@ public class Question extends BaseEntity {
 
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
-
     }
-    public void setQuestionCategory(QuestionCategory questionCategory) {
+    public void addQuestionCategory(QuestionCategory questionCategory) {
         this.questionCategory = questionCategory;
+        questionCategory.getQuestions().add(this);
     }
 
     public void setMember(Member member) {

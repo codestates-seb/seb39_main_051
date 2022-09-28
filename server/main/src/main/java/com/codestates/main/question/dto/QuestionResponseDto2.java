@@ -20,16 +20,23 @@ import java.util.stream.Collectors;
 @Builder
 public class QuestionResponseDto2 {
 
-    private String questionWriter;
-
+    private Long questionId;
     private String content;
 
+    private Long memberId;
+
+    private String email;
+
+    private String nickname;
     private LocalDateTime createdAt;
 
     private List<AnswerResponseDto2> answers;
 
     public QuestionResponseDto2(Question question) {
-        this.questionWriter = question.getMember().getNickname();
+        this.questionId = question.getQuestionId();
+        this.memberId =question.getMember().getMemberId();
+        this.email = question.getMember().getEmail();
+        this.nickname = question.getMember().getNickname();
         this.content = question.getContent();
         this.createdAt = question.getCreatedAt();
         this.answers = question.getAnswers().

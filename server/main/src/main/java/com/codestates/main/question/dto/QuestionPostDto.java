@@ -13,5 +13,5 @@ public class QuestionPostDto {
 
     private String content;
     private Long memberId;
-    private Long questionCategory;
+    private Long questionCategoryId;
 }
