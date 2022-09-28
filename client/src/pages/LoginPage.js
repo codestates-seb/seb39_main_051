@@ -2,8 +2,7 @@ import styled,{keyframes} from 'styled-components';
 import NavigationBar from '../components/NavigationBar';
 import { useSelector } from 'react-redux';
 import Form from '../components/Form';
-import { useEffect, useState } from 'react';
-import {useInterval} from 'react-use';
+import {useState } from 'react';
 const LoginPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const messageArr = ['실력을', '기르는', '습관', '매일메일과', '함께']
