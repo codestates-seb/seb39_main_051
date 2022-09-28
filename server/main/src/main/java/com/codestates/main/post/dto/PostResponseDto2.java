@@ -29,7 +29,7 @@ public class PostResponseDto2 {
 
     private String email;
 
-    private int likes = 3;
+    private long likeCount;
     private LocalDateTime createdAt;
 
     private List<CommentResponseDto> comments;
@@ -42,6 +42,7 @@ public class PostResponseDto2 {
         this.nickname = post.getMember().getNickname();
         this.memberId = post.getMember().getMemberId();
         this.email = post.getMember().getEmail();
+        this.likeCount = post.getLikeCount();
         this.createdAt = post.getCreatedAt();
         this.comments = post.getComments()
                 .stream()
