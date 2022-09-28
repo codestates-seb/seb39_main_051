@@ -1,11 +1,10 @@
 package com.codestates.main.post.mapper;
 
 import com.codestates.main.post.dto.PostPatchDto;
-import com.codestates.main.post.dto.PostPostDto;
 import com.codestates.main.post.dto.PostResponseDto;
+import com.codestates.main.post.dto.PostPostDto;
 import com.codestates.main.post.entity.Post;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

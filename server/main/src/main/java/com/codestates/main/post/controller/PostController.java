@@ -1,15 +1,14 @@
 package com.codestates.main.post.controller;
 
 import com.codestates.main.dto.MultiResponseDto;
-import com.codestates.main.dto.SingleResponseDto;
-import com.codestates.main.member.entity.Member;
-import com.codestates.main.member.service.MemberService;
 import com.codestates.main.post.dto.PostPatchDto;
 import com.codestates.main.post.dto.PostPostDto;
 import com.codestates.main.post.dto.PostResponseDto;
 import com.codestates.main.post.dto.PostResponseDto2;
 import com.codestates.main.post.entity.Post;
 import com.codestates.main.post.mapper.PostMapper;
+import com.codestates.main.member.entity.Member;
+import com.codestates.main.member.service.MemberService;
 import com.codestates.main.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
