@@ -30,4 +30,6 @@ public class QuestionResponseDto {
     private Member member;
 
 //    private QuestionCategory questionCategory;
+
+
 }
