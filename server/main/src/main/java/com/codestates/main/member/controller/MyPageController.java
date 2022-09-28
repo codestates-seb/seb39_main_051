@@ -54,7 +54,7 @@ public class MyPageController {
 //        }
 //
 //        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
-        long memberId=3;
+        long memberId=1;
         String originName = multipartFile.getOriginalFilename();
         String type = originName.split("\\.")[1];
         String path = System.getProperty("user.dir")
@@ -80,7 +80,9 @@ public class MyPageController {
                 multipartFile.transferTo(newFile);
             }
         }
-
+        Member member = memberService.findVerifiedMember(memberId);
+        member.setPicture(path+"\\"+memberId);
+        memberService.updateMember(member);
         //multipartFile.transferTo(newFile);
 
         return null;
