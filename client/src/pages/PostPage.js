@@ -4,7 +4,7 @@ import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
 import NavigationBar from '../components/NavigationBar';
 
-const PostPage = (props) => {
+const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   return (
@@ -23,7 +23,7 @@ const PostPage = (props) => {
                 required
               />
             </InputWrapper>
-            <DropDownList />
+            <DropDownList type='free' category='잡담' />
             <InputWrapper themeState={themeState}>
               <textarea
                 id='body'

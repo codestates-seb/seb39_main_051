@@ -5,7 +5,6 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import {
   faNetworkWired,
-  faLightbulb,
   faDatabase,
   faLeaf,
   faFolderTree,
@@ -27,7 +26,6 @@ const DashBoardPage = () => {
     faReact,
     faLeaf,
     faFolderTree,
-    faLightbulb,
     faGear,
     faDatabase,
     faNetworkWired,
@@ -138,7 +136,7 @@ const LeftContent = styled.div`
     margin: 2rem 0;
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     width: 100%;
     margin: 0;
 
@@ -174,7 +172,7 @@ const RightContent = styled.div`
   border-radius: 1.5rem;
   padding: 5rem;
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 1025px) {
     display: none;
   }
 `;
@@ -182,7 +180,7 @@ const RightContent = styled.div`
 const SubscribeWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   grid-row-gap: 1rem;
   place-items: center;
   width: 100%;
@@ -199,7 +197,7 @@ const SubscribeWrapper = styled.div`
   border-radius: 1rem;
   padding: 1rem 0;
 
-  @media screen and (min-width: 413px) {
+  @media screen and (min-width: 1026px) {
     display: none;
   }
 `;
