@@ -1,25 +1,64 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
-const Comment = (props) => {
+const Comment = ({commentWriter, content,modifiedAt, likes, profileImg}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  //댓글수정
+  const [isCommentEditMode, setIsCommentEditMode] = useState(false)
+  const [editedComment, setEditedComment] = useState(content)
+  const handleEditComment = (e) => {
+    setEditedComment(e.target.value)
+  }
+  const handleEditMode = () => {
+    setIsCommentEditMode(!isCommentEditMode)
+    setEditedComment(content)
+  }
+  const handleDeleteComment = () => {
+
+  }
+  const handleSubmitEditComment = () => {
+    
+  }
   return (
     <Layout themeState={themeState}>
       <CommentInfo>
         <CommentWriter>
-          <img src={props.profileImg} alt='프로필사진' />
-          {props.commentWriter}
+          <img src={profileImg} alt='프로필사진' />
+          {commentWriter}
         </CommentWriter>
-
-        <CommentEvent>
-          <div className='commentDate'>{props.modifiedAt}</div>
-          <div className='commentEdit'>수정</div>
-          <div className='commentEdit'>삭제</div>
+        {isCommentEditMode ? (
+                  <CommentEvent>
+                  <div className='commentDate'>{modifiedAt}</div>
+                  <div className='commentEdit' onClick={()=>handleSubmitEditComment()} >등록</div>
+                  <div className='commentEdit' onClick={()=>handleEditMode()}>취소</div>
+                </CommentEvent>
+        ) : (
+          <CommentEvent>
+          <div className='commentDate'>{modifiedAt}</div>
+          <div className='commentEdit' onClick={()=>handleEditMode()} >수정</div>
+          <div className='commentEdit' onClick={()=>handleDeleteComment()}>삭제</div>
         </CommentEvent>
+        )}
       </CommentInfo>
       <CommentContent themeState={themeState}>
-        <div className='commentContent'>{props.content}</div>
-        <div className='commentlikes'>❤️{props.likes}</div>
+        {isCommentEditMode ? (
+                    <div className='formWrapper'>
+                    <form>
+                      <label id='editComment' />
+                      <textarea
+                      id='editComment'
+                      value={editedComment}
+                      onChange={handleEditComment}
+                      />
+                    </form>
+                    </div>
+        ) : (
+          <>
+          <div className='commentContent'>{content}</div>
+          </>
+        )}
+        <div className='commentlikes'>❤️{likes}</div>
       </CommentContent>
     </Layout>
   );
@@ -72,6 +111,18 @@ const CommentContent = styled.div`
   display: flex;
   background: ${(props) =>
     props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
+    .formWrapper{
+      display:flex;
+      width:90%;
+    }
+    form{
+      width:100%;
+    }
+    textarea{
+      font-size: 1.3rem;
+      width:100%;
+      border: 1px solid #d4d4d4;
+    }
   .commentContent{
     width:90%;
     margin-right: 0.5%;

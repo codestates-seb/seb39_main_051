@@ -4,11 +4,11 @@ import styled, { css } from 'styled-components';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const DropDownList = () => {
+const DropDownList = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [seleted, setSelected] = useState('자바');
+  const [seleted, setSelected] = useState(props.category);
 
   const handleClick = (e) => {
     setIsOpen(!isOpen);
@@ -25,18 +25,43 @@ const DropDownList = () => {
           <li>{`${seleted}`}</li>
           <FontAwesomeIcon icon={faAngleDown} />
         </StyledUl>
-        {isOpen ? (
+        {props.type === 'answer' ? (
+          isOpen ? (
+            <>
+              <StyledUl active themeState={themeState}>
+                <li onClick={handleSelect}>자바</li>
+                <li onClick={handleSelect}>자바스크립트</li>
+                <li onClick={handleSelect}>리액트</li>
+                <li onClick={handleSelect}>스프링</li>
+                <li onClick={handleSelect}>자료구조</li>
+                <li onClick={handleSelect}>알고리즘</li>
+                <li onClick={handleSelect}>운영체제</li>
+                <li onClick={handleSelect}>데이터베이스</li>
+                <li onClick={handleSelect}>네트워크</li>
+              </StyledUl>
+            </>
+          ) : (
+            <></>
+          )
+        ) : props.type === 'free' ? (
+          isOpen ? (
+            <>
+              <StyledUl active themeState={themeState}>
+                <li onClick={handleSelect}>취업 정보</li>
+                <li onClick={handleSelect}>고민 상담</li>
+                <li onClick={handleSelect}>유머</li>
+                <li onClick={handleSelect}>잡담</li>
+              </StyledUl>
+            </>
+          ) : (
+            <></>
+          )
+        ) : isOpen ? (
           <>
             <StyledUl active themeState={themeState}>
-              <li onClick={handleSelect}>자바</li>
-              <li onClick={handleSelect}>자바스크립트</li>
-              <li onClick={handleSelect}>리액트</li>
-              <li onClick={handleSelect}>스프링</li>
-              <li onClick={handleSelect}>자료구조</li>
-              <li onClick={handleSelect}>알고리즘</li>
-              <li onClick={handleSelect}>운영체제</li>
-              <li onClick={handleSelect}>데이터베이스</li>
-              <li onClick={handleSelect}>네트워크</li>
+              <li onClick={handleSelect}>질문 추가</li>
+              <li onClick={handleSelect}>질문 수정</li>
+              <li onClick={handleSelect}>기타</li>
             </StyledUl>
           </>
         ) : (

@@ -13,11 +13,12 @@ const SubscribePage = () => {
     '자바',
     '스프링',
     '자료구조',
-    '알고리즘',
     '네트워크',
     '데이터베이스',
     '운영체제'
   ];
+  const mySubscribe = [ '리액트', '자바스크립트']
+
   const handleSubscribe = (category) => {
     toast.success(`${category}를 구독합니다!`,{
       position:toast.POSITION.TOP_RIGHT,
@@ -30,7 +31,7 @@ const SubscribePage = () => {
       <Message themeState={themeState}>매일 받고 싶은 면접 주제를 선택하세요!</Message>
         <StyledContainer themeState={themeState} />
         <GridLayout>
-          {arr.map((el)=><CategoryCard name={el} handleClick={handleSubscribe}/>)}
+          {arr.map((el)=><CategoryCard name={el} handleClick={handleSubscribe} isSubscribe={mySubscribe.includes(el)}/>)}
         </GridLayout>
     </BorderLayout>
   );
