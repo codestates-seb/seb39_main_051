@@ -1,5 +1,6 @@
 package com.codestates.main.comment.entity;
 
+import com.codestates.main.answer.entity.Answer;
 import com.codestates.main.auditing.BaseEntity;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.post.entity.Post;
@@ -32,10 +33,21 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name = "ANSWER_ID")
+    private Answer answer;
+
     public void addPost(Post post) {
         this.post = post;
         if (!this.post.getComments().contains(this)) {
             this.post.getComments().add(this);
+        }
+    }
+
+    public void addAnswer(Answer answer) {
+        this.answer = answer;
+        if (!this.answer.getComments().contains(this)) {
+            this.answer.getComments().add(this);
         }
     }
 
