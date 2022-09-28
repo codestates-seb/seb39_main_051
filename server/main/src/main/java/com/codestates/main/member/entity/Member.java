@@ -1,5 +1,6 @@
 package com.codestates.main.member.entity;
 
+import com.codestates.main.like.answerlike.entity.AnswerLike;
 import com.codestates.main.like.commentlike.entity.CommentLike;
 import com.codestates.main.like.postlike.entity.PostLike;
 import lombok.*;
@@ -92,5 +93,12 @@ public class Member {
 
     public void setCommentLikes(CommentLike commentLike) {
         this.commentLikes.add(commentLike);
+    }
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<AnswerLike> answerLikes = new ArrayList<>();
+
+    public void setAnswerLikes(AnswerLike answerLike) {
+        this.answerLikes.add(answerLike);
     }
 }
