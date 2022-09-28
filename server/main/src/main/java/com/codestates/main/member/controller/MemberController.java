@@ -41,14 +41,15 @@ public class MemberController {
     @PostConstruct
     public void init(){
         Member member = Member.builder()
-                .email("shb03207@gmail.com")
+                .email("shb03207@naver.com")
                 .nickname("관리자")
                 .password("1234")
                 .role(Member.ROLE.ROLE_ADMIN)
                 .build();
         memberService.createAdmin(member);
+        Subscription subscription = Subscription.builder().build();
         member = Member.builder()
-                .email("shb03207@naver.com")
+                .email("shb03207@gmail.com")
                 .nickname("유저")
                 .password("1234")
                 .build();
