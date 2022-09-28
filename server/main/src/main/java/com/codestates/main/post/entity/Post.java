@@ -2,6 +2,7 @@ package com.codestates.main.post.entity;
 
 import com.codestates.main.auditing.BaseEntity;
 import com.codestates.main.comment.entity.Comment;
+import com.codestates.main.like.postlike.entity.PostLike;
 import com.codestates.main.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -38,13 +39,21 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    private long likeCount;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<PostLike> postLikes = new ArrayList<>();
+
     public void addMember(Member member) {
         this.member = member;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
-    @JsonIgnore
-    private List<Comment> comments = new ArrayList<>();
+    public void setPostLikes(PostLike postLike) {
+        this.postLikes.add(postLike);
+    }
 
     public void addComments(Comment comment) {
         this.comments.add(comment);
@@ -63,5 +72,16 @@ public class Post extends BaseEntity {
 
     public void updateCategory(String category) {
         this.category = category;
+    }
+
+    /*
+    * 좋아요 갯수 업데이트
+    * */
+    public void updateLikeCount() {
+        this.likeCount = (long) postLikes.size();
+    }
+
+    public void discountLike(PostLike postLike) {
+        this.postLikes.remove(postLike);
     }
 }
