@@ -34,4 +34,8 @@ public class Subscription {
 
     @ManyToOne
     private QuestionCategory questionCategory;
+
+    // 몇번까지 받았는지
+
+    // 구독중/구독취소 인지
 }

@@ -38,7 +38,7 @@ public class Member {
     @Column(nullable = false, length=555, name = "PASSWORD")
     private String password;
 
-    @Column(name="PICTURE", columnDefinition = "BLOB")
+    @Column(name="PICTURE", nullable = false)
     private String picture;
 
     @Column(name="CREATED_AT")
