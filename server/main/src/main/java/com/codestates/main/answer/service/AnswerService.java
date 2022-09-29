@@ -41,4 +41,8 @@ public class AnswerService {
         return answerRepository.save(findAnswer);
     }
 
+    public void delete(Long answerId) {
+        Answer findAnswer = findVerifiedAnswer(answerId);
+        answerRepository.delete(findAnswer);
+    }
 }

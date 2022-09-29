@@ -71,9 +71,10 @@ public class AnswerController {
                 new SingleResponseDto<>(answerResponseDto),HttpStatus.OK);
     }
 
-    // /answers?questionId=1
-//    @GetMapping
-//    public ResponseEntity getAnswersByQuestion(@RequestParam Long questionId) {
-//        answerService.findAllAnswersByQuestion(questionId);
-//    }
+    @DeleteMapping("/{answer-id}")
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") Long answerId) {
+        answerService.delete(answerId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }
