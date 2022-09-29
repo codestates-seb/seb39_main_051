@@ -30,7 +30,7 @@ public class SubscriptionService {
     public Subscription findSubscriptionInfo(Member member, QuestionCategory questionCategory) {
         Subscription subscription = subscriptionRepository.findSubscriptionsByMemberAndQuestionCategory(member, questionCategory);
 
-        if (subscription == null) {
+        if (subscription == null) {                                         // 아예 처음 구독
             Subscription createdSubscription = new Subscription();
             createdSubscription.setMember(member);
             createdSubscription.setQuestionCategory(questionCategory);
@@ -38,7 +38,7 @@ public class SubscriptionService {
             return createdSubscription;
         } else {
 
-            Subscription.STATUS status = subscription.getStatus();
+            Subscription.STATUS status = subscription.getStatus();          // 이후 구독 처리
             System.out.println(status);
             if (status.equals(Subscription.STATUS.SUBSCRIPTION_ACTIVE)) {
                 subscription.setStatus(Subscription.STATUS.SUBSCRIPTION_DEACTIVATED);
