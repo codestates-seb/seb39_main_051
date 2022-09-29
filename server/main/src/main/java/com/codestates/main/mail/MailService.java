@@ -28,8 +28,8 @@ public class MailService {
     private MemberService memberService;
     private SubscriptionService subscriptionService;
     private QuestionService questionService;
-    @Scheduled(cron = "*/60 * * * * *")     // 00/20/40 초 마다
-    //@Scheduled(cron = "0 0 8 ? * MON-FRI") //실제 서비스 시 (주말 제외 모든 요일에 아침 8시)
+    //@Scheduled(cron = "*/60 * * * * *")     // 00/20/40 초 마다
+    @Scheduled(cron = "0 0 8 ? * MON-FRI") //실제 서비스 시 (주말 제외 모든 요일에 아침 8시)
     public void scheduleTest() throws MessagingException {
         List<Member> members = memberService.findMembers();
 
