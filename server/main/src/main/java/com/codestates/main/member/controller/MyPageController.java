@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 
 @RequiredArgsConstructor
@@ -29,6 +30,22 @@ public class MyPageController {
 
     @Value("src\\main\\resources\\file\\images")
     private String filePath;
+
+    @GetMapping("/test")
+    public String getTest(){
+        return "security test";
+    }
+
+    @GetMapping
+    public ResponseEntity getMemberProfile(@RequestHeader(value = "Authorization") String jwtHeader){
+        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
+            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
+        }
+        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
+        Member member = memberService.findVerifiedMember(memberId);
+        MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(member);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
     @PatchMapping("/patch")
     public ResponseEntity patchMember(@RequestBody MemberDTO.Patch requestBody,
@@ -47,21 +64,19 @@ public class MyPageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile) throws IOException {
-                                    //@RequestHeader(value = "Authorization") String jwtHeader) {
-//        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-//            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
-//        }
-//
-//        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
-        long memberId=1;
+    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile,
+                                    @RequestHeader(value = "Authorization") String jwtHeader) throws IOException {
+        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
+            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
+        }
+
+        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
         String originName = multipartFile.getOriginalFilename();
-        String type = originName.split("\\.")[1];
+        String type = Objects.requireNonNull(originName).split("\\.")[1];
         String path = System.getProperty("user.dir")
                         +File.separator
                         +filePath;
         System.out.println(path);
-        //System.out.println(path+"\\resources\\file\\images");
 
         File newFile = new File(path, memberId+"."+type); // 경로/파일.type\
         if(!newFile.exists()){
@@ -83,7 +98,6 @@ public class MyPageController {
         Member member = memberService.findVerifiedMember(memberId);
         member.setPicture(path+"\\"+memberId);
         memberService.updateMember(member);
-        //multipartFile.transferTo(newFile);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
