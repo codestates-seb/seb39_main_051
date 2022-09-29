@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import BasicButton from './BasicButton';
 import Comment from './Comment';
 import { useState } from 'react';
-const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) => {
+const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isCommentShow, setIsCommentShow] = useState(false);
   //답변 수정
@@ -19,7 +19,10 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) =
   const toggleCommentShow = () => {
     setIsCommentShow(!isCommentShow);
   };
-  
+  const handleSubmitEditAnswer = () => {
+    console.log(editedAnswer)
+    setIsAnswerEditMode(false)
+  }
   return (
     <Layout themeState={themeState}>
       <AnswerInfo>
@@ -31,7 +34,7 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) =
           <div className='answerDate'>{modifiedAt}</div>
           {isAnswerEditMode ? (
           <>
-          <div className='answerEdit'>등록</div>
+          <div className='answerEdit' onClick={()=>handleSubmitEditAnswer()}>등록</div>
           <div className='answerEdit' onClick={()=>handleEditMode()}>취소</div>
           </>
           ) : (
@@ -47,9 +50,9 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) =
           {isAnswerEditMode ? (
           <div className='formWrapper'>
           <form>
-            <label id='editAnswer' />
+            <label id='editedAnswer' />
             <textarea
-            id='editAnswer'
+            id='editedAnswer'
             value={editedAnswer}
             onChange={handleEditAnswer}
             />
@@ -60,7 +63,7 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) =
                       <div className='answerContent'>{content}</div>
             </>
           )}
-          <div className='answerLikes'>❤️{likes}</div>
+          <div className='answerLikes'>❤️{likeCount}</div>
         </AnswerContent>
       </AnswerLayout>
       <AnswerCommentInput themeState={themeState}>
@@ -79,10 +82,12 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likes, comment}) =
           </ToggleComment>
           {comment.map((el) => (
             <Comment
-              commentWriter={el.commentWriter}
+              commentId={el.commentId}
+              memberId = {el.memberId}
+              nickname={el.nickname}
               content={el.content}
-              modifiedAt={el.modifiedAt}
-              likes={el.likes}
+              createdAt={el.createdAt}
+              likeCount={el.likeCount}
               profileImg={el.profileImg}
             />
           ))}
@@ -109,6 +114,8 @@ const Layout = styled.div`
   width: 100%;
   border: 1px solid #d4d4d4;
   margin-bottom: 1rem;
+  color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
 `;
 const AnswerInfo = styled.div`
   display: flex;
@@ -149,7 +156,7 @@ const AnswerContent = styled.div`
   display: flex;
   width: 100%;
   background: ${(props) =>
-    props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
+    props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-dark-bg-color )'};
     .formWrapper{
       display:flex;
       width:90%;
@@ -160,6 +167,11 @@ const AnswerContent = styled.div`
     textarea{
       width:100%;
       border: 1px solid #d4d4d4;
+      background: ${(props) =>
+      props.themeState === 'light'
+        ? 'var(--color-white)'
+        : 'var(--color-gray)'};
+            color: ${(props)=>props.themeState ==='light' ? 'var(--color-black)': '#D4D4D4' };
     }
     .answerContent{
       font-size: 2rem;
