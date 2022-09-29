@@ -66,6 +66,7 @@ public class MailService {
                 }
                 sb.append("</ol>");
                 subscription.setReceived(received+size);
+                subscriptionService.createSubscription(subscription);
 
             }
             mailHelper.setText(sb.toString(),true);
