@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/questions")
@@ -43,33 +45,42 @@ public class QuestionController {
         QuestionCategory findQuestionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
         Question question = mapper.questionPostDtoToQuestion(questionPostDto);
         question.setMember(findMember);
-        question.addQuestionCategory(findQuestionCategory);
+        question.setQuestionCategory(findQuestionCategory);
         Question findQuestion = questionService.creatQuestion(question);
-        QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(findQuestion);
-        return new ResponseEntity(
-                new SingleResponseDto<>(responseDto), HttpStatus.CREATED);
+        QuestionResponseDto responseDto = new QuestionResponseDto(findQuestion);
+        return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestionByQuestionId(@PathVariable("question-id") long questionId){
         System.out.println("QuestionController.getQuestionByQuestionId");
         Question findQuestion = questionService.findQuestion(questionId);
-//        QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(findQuestion);
         return new ResponseEntity(
                 new QuestionResponseDto2(findQuestion), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getQuestions(@RequestParam int page,
-                               @RequestParam int size){
+                                       @RequestParam int size,
+                                       @RequestParam("questionCategory") Optional<String> questionCategory){
         System.out.println("QuestionController.getQuestions");
+        Page<Question> pageQuestions;
 
-        Page<Question> pageQuestions = questionService.findQuestions(page - 1, size);
+        // 카테고리별 조회하기
+        if (questionCategory.isPresent()) {
+            pageQuestions = questionService.findQuestionsByQuestionCategory(page -1, size, questionCategory.get());
+        }
+        // 전체 질문 조회하기
+        else {
+            pageQuestions = questionService.findQuestions(page - 1, size);
+
+        }
         List<Question> questions = pageQuestions.getContent();
-        List<QuestionResponseDto> questionResponseDtos = mapper.questionsToQuestionResponses(questions);
-
+        List<QuestionResponseDto> responseDtos = questions.stream()
+                .map(question -> new QuestionResponseDto(question))
+                .collect(Collectors.toList());
         return new ResponseEntity<>(
-                new MultiResponseDto<>(questionResponseDtos,pageQuestions), HttpStatus.OK
+                new MultiResponseDto<>(responseDtos,pageQuestions), HttpStatus.OK
         );
     }
 
@@ -80,9 +91,8 @@ public class QuestionController {
         questionPatchDto.setQuestionId(questionId);
         Question question = mapper.questionPatchDtoToQuestion(questionPatchDto);
         Question updatedQuestion = questionService.updateQuestion(question);
-        QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(updatedQuestion);
-        return new ResponseEntity(
-                new SingleResponseDto<>(responseDto), HttpStatus.OK);
+        QuestionResponseDto responseDto = new QuestionResponseDto(updatedQuestion);
+        return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{question-id}")

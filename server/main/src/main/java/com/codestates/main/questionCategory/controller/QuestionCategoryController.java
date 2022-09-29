@@ -1,13 +1,10 @@
 package com.codestates.main.questionCategory.controller;
 
-import com.codestates.main.member.entity.Member;
 import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +13,7 @@ public class QuestionCategoryController {
     private final QuestionCategoryService questionCategoryService;
 
     String[] categories = new String[]{"Java", "React", "Spring", "Data Structure", "Operating System", "Database", "Network", "Javascript"};
-    @PostConstruct
+//    @PostConstruct
     public void init(){
         for(long i=0;i<categories.length;i++){
             QuestionCategory questionCategory = QuestionCategory.builder()
@@ -25,6 +22,5 @@ public class QuestionCategoryController {
                     .build();
             questionCategoryService.createQuestionCategory(questionCategory);
         }
-
     }
 }

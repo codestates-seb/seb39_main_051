@@ -6,6 +6,9 @@ import com.codestates.main.member.repository.MemberRepository;
 import com.codestates.main.question.dto.QuestionResponseDto;
 import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.repository.QuestionRepository;
+import com.codestates.main.questionCategory.entity.QuestionCategory;
+import com.codestates.main.questionCategory.repository.QuestionCategoryRepository;
+import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +24,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
+    private final QuestionCategoryRepository questionCategoryRepository;
 
 
     public Question creatQuestion(Question question) {
@@ -56,5 +60,8 @@ public class QuestionService {
         return questionRepository.findAll(PageRequest.of(page,size));
     }
 
-
+    public Page<Question> findQuestionsByQuestionCategory(int page, int size, String questionCategory) {
+        QuestionCategory findQuestionCategory = questionCategoryRepository.findByName(questionCategory);
+        return questionRepository.findAllByQuestionCategory(PageRequest.of(page,size),findQuestionCategory);
+    }
 }
