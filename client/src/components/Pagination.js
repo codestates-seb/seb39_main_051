@@ -15,13 +15,14 @@ const Pagination = ({ total, size, page, setPage, setSize, setTotal }) => {
 
   useEffect(() => {
     axios
-      .get(`/answer?page=${page}&size=${size}`)
+      .get(`/questions?page=${page}&size=${size}`)
       .then((res) => {
-        setTotal(Number(res.data.pageInfo.totalElements));
+        // setTotal(Number(res.data.pageInfo.totalElements));
         setSize(size);
         setPage(page);
+        console.log(res);
       })
-      .catch((err) => err);
+      .catch((err) => console.log(err));
   }, [page, size]);
 
   return (
