@@ -6,12 +6,14 @@ import com.codestates.main.member.repository.MemberRepository;
 import com.codestates.main.question.dto.QuestionResponseDto;
 import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.repository.QuestionRepository;
+import com.codestates.main.questionCategory.entity.QuestionCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,6 +56,10 @@ public class QuestionService {
 
     public Page<Question> findQuestions(int page, int size) {
         return questionRepository.findAll(PageRequest.of(page,size));
+    }
+
+    public List<Question> findByQuestionCategory(QuestionCategory questionCategory, PageRequest pageRequest){
+        return questionRepository.findByQuestionCategory(pageRequest,questionCategory);
     }
 
 

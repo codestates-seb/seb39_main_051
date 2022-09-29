@@ -84,11 +84,12 @@ public class MemberController {
         long questionCategoryId = requestBody.getQuestionCategoryId();
         Member member = memberService.findVerifiedMember(memberId);
         QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
-        Subscription subscription = new Subscription();
-        subscription.setMember(member);
-        subscription.setQuestionCategory(questionCategory);
-        subscriptionService.createSubscription(subscription);
-        return new ResponseEntity<>("",HttpStatus.CREATED);
+        Subscription subscription = subscriptionService.findSubscriptionInfo(member,questionCategory);
+//        Subscription subscription = new Subscription();
+//        subscription.setMember(member);
+//        subscription.setQuestionCategory(questionCategory);
+        //subscriptionService.createSubscription(subscription);
+        return new ResponseEntity<>(subscription,HttpStatus.CREATED);
     }
 
 }
