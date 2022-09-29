@@ -1,7 +1,10 @@
 package com.codestates.main.question.dto;
 
 import com.codestates.main.answer.entity.Answer;
+import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
+import com.codestates.main.question.entity.Question;
+import com.codestates.main.questionCategory.dto.QuestionCategoryResponseDto;
 import com.codestates.main.questionCategory.entity.QuestionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,13 +26,15 @@ public class QuestionResponseDto {
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime modifiedAt;
+    private MemberDTO.Response member;
 
-    private List<Answer> answers;
+    private QuestionCategoryResponseDto questionCategory;
 
-    private Member member;
-
-//    private QuestionCategory questionCategory;
-
-
+    public QuestionResponseDto(Question question) {
+        this.questionId = question.getQuestionId();
+        this.content = question.getContent();
+        this.createdAt = question.getCreatedAt();
+        this.member = new MemberDTO.Response(question.getMember());
+        this.questionCategory = new QuestionCategoryResponseDto(question.getQuestionCategory());
+    }
 }

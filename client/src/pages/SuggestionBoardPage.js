@@ -4,9 +4,11 @@ import NavigationBar from '../components/NavigationBar';
 import TapMenu from '../components/TapMenu';
 import Search from '../components/Search';
 import BasicButton from '../components/BasicButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import PostSummary from '../components/PostSummary';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const SuggestionBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -15,6 +17,27 @@ const SuggestionBoardPage = () => {
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
   const [data, setData] = useState([]);
+
+  const navigate = useNavigate();
+
+  const categoryArr = ['질문 추가 요청', '질문 수정 요청', '기타'];
+
+  const { category } = useParams();
+
+  useEffect(() => {
+    if (categoryArr.indexOf(category) !== -1) {
+      axios
+        .get(`/posts?category=${category}&page=${page}&size=${size}`)
+        .then((res) => setData(res.data.data));
+    } else {
+      axios
+        .get(`/posts?type=건의게시판&page=${page}&size=${size}`)
+        .then((res) => {
+          setData(res.data.data);
+        });
+      navigate('/suggestion');
+    }
+  }, [category]);
 
   return (
     <>
@@ -39,6 +62,7 @@ const SuggestionBoardPage = () => {
           {data.map((el) => (
             <PostSummary
               themeState={themeState}
+              key={el.id}
               title={el.title}
               category={el.category}
               likes={el.likes}

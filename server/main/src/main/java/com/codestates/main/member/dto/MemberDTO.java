@@ -31,6 +31,14 @@ public class MemberDTO {
         private String nickname;
         private Member.ROLE role;
         private LocalDateTime createdDate;
+
+        public Response(Member member) {
+            this.id = member.getMemberId();
+            this.email = member.getEmail();
+            this.nickname = member.getNickname();
+            this.role = member.getRole();
+            this.createdDate = member.getCreatedAt();
+        }
     }
 
     @Getter

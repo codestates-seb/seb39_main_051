@@ -1,15 +1,41 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
-import DropDownList from '../components/DropDownList';
 import NavigationBar from '../components/NavigationBar';
 
 const AnswerPostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
+  const [answerContent, setAnswerContent] = useState('')
+  const { state } =useLocation()
 
+  const handleAnswer = (e) => {
+    setAnswerContent(e.target.value)
+  }
+  const handleSubmitAnswerPost = async() => {
+    try{
+      const response = axios.post(`/answers`,{
+        memberId : 1,
+        questionId : state.questionId,
+        content: answerContent
+      })
+      console.log(response)
+      if(window.confirm('답변이 등록되었습니다.')){
+        navigate(`/questions/${state.questionId}`)
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+  useEffect(()=>{
+    setTitle(state.questionContent)
+    setCategory(state.questionCategory)
+  })
   return (
     <>
       <NavigationBar themeState={themeState} />
@@ -18,10 +44,10 @@ const AnswerPostPage = () => {
           <form>
           <h1>답변 작성</h1>
             <InputWrapper themeState={themeState}>
-              <Title themeState={themeState}><div>호이스팅이란?</div></Title>
+              <Title themeState={themeState}><div>{title}</div></Title>
             </InputWrapper>
             <CategoryWrapper themeState={themeState}>
-              <div>리액트</div>
+              <div>{category}</div>
             </CategoryWrapper>
             <InputWrapper themeState={themeState}>
               <textarea
@@ -29,6 +55,8 @@ const AnswerPostPage = () => {
                 name='body'
                 type='text'
                 placeholder='답변 내용'
+                value = {answerContent}
+                onChange={handleAnswer}
                 required
               />
             </InputWrapper>
@@ -50,6 +78,7 @@ const AnswerPostPage = () => {
                 backGroundColor='var(--color-orange)'
                 fontSize='1.8rem'
                 text='답변등록'
+                onClick={handleSubmitAnswerPost}
               />
             </ButtonWrapper>
           </form>
