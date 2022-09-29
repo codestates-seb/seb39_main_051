@@ -3,6 +3,7 @@ package com.codestates.main.member.controller;
 import com.codestates.main.exception.BusinessLogicException;
 import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.filter.JwtAuthenticationFilter;
+import com.codestates.main.jwt.JwtTokenizer;
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.mapper.MemberMapper;
@@ -38,6 +39,7 @@ public class MemberController {
     private final QuestionCategoryService questionCategoryService;
 
     private final SubscriptionService subscriptionService;
+    private final JwtTokenizer jwtTokenizer;
     @PostConstruct
     public void init(){
         Member member = Member.builder()
@@ -73,8 +75,12 @@ public class MemberController {
     }
 
     @PostMapping("/subscription")
-    public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody){
-        long memberId = 1;
+    public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody,
+                                           @RequestHeader(value = "Authorization") String jwtHeader){
+        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
+            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
+        }
+        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
         long questionCategoryId = requestBody.getQuestionCategoryId();
         Member member = memberService.findVerifiedMember(memberId);
         QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
