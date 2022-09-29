@@ -4,9 +4,11 @@ import NavigationBar from '../components/NavigationBar';
 import TapMenu from '../components/TapMenu';
 import Search from '../components/Search';
 import BasicButton from '../components/BasicButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import PostSummary from '../components/PostSummary';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const FreeBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -15,6 +17,27 @@ const FreeBoardPage = () => {
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
   const [data, setData] = useState([]);
+
+  const navigate = useNavigate();
+
+  const categoryArr = ['취업 정보', '고민 상담', '유머', '잡담'];
+
+  const { category } = useParams();
+
+  useEffect(() => {
+    if (categoryArr.indexOf(category) !== -1) {
+      axios
+        .get(`/posts?category=${category}&page=${page}&size=${size}`)
+        .then((res) => setData(res.data.data));
+    } else {
+      axios
+        .get(`/posts?type=자유게시판&page=${page}&size=${size}`)
+        .then((res) => {
+          setData(res.data.data);
+        });
+      navigate('/free');
+    }
+  }, [category]);
 
   return (
     <>
@@ -39,6 +62,7 @@ const FreeBoardPage = () => {
           {data.map((el) => (
             <PostSummary
               themeState={themeState}
+              key={el.id}
               title={el.title}
               category={el.category}
               likes={el.likes}
