@@ -6,37 +6,66 @@ const DropDownMenu = (props) => {
       {props.mobile ? (
         <ItemListWrapper mobile themeState={props.themeState}>
           <ItemList mobile>
-            <span>질문 답변 공유 게시판</span>
-            <span>자유 게시판</span>
-            <span>건의 게시판</span>
-            <span>로그인</span>
-            <span>회원가입</span>
+            <a href='/questions'>질문 답변 공유 게시판</a>
+            <a href='/free'>자유 게시판</a>
+            <a href='/suggestion'>건의 게시판</a>
+            <a href='/login'>로그인</a>
+            <a href='/signup'>회원가입</a>
             <DarkModeSwitch />
           </ItemList>
         </ItemListWrapper>
       ) : (
         <ItemListWrapper themeState={props.themeState}>
           <ItemList>
-            <span>자바</span>
-            <span>자바스크립트</span>
-            <span>리액트</span>
-            <span>스프링</span>
-            <span>자료구조</span>
-            <span>알고리즘</span>
-            <span>운영체제</span>
-            <span>데이터베이스</span>
-            <span>네트워크</span>
+            <a href='/questions/java'>
+              <span>자바</span>
+            </a>
+            <a href='/questions/javascript'>
+              <span>자바스크립트</span>
+            </a>
+            <a href='/questions/react'>
+              <span>리액트</span>
+            </a>
+            <a href='/questions/spring'>
+              <span>스프링</span>
+            </a>
+            <a href='/questions/datastructure'>
+              <span>자료구조</span>
+            </a>
+            <a href='/questions/os'>
+              <span>운영체제</span>
+            </a>
+            <a href='/questions/database'>
+              <span>데이터베이스</span>
+            </a>
+            <a href='/questions/network'>
+              <span>네트워크</span>
+            </a>
           </ItemList>
           <ItemList>
-            <span>취업정보</span>
-            <span>고민상담</span>
-            <span>유머</span>
-            <span>잡담</span>
+            <a href='/free/career'>
+              <span>취업정보</span>
+            </a>
+            <a href='/free/counseling'>
+              <span>고민상담</span>
+            </a>
+            <a href='/free/유머'>
+              <span>유머</span>
+            </a>
+            <a href='/free/chat'>
+              <span>잡담</span>
+            </a>
           </ItemList>
           <ItemList>
-            <span>질문 추가 요청</span>
-            <span>질문 수정 요청</span>
-            <span>기타</span>
+            <a href='/suggestion/add'>
+              <span>질문 추가 요청</span>
+            </a>
+            <a href='/suggestion/edit'>
+              <span>질문 수정 요청</span>
+            </a>
+            <a href='/suggestion/etc'>
+              <span>기타</span>
+            </a>
           </ItemList>
         </ItemListWrapper>
       )}
@@ -66,6 +95,11 @@ const ItemList = styled.div`
     props.themeState === 'light'
       ? 'var(--color-black)'
       : 'var(--color-white);'};
+
+  & a {
+    color: var(--color-white);
+    text-decoration: none;
+  }
 
   & span {
     cursor: pointer;

@@ -4,11 +4,13 @@ import NavigationBar from '../components/NavigationBar';
 import TapMenu from '../components/TapMenu';
 import Search from '../components/Search';
 import BasicButton from '../components/BasicButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import PostSummary from '../components/PostSummary';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
-const AnswerBoardPage = () => {
+const QuestionBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const [page, setPage] = useState(1);
@@ -16,6 +18,7 @@ const AnswerBoardPage = () => {
   const [total, setTotal] = useState(1);
   const [data, setData] = useState([
     {
+      id: 0,
       title: '질문1',
       category: '자바',
       likes: 1,
@@ -23,6 +26,7 @@ const AnswerBoardPage = () => {
       createdAt: '22.01.24',
     },
     {
+      id: 1,
       title: '질문2',
       category: '자바',
       likes: 10,
@@ -30,6 +34,36 @@ const AnswerBoardPage = () => {
       createdAt: '22.02.14',
     },
   ]);
+
+  const navigate = useNavigate();
+
+  const categoryArr = [
+    '자바',
+    '자바스크립트',
+    '스프링',
+    '리액트',
+    '자료구조',
+    '운영체제',
+    '데이터베이스',
+    '네트워크',
+  ];
+
+  const { category } = useParams();
+
+  useEffect(() => {
+    if (categoryArr.indexOf(category) !== -1) {
+      axios
+        .get(`/posts?category=${category}&page=${page}&size=${size}`)
+        .then((res) => setData(res.data.data));
+    } else {
+      axios
+        .get(`/posts?type=질문답변게시판&page=${page}&size=${size}`)
+        .then((res) => {
+          setData(res.data.data);
+        });
+      navigate('/questions');
+    }
+  }, [category]);
 
   return (
     <>
@@ -54,6 +88,7 @@ const AnswerBoardPage = () => {
           {data.map((el) => (
             <PostSummary
               themeState={themeState}
+              key={el.id}
               title={el.title}
               category={el.category}
               likes={el.likes}
@@ -114,4 +149,4 @@ const PostSummaryWrapper = styled.div`
   margin: 2rem;
 `;
 
-export default AnswerBoardPage;
+export default QuestionBoardPage;

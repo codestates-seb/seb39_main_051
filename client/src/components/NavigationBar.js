@@ -2,10 +2,21 @@ import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import DropDownMenu from './DropDownMenu';
 import DarkModeSwitch from './DarkModeSwitch';
+import { useEffect, useState } from 'react';
+import { getCookie } from '../utils/cookie';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const isLoggedin = false;
+
+  const [userEmail, setUserEmail] = useState('');
+
+  const isLoggedin = true;
+
+  useEffect(() => {
+    if (isLoggedin) {
+      setUserEmail(getCookie('email'));
+    }
+  }, [userEmail]);
 
   return (
     <>
@@ -23,7 +34,7 @@ const NavigationBar = () => {
         </DropDown>
         <DropDown web>
           <NavBarMenu web themeState={themeState}>
-            <a href='/answer'>질문 답변 공유 게시판</a>
+            <a href='/questions'>질문 답변 공유 게시판</a>
             <a href='/free'>자유 게시판</a>
             <a href='/suggestion'>건의 게시판</a>
           </NavBarMenu>
@@ -33,7 +44,7 @@ const NavigationBar = () => {
           <NavBarRight web themeState={themeState}>
             <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/mypage'>
-              <NavBarButton themeState={themeState}>마이페이지</NavBarButton>
+              <NavBarButton themeState={themeState}>{userEmail}</NavBarButton>
             </a>
             <NavBarButton themeState={themeState}>로그아웃</NavBarButton>
           </NavBarRight>
