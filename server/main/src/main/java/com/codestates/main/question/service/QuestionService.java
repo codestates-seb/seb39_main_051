@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,6 +60,11 @@ public class QuestionService {
     public Page<Question> findQuestions(int page, int size) {
         return questionRepository.findAll(PageRequest.of(page,size));
     }
+
+    public List<Question> findByQuestionCategory(QuestionCategory questionCategory, PageRequest pageRequest){
+        return questionRepository.findByQuestionCategory(pageRequest,questionCategory);
+    }
+
 
     public Page<Question> findQuestionsByQuestionCategory(int page, int size, String questionCategory) {
         QuestionCategory findQuestionCategory = questionCategoryRepository.findByName(questionCategory);

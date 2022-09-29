@@ -12,6 +12,7 @@ import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.service.QuestionService;
 import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.questionCategory.service.QuestionCategoryService;
+import com.codestates.main.subscription.entity.Subscription;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,20 @@ public class InitDb {
 
     @PostConstruct
     public void init() {
+        Member member = Member.builder()
+                .email("shb03207@naver.com")
+                .nickname("관리자")
+                .password("1234")
+                .role(Member.ROLE.ROLE_ADMIN)
+                .build();
+        memberService.createAdmin(member);
+        Subscription subscription = Subscription.builder().build();
+        member = Member.builder()
+                .email("test@gmail.com")
+                .nickname("유저")
+                .password("1234")
+                .build();
+        memberService.createMember(member);
 
         for(long i=0;i<categories.length;i++){
             QuestionCategory questionCategory = QuestionCategory.builder()
@@ -82,13 +97,20 @@ public class InitDb {
             commentService.creatComment(comment1, post.getPostId(), member2.getMemberId());
 
             QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(1L);
-
+            QuestionCategory questionCategory2 = questionCategoryService.findQuestionCategory(2L);
             Question question = Question.builder()
-                    .content("자바 언어 특징 4가지를 설명해주세요.")
+                    .content(i+" 번 질문 : 자바 언어 특징 4가지를 설명해주세요.")
                     .member(member1)
                     .questionCategory(questionCategory)
                     .build();
             questionService.creatQuestion(question);
+
+            Question question2 = Question.builder()
+                    .content(i+" 번 질문 : 리액트 특징 4가지를 설명해주세요.")
+                    .member(member1)
+                    .questionCategory(questionCategory2)
+                    .build();
+            questionService.creatQuestion(question2);
 
             Answer answer = Answer.builder()
                     .content("고립에의 종류는 3가지가 있습니다.")

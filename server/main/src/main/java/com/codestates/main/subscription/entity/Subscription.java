@@ -36,7 +36,21 @@ public class Subscription {
     private QuestionCategory questionCategory;
 
     // 몇번까지 받았는지
+    @Column
+    private long received;
 
-
+    @Column
+    private STATUS status;
     // 구독중/구독취소 인지
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public enum STATUS{
+        SUBSCRIPTION_ACTIVE("구독 중"),
+        SUBSCRIPTION_DEACTIVATED("구독 비활성화");
+
+        @Getter
+        private String status;
+    }
 }
