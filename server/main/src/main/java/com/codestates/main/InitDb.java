@@ -1,4 +1,4 @@
-package com.codestates.main.post;
+package com.codestates.main;
 
 import com.codestates.main.answer.entity.Answer;
 import com.codestates.main.answer.service.AnswerService;
@@ -10,6 +10,8 @@ import com.codestates.main.post.entity.Post;
 import com.codestates.main.post.service.PostService;
 import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.service.QuestionService;
+import com.codestates.main.questionCategory.entity.QuestionCategory;
+import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +25,23 @@ public class InitDb {
     private final PostService postService;
     private final CommentService commentService;
     private final QuestionService questionService;
-
+    private final QuestionCategoryService questionCategoryService;
     private final AnswerService answerService;
+
+    String[] categories = new String[]{"Java", "React", "Spring", "Data Structure", "Operating System", "Database", "Network", "Javascript"};
 
     @PostConstruct
     public void init() {
 
-        for (int i=1; i<=10; i++) {
+        for(long i=0;i<categories.length;i++){
+            QuestionCategory questionCategory = QuestionCategory.builder()
+                    .questionCategoryId(i+1)
+                    .name(categories[(int)i])
+                    .build();
+            questionCategoryService.createQuestionCategory(questionCategory);
+        }
+
+        for (int i=1; i<=5; i++) {
             Member member1 = Member.builder()
                     .email("test" + i + "@naver.com")
                     .nickname("작성자" + i)
@@ -69,9 +81,12 @@ public class InitDb {
             commentService.creatComment(comment, post.getPostId(), member2.getMemberId());
             commentService.creatComment(comment1, post.getPostId(), member2.getMemberId());
 
+            QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(1L);
+
             Question question = Question.builder()
-                    .content("MYSQL 고립 종류에 대해 설명해주세요")
+                    .content("자바 언어 특징 4가지를 설명해주세요.")
                     .member(member1)
+                    .questionCategory(questionCategory)
                     .build();
             questionService.creatQuestion(question);
 
