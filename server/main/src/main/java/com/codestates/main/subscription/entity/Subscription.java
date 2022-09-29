@@ -37,5 +37,6 @@ public class Subscription {
 
     // 몇번까지 받았는지
 
+
     // 구독중/구독취소 인지
 }

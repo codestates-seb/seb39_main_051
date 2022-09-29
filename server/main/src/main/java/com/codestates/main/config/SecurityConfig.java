@@ -40,7 +40,8 @@ public class SecurityConfig{
                 .and()
                 .authorizeHttpRequests(authorize -> authorize  // (3) 추가
                                 .antMatchers(HttpMethod.GET, "/member/get").hasRole("USER")
-                                .antMatchers(HttpMethod.GET, "/my-page").hasAnyRole("USER", "ADMIN")  // (4) 추가
+                                //.antMatchers(HttpMethod.GET, "/my-page/**").hasAnyRole("USER", "ADMIN")  // (4) 추가
+                                .antMatchers("/my-page/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll());
                 //.authorizeRequests()
                 //.antMatchers("/answer/**")
