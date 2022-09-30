@@ -25,8 +25,8 @@ const AnswerPostPage = () => {
         content: answerContent
       })
       console.log(response)
-      if(window.confirm('답변이 등록되었습니다.')){
-        navigate(`/questions/${state.questionId}`)
+      if(window.confirm('답변을 등록하시겠습니까?')){
+        navigate(`/question/${state.questionId}`)
       }
     }catch(err){
       console.log(err)

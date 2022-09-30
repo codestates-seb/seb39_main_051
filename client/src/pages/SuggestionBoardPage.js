@@ -39,6 +39,12 @@ const SuggestionBoardPage = () => {
     }
   }, [category]);
 
+  const handleOnClick = () => {
+    navigate('/post', {
+      state: { type: 'suggestion', category: '질문 추가 요청' },
+    });
+  };
+
   return (
     <>
       <NavigationBar />
@@ -56,6 +62,7 @@ const SuggestionBoardPage = () => {
             backGroundColor='var(--color-orange)'
             fontSize='1.3rem'
             text='글 작성하기'
+            onClick={handleOnClick}
           />
         </ButtonWrapper>
         <PostSummaryWrapper>

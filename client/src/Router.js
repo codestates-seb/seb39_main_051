@@ -13,6 +13,7 @@ import DashBoardPage from './pages/DashBoardPage';
 import UserImgPage from './pages/UserImgPage';
 import UserNamePage from './pages/UserNamePage';
 import UserPasswordPage from './pages/UserPasswordPage';
+import AnswerPostPage from './pages/AnswerPostPage'
 
 const Router = () => {
   return (
@@ -34,6 +35,7 @@ const Router = () => {
       <Route path='/userimg' element={<UserImgPage />} />
       <Route path='/username' element={<UserNamePage />} />
       <Route path='/userpassword' element={<UserPasswordPage />} />
+      <Route path='/answer/post' element={<AnswerPostPage />} />
     </Routes>
   );
 };

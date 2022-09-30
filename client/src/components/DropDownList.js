@@ -25,7 +25,7 @@ const DropDownList = (props) => {
           <li>{`${seleted}`}</li>
           <FontAwesomeIcon icon={faAngleDown} />
         </StyledUl>
-        {props.type === 'answer' ? (
+        {props.type === 'questions' ? (
           isOpen ? (
             <>
               <StyledUl active themeState={themeState}>

@@ -4,25 +4,26 @@ import DropDownMenu from './DropDownMenu';
 import DarkModeSwitch from './DarkModeSwitch';
 import { useEffect, useState } from 'react';
 import { getCookie } from '../utils/cookie';
+import Logo from '../assets/Logo';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
-  const [userEmail, setUserEmail] = useState('');
-
-  const isLoggedin = true;
+  const [nickName, setNickName] = useState('');
 
   useEffect(() => {
-    if (isLoggedin) {
-      setUserEmail(getCookie('email'));
+    if (getCookie('nickname')) {
+      setNickName(getCookie('nickname'));
     }
-  }, [userEmail]);
+  }, [nickName]);
+
+  const handleOnClick = () => {};
 
   return (
     <>
       <NavBar themeState={themeState}>
         <NavBarLogo themeState={themeState} href='/'>
-          매일 메일
+          <Logo/>
         </NavBarLogo>
         <DropDown mobile>
           <img
@@ -40,13 +41,15 @@ const NavigationBar = () => {
           </NavBarMenu>
           <DropDownMenu themeState={themeState} />
         </DropDown>
-        {isLoggedin ? (
+        {nickName !== '' ? (
           <NavBarRight web themeState={themeState}>
             <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/mypage'>
-              <NavBarButton themeState={themeState}>{userEmail}</NavBarButton>
+              <NavBarButton themeState={themeState}>{nickName}</NavBarButton>
             </a>
-            <NavBarButton themeState={themeState}>로그아웃</NavBarButton>
+            <NavBarButton themeState={themeState} onClick={handleOnClick}>
+              로그아웃
+            </NavBarButton>
           </NavBarRight>
         ) : (
           <NavBarRight web themeState={themeState}>
@@ -69,7 +72,7 @@ const NavBar = styled.div`
   left: 0;
   top: 0;
   width: 100%;
-  height: 4rem;
+  height: 6rem;
   z-index: 10;
   display: flex;
   justify-content: space-between;
@@ -95,7 +98,7 @@ const NavBarLogo = styled.a`
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   font-size: 1.6rem;
   width: 28rem;
-  height: 4rem;
+  height: 6rem;
   text-decoration: none;
 
   @media screen and (min-width: 413px) {
@@ -111,7 +114,7 @@ const NavBarMenu = styled.div`
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   font-size: 1.6rem;
   width: 52.5rem;
-  height: 4rem;
+  height: 6rem;
 
   & a {
     cursor: pointer;
@@ -134,7 +137,7 @@ const NavBarRight = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 4rem;
+  height: 6rem;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
 
@@ -162,7 +165,7 @@ const NavBarButton = styled.button`
   color: var(--color-white);
   border: none;
   font-size: 1.6rem;
-  height: 4rem;
+  height: 6rem;
   cursor: pointer;
 `;
 
