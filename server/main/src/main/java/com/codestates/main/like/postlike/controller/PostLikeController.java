@@ -1,6 +1,7 @@
 package com.codestates.main.like.postlike.controller;
 
 import com.codestates.main.like.postlike.dto.PostLikePostDto;
+import com.codestates.main.like.postlike.dto.PostLikeResponseDto;
 import com.codestates.main.like.postlike.service.PostLikeService;
 import com.codestates.main.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostLikeController {
 
     private final PostLikeService postLikeService;
-
+    private final PostService postService;
     @PostMapping("/posts/{post-id}/like")
     public ResponseEntity postLikePost(@PathVariable("post-id") Long postId,
                                        @RequestBody PostLikePostDto postLikePostDto) {
-
-        postLikeService.postLike(postId, postLikePostDto.getMemberId());
-        return new ResponseEntity(HttpStatus.OK);
+        boolean isVoted;
+        isVoted = postLikeService.postLike(postId, postLikePostDto.getMemberId());
+        long likeCount = postService.findPost(postId).getLikeCount();
+        PostLikeResponseDto postLikeResponse = new PostLikeResponseDto(likeCount, isVoted);
+        return new ResponseEntity(postLikeResponse, HttpStatus.OK);
     }
 }
