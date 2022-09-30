@@ -21,8 +21,10 @@ public class PostResponseDto {
 
     private String type;
     private String category;
+    private long likeCount;
 
     private Member member;
+
     private LocalDateTime createdAt;
 
     public PostResponseDto(Post post) {
@@ -31,6 +33,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.type = post.getType();
         this.category = post.getCategory();
+        this.likeCount = post.getLikeCount();
         this.member = post.getMember();
         this.createdAt = post.getCreatedAt();
     }
