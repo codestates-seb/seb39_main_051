@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<Subscription,Long> {
     List<Subscription> findSubscriptionsByMemberAndStatus(Member member, Subscription.STATUS status);
     Subscription findSubscriptionsByMemberAndQuestionCategory(Member member, QuestionCategory questionCategory);
+
 }

@@ -2,6 +2,7 @@ package com.codestates.main.subscription.entity;
 
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.questionCategory.entity.QuestionCategory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,9 +31,11 @@ public class Subscription {
     private LocalDateTime modifiedAt;
 
     @ManyToOne
+    @JsonIgnore
     private Member member;
 
     @ManyToOne
+    @JsonIgnore
     private QuestionCategory questionCategory;
 
     // 몇번까지 받았는지
