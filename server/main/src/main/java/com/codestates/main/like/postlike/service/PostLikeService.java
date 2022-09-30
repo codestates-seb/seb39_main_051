@@ -20,7 +20,7 @@ public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final MemberService memberService;
     private final PostService postService;
-    public void postLike(Long postId, Long memberId) {
+    public boolean postLike(Long postId, Long memberId) {
         Post findPost = postService.findPost(postId);
         Member findMember = memberService.findVerifiedMember(memberId);
         Optional<PostLike> optionalPostLike = postLikeRepository.findByPostAndMember(findPost, findMember);
@@ -41,6 +41,11 @@ public class PostLikeService {
                     postLikeRepository.save(postLike);
                 }
         );
+
+        if (optionalPostLike.isPresent())
+            return false;
+        else
+            return true;
     }
 
 }
