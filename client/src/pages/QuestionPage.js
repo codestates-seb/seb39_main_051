@@ -71,12 +71,12 @@ const QuestionPage = () => {
   useEffect(() => {
     axios.get(`/questions/${params.id}`)
     .then((res)=>{
-      console.log(res)
     setContent(res.data.content);
     setEditedQuestion(res.data.content);
     setQuestionId(res.data.questionId)
     // setCategory(res.data.questionCategory);
-    setCreatedAt(res.data.createdAt);
+    const newDate = res.data.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')
+    setCreatedAt(newDate);
     // setModifiedAt(res.data.modifiedAt);
     setMemberId(res.data.memberId)
     setNickname(res.data.nickname)
@@ -84,7 +84,8 @@ const QuestionPage = () => {
     const sortedByLikesAnswer = origin.sort((a,b)=>
       a.likeCount > b.likeCount ? -1 : 1
     ) 
-    setAnswer(res.data.answers)
+    setAnswer(sortedByLikesAnswer)
+    
     })
     .catch((err)=>console.log(err))
 
@@ -152,17 +153,23 @@ const QuestionPage = () => {
             text={'답변등록'}
           />
         </CenterWrapper>
-        {answer.map((el, i) => (
+        {answer.map((el, i) => 
+        (
           <AnswerCard
             profileImg='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png'
             writer={el.writer}
-            modifiedAt='2022.09.20'
+            createdAt={el.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')}
+            // modifiedAt='2022.09.20'
             content={el.content}
             likeCount={el.likeCount}
-            comment={el.comments}
+            comment={el.comments.sort((a,b)=>
+              a.likeCount > b.likeCount ? -1 : 1
+            ) }
             answerId={el.answerId}
-          />
-        ))}
+            answer={answer}
+            setAnswer={setAnswer}
+          />)
+        )}
       </BorderLayout>
     </>
   );
