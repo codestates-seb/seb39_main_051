@@ -1,5 +1,6 @@
 package com.codestates.main.member.controller;
 
+import com.codestates.main.aspect.TokenAop;
 import com.codestates.main.exception.BusinessLogicException;
 import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.filter.JwtAuthenticationFilter;
@@ -16,6 +17,7 @@ import com.codestates.main.subscription.entity.Subscription;
 import com.codestates.main.subscription.service.SubscriptionService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.AjAttribute;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.web.servlet.headers.HeadersSecurityMarker;
@@ -43,6 +45,7 @@ public class MemberController {
 
 
     @PostMapping("/post")
+    @TokenAop
     public ResponseEntity<Object> postMember(@RequestBody MemberDTO.Post requestBody) throws BusinessLogicException {
         Member member = memberMapper.memberPostDTOToMember(requestBody);
         Member createdMember;
@@ -59,6 +62,7 @@ public class MemberController {
     }
 
     @PostMapping("/subscription")
+    @TokenAop
     public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody,
                                            @RequestHeader(value = "Authorization") String jwtHeader){
         if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
@@ -76,4 +80,15 @@ public class MemberController {
         return new ResponseEntity<>(subscription,HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody MemberDTO.Login requestBody){
+        System.out.println("haha");
+        return new ResponseEntity<>(requestBody,HttpStatus.CREATED);
+    }
+
+    @GetMapping("/aoptest")
+    @TokenAop
+    public ResponseEntity aopTest(long memberId){
+        return new ResponseEntity<>("",HttpStatus.CREATED);
+    }
 }

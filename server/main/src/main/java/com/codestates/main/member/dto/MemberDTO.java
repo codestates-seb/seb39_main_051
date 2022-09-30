@@ -1,12 +1,14 @@
 package com.codestates.main.member.dto;
 
 import com.codestates.main.member.entity.Member;
+import com.codestates.main.questionCategory.entity.QuestionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberDTO {
 
@@ -31,6 +33,7 @@ public class MemberDTO {
         private String nickname;
         private Member.ROLE role;
         private LocalDateTime createdDate;
+
 
         public Response(Member member) {
             this.id = member.getMemberId();

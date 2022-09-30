@@ -1,5 +1,6 @@
 package com.codestates.main.oauth;
 
+import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.member.entity.Member;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,8 +32,13 @@ public class PrincipalDetails extends Member implements UserDetails {
 //    }
 
     @Override
-    public String getPassword() {
-        return member.getPassword();
+    public String getPassword() throws NullPointerException{
+        try{
+            return member.getPassword();
+        }catch (NullPointerException nullPointerException){
+            return null;
+        }
+
     }
 
     @Override
