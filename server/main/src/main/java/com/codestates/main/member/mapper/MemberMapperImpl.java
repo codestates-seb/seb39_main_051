@@ -2,9 +2,11 @@ package com.codestates.main.member.mapper;
 
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
+import com.codestates.main.subscription.entity.Subscription;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class MemberMapperImpl implements MemberMapper{
@@ -49,6 +51,7 @@ public class MemberMapperImpl implements MemberMapper{
         String nickname = null;
         Member.ROLE role = null;
         LocalDateTime createdDate = null;
+        List<Subscription> subscriptionList = null;
         if ( member.getMemberId()!=0L ) {
             memberId = member.getMemberId();
         }
@@ -56,7 +59,8 @@ public class MemberMapperImpl implements MemberMapper{
         nickname = member.getNickname();
         role = member.getRole();
         createdDate = member.getCreatedAt();
-        return new MemberDTO.Response(memberId, email, nickname, role,createdDate);
+        subscriptionList = member.getSubscriptions();
+        return new MemberDTO.Response(memberId, email, nickname, role,createdDate, subscriptionList);
         //return new MemberDTO.Response(memberId, email, nickname);
     }
 

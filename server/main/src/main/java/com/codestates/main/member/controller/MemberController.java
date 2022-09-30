@@ -62,7 +62,7 @@ public class MemberController {
     }
 
     @PostMapping("/subscription")
-    @TokenAop
+    //@TokenAop
     public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody,
                                            @RequestHeader(value = "Authorization") String jwtHeader){
         if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
@@ -88,7 +88,9 @@ public class MemberController {
 
     @GetMapping("/aoptest")
     @TokenAop
-    public ResponseEntity aopTest(long memberId){
+    public ResponseEntity aopTest(){
         return new ResponseEntity<>("",HttpStatus.CREATED);
     }
+
+
 }

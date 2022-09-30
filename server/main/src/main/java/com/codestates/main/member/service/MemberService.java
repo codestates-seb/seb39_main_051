@@ -4,6 +4,8 @@ import com.codestates.main.exception.BusinessLogicException;
 import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.repository.MemberRepository;
+import com.codestates.main.subscription.entity.Subscription;
+import com.codestates.main.subscription.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,8 @@ import java.util.Optional;
 public class MemberService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final SubscriptionService subscriptionService;
     @Value("src\\main\\resources\\file\\images\\default.png")
     private String defaultFilePath;
     public Member createMember(Member member) {
@@ -82,5 +86,12 @@ public class MemberService{
 
     public List<Member> findMembers() {
         return memberRepository.findAll();
+    }
+
+    public Member findMemberWithActiveSubscription(long memberId){
+        Member findMember = findVerifiedMember(memberId);
+        List<Subscription> subscriptions = subscriptionService.findActiveMemberSubscriptions(findMember);
+        findMember.setSubscriptions(subscriptions);
+        return findMember;
     }
 }
