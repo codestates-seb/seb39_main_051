@@ -8,21 +8,20 @@ const DropDownList = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [seleted, setSelected] = useState(props.category);
 
   const handleClick = (e) => {
     setIsOpen(!isOpen);
   };
 
   const handleSelect = (e) => {
-    setSelected(e.target.innerText);
+    props.setSelected(e.target.innerText);
   };
 
   return (
     <>
       <DropDownWrapper onClick={handleClick}>
         <StyledUl themeState={themeState}>
-          <li>{`${seleted}`}</li>
+          <li>{`${props.seleted}`}</li>
           <FontAwesomeIcon icon={faAngleDown} />
         </StyledUl>
         {props.type === 'questions' ? (
@@ -59,8 +58,8 @@ const DropDownList = (props) => {
         ) : isOpen ? (
           <>
             <StyledUl active themeState={themeState}>
-              <li onClick={handleSelect}>질문 추가</li>
-              <li onClick={handleSelect}>질문 수정</li>
+              <li onClick={handleSelect}>질문 추가 요청</li>
+              <li onClick={handleSelect}>질문 수정 요청</li>
               <li onClick={handleSelect}>기타</li>
             </StyledUl>
           </>
