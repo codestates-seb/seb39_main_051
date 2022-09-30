@@ -28,6 +28,10 @@ public class QuestionResponseDto2 {
     private String email;
 
     private String nickname;
+
+    private Long questionCategoryId;
+
+    private String questionCategoryName;
     private LocalDateTime createdAt;
 
     private List<AnswerResponseDto2> answers;
@@ -38,6 +42,8 @@ public class QuestionResponseDto2 {
         this.email = question.getMember().getEmail();
         this.nickname = question.getMember().getNickname();
         this.content = question.getContent();
+        this.questionCategoryId = question.getQuestionCategory().getQuestionCategoryId();
+        this.questionCategoryName = question.getQuestionCategory().getName();
         this.createdAt = question.getCreatedAt();
         this.answers = question.getAnswers().
                 stream()
