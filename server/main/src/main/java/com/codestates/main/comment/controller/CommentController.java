@@ -94,4 +94,10 @@ public class CommentController {
                 new SingleResponseDto<>(commentResponseDto),
                 HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/comments/{comment-id}")
+    public ResponseEntity deleteComment(@PathVariable("comment-id") Long commentId) {
+        commentService.deleteComment(commentId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

@@ -39,6 +39,12 @@ const FreeBoardPage = () => {
     }
   }, [category]);
 
+  const handleOnClick = () => {
+    navigate('/post', {
+      state: { type: 'free', category: '취업 정보' },
+    });
+  };
+
   return (
     <>
       <NavigationBar />
@@ -56,6 +62,7 @@ const FreeBoardPage = () => {
             backGroundColor='var(--color-orange)'
             fontSize='1.3rem'
             text='글 작성하기'
+            onClick={handleOnClick}
           />
         </ButtonWrapper>
         <PostSummaryWrapper>

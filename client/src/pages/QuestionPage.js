@@ -35,31 +35,26 @@ const QuestionPage = () => {
 
   const handleDeleteQuestion = async() => {
     try{
-      const response = await axios.delete(`/questions/${params.id}`)
-      navigate('/questions')
-      console.log(response)
-      return 
+      if(window.confirm('정말 질문을 삭제하시겠습니까?/'))
+      {
+        const response = await axios.delete(`/questions/${params.id}`)
+        navigate('/questions')
+        console.log(response)
+      }
     }catch(error){
       console.log(error)
     }
   }
 
   const handleSubmitEditQuestion = async() => {
-    try{
-        const response = await axios.patch(`/questions/${params.id}`,{
-        content : editedQuestion
-      })
+    const response = await axios.patch(`/questions/${params.id}`,{
+      content : editedQuestion})
       setIsQuestionEditMode(false)
       console.log('hello')
       toast.success(`질문이 수정되었습니다!`)
-      // setContent(response.data)
-      //setEditedQuestion(response.data)
-      return response
-    }
-    catch(error){
-      console.log(error)
-    }
-    
+      setContent(editedQuestion);
+      setEditedQuestion(editedQuestion);
+
   };
 
 
@@ -76,7 +71,7 @@ const QuestionPage = () => {
   useEffect(() => {
     axios.get(`/questions/${params.id}`)
     .then((res)=>{
-    console.log(res)
+      console.log(res)
     setContent(res.data.content);
     setEditedQuestion(res.data.content);
     setQuestionId(res.data.questionId)
@@ -165,6 +160,7 @@ const QuestionPage = () => {
             content={el.content}
             likeCount={el.likeCount}
             comment={el.comments}
+            answerId={el.answerId}
           />
         ))}
       </BorderLayout>

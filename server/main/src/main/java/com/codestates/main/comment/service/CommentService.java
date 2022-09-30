@@ -82,7 +82,7 @@ public class CommentService {
                 new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
         return commentRepository.findByPost(findPost);
     }*/
-    private void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId) {
         Comment findComment = findVerifiedComment(commentId);
         commentRepository.delete(findComment);
     }

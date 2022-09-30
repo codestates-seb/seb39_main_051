@@ -20,7 +20,7 @@ public class CommentLikeService {
     private final CommentLikeRepository commentLikeRepository;
     private final CommentService commentService;
     private final MemberService memberService;
-    public void commentLike(Long commentId, Long memberId) {
+    public boolean commentLike(Long commentId, Long memberId) {
         Comment findComment = commentService.findComment(commentId);
         Member findMember = memberService.findVerifiedMember(memberId);
         Optional<CommentLike> optionalCommentLike = commentLikeRepository.findByCommentAndMember(findComment, findMember);
@@ -42,6 +42,11 @@ public class CommentLikeService {
                     commentLikeRepository.save(commentLike);
                 }
         );
+
+        if (optionalCommentLike.isPresent())
+            return false;
+        else
+            return true;
 
     }
 }

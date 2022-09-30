@@ -35,15 +35,6 @@ const Form = (props) => {
     });
   };
 
-  //임시 쿠키 확인 코드
-  const handleOnClick = (e) => {
-    e.preventDefault();
-    if ((email === 'test1@gmail.com') & (password === '000000001')) {
-      console.log('로그인 성공');
-      setCookie('email', email, 1);
-    }
-  };
-
   const regNumber = /[0-9]/g;
   const regString = /[a-zA-Z]/g;
   const regSpecialCharacter =
@@ -97,17 +88,15 @@ const Form = (props) => {
 
       try {
         const response = await axios.post('/login', {
-          userEmail: email,
-          userPassword: password,
+          email: email,
+          password: password,
         });
-        const data = await response.data;
-        const token = data.userToken;
-        const userName = data.userName;
-        setCookie('token', token);
-        setCookie('userName', userName);
+        const headers = await response.headers;
+        setCookie('accessToken', headers.authorization, 60);
+        // setCookie('email', email);
         alert('Login Success');
-        navigate('/');
-        window.location.reload();
+        // navigate('/');
+        // window.location.reload();
       } catch (err) {
         alert('Check your Email and Password');
       }
@@ -116,10 +105,14 @@ const Form = (props) => {
       if (emailValid && passwordValid && rePasswordValid) {
         try {
           const response = axios.post('/member/post', {
-            userEmail: email,
-            userPassword: password,
+            nickname: nickName,
+            email: email,
+            password: password,
           });
           alert('SignUp Success');
+          setCookie('email', response.email, 60);
+          setCookie('nickname', response.nickname, 60);
+          setCookie('accessToken', response.headers.authorization, 60);
           navigate('/');
           window.location.reload();
           return response;
@@ -213,7 +206,7 @@ const Form = (props) => {
           text={props.status === 'login' ? '로그인하기' : '회원가입하기'}
           backGroundColor='#FF6C02'
           color='#ffffff'
-          onClick={handleOnClick}
+          onClick={submitHandler}
         />
         {props.status === 'login' ? (
           <Redirect themeState={themeState}>

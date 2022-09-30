@@ -43,27 +43,27 @@ const DropDownMenu = (props) => {
             </a>
           </ItemList>
           <ItemList>
-            <a href='/free/career'>
+            <a href='/free/취업 정보'>
               <span>취업정보</span>
             </a>
-            <a href='/free/counseling'>
+            <a href='/free/고민 상담'>
               <span>고민상담</span>
             </a>
             <a href='/free/유머'>
               <span>유머</span>
             </a>
-            <a href='/free/chat'>
+            <a href='/free/잡담'>
               <span>잡담</span>
             </a>
           </ItemList>
           <ItemList>
-            <a href='/suggestion/add'>
+            <a href='/suggestion/질문 추가 요청'>
               <span>질문 추가 요청</span>
             </a>
-            <a href='/suggestion/edit'>
+            <a href='/suggestion/질문 수정 요청'>
               <span>질문 수정 요청</span>
             </a>
-            <a href='/suggestion/etc'>
+            <a href='/suggestion/기타'>
               <span>기타</span>
             </a>
           </ItemList>
