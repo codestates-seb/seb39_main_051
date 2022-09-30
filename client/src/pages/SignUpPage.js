@@ -42,7 +42,7 @@ const LoginPage = () => {
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding-top: 4rem;
+  padding-top: 6rem;
   font-size: 1.3rem;
   border-radius: 1.5rem;
   display: flex;
