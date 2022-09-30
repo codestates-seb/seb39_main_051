@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
@@ -7,13 +8,15 @@ import NavigationBar from '../components/NavigationBar';
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
+  const { type, category } = useLocation().state;
+
   return (
     <>
       <NavigationBar themeState={themeState} />
       <ContentWrapper>
         <FormWrapper themeState={themeState}>
           <form>
-          <h1>게시판이름</h1>
+            <h1>게시판이름</h1>
             <InputWrapper themeState={themeState}>
               <input
                 id='title'
@@ -23,7 +26,7 @@ const PostPage = () => {
                 required
               />
             </InputWrapper>
-            <DropDownList type='free' category='잡담' />
+            <DropDownList type={type} category={category} />
             <InputWrapper themeState={themeState}>
               <textarea
                 id='body'
@@ -82,10 +85,11 @@ const FormWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 95%;
-    h1{
+    h1 {
       font-size: 300%;
-      font-weight:bold;
-      color: ${(props) =>props.themeState === 'light'? 'var(--color-black)' : '#D2D2D2'};
+      font-weight: bold;
+      color: ${(props) =>
+        props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
     }
     select {
       max-width: 20rem;
