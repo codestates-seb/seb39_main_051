@@ -3,6 +3,8 @@ package com.codestates.main.member.entity;
 import com.codestates.main.like.answerlike.entity.AnswerLike;
 import com.codestates.main.like.commentlike.entity.CommentLike;
 import com.codestates.main.like.postlike.entity.PostLike;
+import com.codestates.main.subscription.entity.Subscription;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -98,7 +100,10 @@ public class Member {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<AnswerLike> answerLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Subscription> subscriptions = new ArrayList<>();
     public void setAnswerLikes(AnswerLike answerLike) {
         this.answerLikes.add(answerLike);
     }
+
 }
