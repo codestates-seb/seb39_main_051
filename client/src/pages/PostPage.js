@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -15,6 +15,7 @@ const PostPage = () => {
   const [categoryContent, setCategoryContent] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [seleted, setSelected] = useState('');
   const handleTitle = (e) => {
     setTitle(e.target.value);
   };
@@ -87,6 +88,21 @@ const PostPage = () => {
     }
   };
 
+  
+
+  useEffect(() => {
+    if ((type === 'questions') & !category) {
+      setSelected('자바');
+    } else if ((type === 'free') & !category) {
+      setSelected('취업 정보');
+    } else if ((type === 'suggestion') & !category) {
+      setSelected('질문 추가 요청');
+    } else {
+      setSelected(category);
+    }
+  }, []);
+
+
   const handleCancel = () => {
     if (type === 'questions') {
       if (window.confirm('게시물 작성을 그만두시겠습니까?')) {
@@ -111,6 +127,7 @@ const PostPage = () => {
   } else if (type === 'suggestion') {
     boardName = '건의 게시판';
   }
+
   return (
     <>
       <NavigationBar themeState={themeState} />
@@ -132,6 +149,8 @@ const PostPage = () => {
             <DropDownList
               type={type}
               category={category}
+              seleted={seleted}
+              setSelected={setSelected}
               handleCategory={handleCategory}
             />
             <InputWrapper themeState={themeState}>

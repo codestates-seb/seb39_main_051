@@ -9,30 +9,66 @@ const TapMenu = ({ type }) => {
       <TapWrapper themeState={themeState}>
         {type === 'answer' ? (
           <>
-            <div>전체</div>
-            <div>자바</div>
-            <div>자바스크립트</div>
-            <div>리액트</div>
-            <div>스프링</div>
-            <div>자료구조</div>
-            <div>운영체제</div>
-            <div>데이터베이스</div>
-            <div>네트워크</div>
+            <a href='/questions'>
+              <div>전체</div>
+            </a>
+            <a href='/questions/Java'>
+              <div>Java</div>
+            </a>
+            <a href='/questions/Javascript'>
+              <div>Javascript</div>
+            </a>
+            <a href='/questions/React'>
+              <div>React</div>
+            </a>
+            <a href='/questions/Spring'>
+              <div>Spring</div>
+            </a>
+            <a href='/questions/Data Structure'>
+              <div>Data Structure</div>
+            </a>
+            <a href='/questions/Operating System'>
+              <div>Operating System</div>
+            </a>
+            <a href='/questions/Database'>
+              <div>Database</div>
+            </a>
+            <a href='/questions/Network'>
+              <div>Network</div>
+            </a>
           </>
         ) : type === 'free' ? (
           <>
-            <div>전체</div>
-            <div>취업 정보</div>
-            <div>고민 상담</div>
-            <div>유머</div>
-            <div>잡담</div>
+            <a href='/free'>
+              <div>전체</div>
+            </a>
+            <a href='/free/취업 정보'>
+              <div>취업정보</div>
+            </a>
+            <a href='/free/고민 상담'>
+              <div>고민상담</div>
+            </a>
+            <a href='/free/유머'>
+              <div>유머</div>
+            </a>
+            <a href='/free/잡담'>
+              <div>잡담</div>
+            </a>
           </>
         ) : (
           <>
-            <div>전체</div>
-            <div>질문 추가</div>
-            <div>질문 수정</div>
-            <div>기타</div>
+            <a href='/suggestion'>
+              <div>전체</div>
+            </a>
+            <a href='/suggestion/질문 추가 요청'>
+              <div>질문 추가 요청</div>
+            </a>
+            <a href='/suggestion/질문 수정 요청'>
+              <div>질문 수정 요청</div>
+            </a>
+            <a href='/suggestion/기타'>
+              <div>기타</div>
+            </a>
           </>
         )}
       </TapWrapper>
@@ -59,6 +95,11 @@ const TapWrapper = styled.div`
     height: 4rem;
     margin: 0 1rem;
     cursor: pointer;
+  }
+
+  & a {
+    text-decoration: none;
+    color: var(--color-white);
   }
 `;
 

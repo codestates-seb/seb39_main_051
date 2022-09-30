@@ -22,34 +22,35 @@ const QuestionBoardPage = () => {
   const { category } = useParams();
 
   const categoryArr = [
-    '자바',
-    '자바스크립트',
-    '스프링',
-    '리액트',
-    '자료구조',
-    '운영체제',
-    '데이터베이스',
-    '네트워크',
+    'Java',
+    'Javascript',
+    'Spring',
+    'React',
+    'Data Structure',
+    'Operating System',
+    'Database',
+    'Network',
   ];
 
   useEffect(() => {
     if (categoryArr.indexOf(category) !== -1) {
       axios
-        .get(`/posts?category=${category}&page=${page}&size=${size}`)
+        .get(
+          `/questions?questionCategory=${category}&page=${page}&size=${size}`
+        )
         .then((res) => setData(res.data.data));
     } else {
-      axios
-        .get(`/posts?type=질문답변게시판&page=${page}&size=${size}`)
-        .then((res) => {
-          setData(res.data.data);
-        });
+      axios.get(`/questions?page=${page}&size=${size}`).then((res) => {
+        setData(res.data.data);
+        console.log(res.data.data);
+      });
       navigate('/questions');
     }
-  }, [category]);
+  }, [category, page]);
 
   const handleOnClick = () => {
     navigate('/post', {
-      state: { type: 'questions', category: '자바' },
+      state: { type: 'questions', category: category || '자바' },
     });
   };
 
@@ -77,11 +78,10 @@ const QuestionBoardPage = () => {
           {data.map((el) => (
             <PostSummary
               themeState={themeState}
-              key={el.id}
-              title={el.title}
-              category={el.category}
-              likes={el.likes}
-              writer={el.writer}
+              key={el.questionId}
+              title={el.content}
+              category={el.questionCategory.name}
+              writer={el.member.nickname}
               createdAt={el.createdAt}
             />
           ))}
@@ -94,6 +94,7 @@ const QuestionBoardPage = () => {
           setPage={setPage}
           setSize={setSize}
           setTotal={setTotal}
+          type='질문 답변 공유 게시판'
         />
       </ContentWrapper>
     </>

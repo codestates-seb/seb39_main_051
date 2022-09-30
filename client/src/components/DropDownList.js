@@ -8,36 +8,34 @@ const DropDownList = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [seleted, setSelected] = useState(props.category);
 
   const handleClick = (e) => {
     setIsOpen(!isOpen);
   };
 
   const handleSelect = (e) => {
-    setSelected(e.target.innerText);
+    props.setSelected(e.target.innerText);
   };
 
   return (
     <>
       <DropDownWrapper onClick={handleClick}>
         <StyledUl themeState={themeState}>
-          <li>{`${seleted}`}</li>
+          <li>{`${props.seleted}`}</li>
           <FontAwesomeIcon icon={faAngleDown} />
         </StyledUl>
         {props.type === 'questions' ? (
           isOpen ? (
             <>
               <StyledUl active themeState={themeState}>
-                <li onClick={handleSelect}>자바</li>
-                <li onClick={handleSelect}>자바스크립트</li>
-                <li onClick={handleSelect}>리액트</li>
-                <li onClick={handleSelect}>스프링</li>
-                <li onClick={handleSelect}>자료구조</li>
-                <li onClick={handleSelect}>알고리즘</li>
-                <li onClick={handleSelect}>운영체제</li>
-                <li onClick={handleSelect}>데이터베이스</li>
-                <li onClick={handleSelect}>네트워크</li>
+                <li onClick={handleSelect}>Java</li>
+                <li onClick={handleSelect}>Javascript</li>
+                <li onClick={handleSelect}>React</li>
+                <li onClick={handleSelect}>Spring</li>
+                <li onClick={handleSelect}>Data Structure</li>
+                <li onClick={handleSelect}>Operating System</li>
+                <li onClick={handleSelect}>Database</li>
+                <li onClick={handleSelect}>Network</li>
               </StyledUl>
             </>
           ) : (
@@ -59,8 +57,8 @@ const DropDownList = (props) => {
         ) : isOpen ? (
           <>
             <StyledUl active themeState={themeState}>
-              <li onClick={handleSelect}>질문 추가</li>
-              <li onClick={handleSelect}>질문 수정</li>
+              <li onClick={handleSelect}>질문 추가 요청</li>
+              <li onClick={handleSelect}>질문 수정 요청</li>
               <li onClick={handleSelect}>기타</li>
             </StyledUl>
           </>
