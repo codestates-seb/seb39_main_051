@@ -6,12 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from './Toast';
 
-const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, profileImg, postId, answerId}) => {
+
+const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, profileImg, postId, answerId, commentArr, setCommentArr}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   //댓글수정
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
   const [editedComment, setEditedComment] = useState(content)
   const [commentContent, setCommentContent] = useState(content)
+  // 좋아요
+  const [commentLikeContent, setCommentLikeContent] = useState(likeCount)
+
+
   const handleEditComment = (e) => {
     setEditedComment(e.target.value)
   }
@@ -19,21 +24,24 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
     setIsCommentEditMode(!isCommentEditMode)
     setEditedComment(commentContent)
   }
-  const handleDeleteComment = () => {
-
+  const handleDeleteComment = async() => {
+    if(window.confirm('댓글을 삭제하시겠습니까?')){
+      await axios.delete(`/comments/${commentId}`)
+      setCommentArr(commentArr.filter((el)=>el.commentId !== commentId))
+    }
   }
-  const handleSubmitEditComment = () => {
+  const handleSubmitEditComment = async() => {
     if(postId){
-      axios.patch(`/posts/${postId}/comments/${commentId}`,{
+      await axios.patch(`/posts/${postId}/comments/${commentId}`,{
         memberId: 1,
         content : editedComment
       })
+      toast.success(`댓글이 수정되었습니다!`)
       setCommentContent(editedComment)
       setEditedComment(editedComment)
     }
     else if(answerId) {
-      console.log(answerId, commentId)
-      axios.patch(`/answers/${answerId}/comments/${commentId}`,{
+      await axios.patch(`/answers/${answerId}/comments/${commentId}`,{
         member1:1,
         content : editedComment
       })
@@ -45,10 +53,10 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
   }
 
   const handleCommentLike = async() => {
-    axios.post(`/comments/${commentId}/like`,{
+    await axios.post(`/comments/${commentId}/like`,{
       memberId:1
     })
-    .then((res)=>console.log(res))
+    .then((res)=>setCommentLikeContent(res.data.likeCount))
   }
 
   return (
@@ -90,7 +98,7 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
           <div className='commentContent'>{commentContent}</div>
           </>
         )}
-        <div className='commentlikes' onClick={()=>handleCommentLike()}>❤️{likeCount}</div>
+        <div className='commentlikes' onClick={()=>handleCommentLike()}>❤️ {commentLikeContent}</div>
       </CommentContent>
     </Layout>
   );
