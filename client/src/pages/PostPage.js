@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,6 +10,20 @@ const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const { type, category } = useLocation().state;
+
+  const [seleted, setSelected] = useState('');
+
+  useEffect(() => {
+    if ((type === 'questions') & !category) {
+      setSelected('자바');
+    } else if ((type === 'free') & !category) {
+      setSelected('취업 정보');
+    } else if ((type === 'suggestion') & !category) {
+      setSelected('질문 추가 요청');
+    } else {
+      setSelected(category);
+    }
+  }, []);
 
   return (
     <>
@@ -26,7 +41,12 @@ const PostPage = () => {
                 required
               />
             </InputWrapper>
-            <DropDownList type={type} category={category} />
+            <DropDownList
+              type={type}
+              category={category}
+              seleted={seleted}
+              setSelected={setSelected}
+            />
             <InputWrapper themeState={themeState}>
               <textarea
                 id='body'
