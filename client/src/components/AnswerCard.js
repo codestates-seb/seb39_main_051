@@ -3,12 +3,37 @@ import { useSelector } from 'react-redux';
 import BasicButton from './BasicButton';
 import Comment from './Comment';
 import { useState } from 'react';
-const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment}) => {
+import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import Toast from './Toast';
+const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment, answerId}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isCommentShow, setIsCommentShow] = useState(false);
   //답변 수정
   const [isAnswerEditMode, setIsAnswerEditMode] = useState(false) 
   const [editedAnswer, setEditedAnswer] = useState(content)
+  //답변의 댓글 작성
+  const [commentContent, setCommentContent] = useState('')
+  const [answerComment, setAnswerComment] = useState(comment)
+  const handleComment = (e) => {
+    setCommentContent(e.target.value)
+  }
+
+  const handleSubmitAnswerComment = () => {
+    axios.post(`/answers/${answerId}/comments`,{
+      memberId:1,
+      content: commentContent
+    })
+    .then((res)=>{
+      let arr =answerComment
+      arr.push(res.data)
+      toast.success(`댓글이 작성되었습니다!`)
+      setAnswerComment(arr)
+      setCommentContent('')
+    }
+    )
+  }
   const handleEditAnswer = (e) => {
     setEditedAnswer(e.target.value)
   }
@@ -23,8 +48,19 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
     console.log(editedAnswer)
     setIsAnswerEditMode(false)
   }
+  const handleDeleteAnswer = () => {
+    console.log('삭제')
+  }
+  const handleAnswerLike = () => {
+    console.log('답변좋아요')
+    axios.post(`/answers/${answerId}/like`,{
+      memberId:1
+    })
+    .then((res)=>console.log(res))
+  }
   return (
     <Layout themeState={themeState}>
+      <Toast />
       <AnswerInfo>
         <AnswerWriter>
           <img src={profileImg} />
@@ -40,7 +76,7 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
           ) : (
           <>
             <div className='answerEdit' onClick={()=>handleEditMode()}>수정</div>
-          <div className='answerEdit'>삭제</div>
+          <div className='answerEdit' onClick={()=>handleDeleteAnswer()}>삭제</div>
           </>)
           }
           </AnswerEvent>
@@ -63,16 +99,17 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
                       <div className='answerContent'>{content}</div>
             </>
           )}
-          <div className='answerLikes'>❤️{likeCount}</div>
+          <div className='answerLikes' onClick={()=>handleAnswerLike()}>❤️ {likeCount}</div>
         </AnswerContent>
       </AnswerLayout>
       <AnswerCommentInput themeState={themeState}>
         <label id='comment' />
-        <input placeholder='댓글을 입력하세요' />
+        <input placeholder='댓글을 입력하세요' value={commentContent} onChange={handleComment} />
         <BasicButton
           text='댓글등록'
           backGroundColor='#ff6c02'
           color='#ffffff'
+          onClick={handleSubmitAnswerComment}
         />
       </AnswerCommentInput>
       {isCommentShow ? (
@@ -80,8 +117,10 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
           <ToggleComment themeState onClick={() => toggleCommentShow()}>
             댓글 숨기기
           </ToggleComment>
-          {comment.map((el) => (
+          {answerComment.map((el) => (
             <Comment
+              answerId={answerId}
+              key={el.commentId}
               commentId={el.commentId}
               memberId = {el.memberId}
               nickname={el.nickname}
@@ -97,7 +136,7 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
           <ToggleComment
             themeState
             onClick={() => toggleCommentShow()}
-          >{`총 ${comment.length} 개의 댓글이 있습니다.`}</ToggleComment>
+          >{`총 ${answerComment.length} 개의 댓글이 있습니다.`}</ToggleComment>
         </>
       )}
     </Layout>
@@ -223,5 +262,6 @@ const ToggleComment = styled.div`
   cursor: pointer;
   color: #d2d2d2;
 `;
+
 
 export default AnswerCard;

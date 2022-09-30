@@ -1,31 +1,59 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import Toast from './Toast';
 
-const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, profileImg}) => {
+const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, profileImg, postId, answerId}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   //댓글수정
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
   const [editedComment, setEditedComment] = useState(content)
+  const [commentContent, setCommentContent] = useState(content)
   const handleEditComment = (e) => {
     setEditedComment(e.target.value)
   }
   const handleCommentEditMode = () => {
     setIsCommentEditMode(!isCommentEditMode)
-    setEditedComment(content)
+    setEditedComment(commentContent)
   }
   const handleDeleteComment = () => {
 
   }
   const handleSubmitEditComment = () => {
-    console.log(editedComment)
+    if(postId){
+      axios.patch(`/posts/${postId}/comments/${commentId}`,{
+        memberId: 1,
+        content : editedComment
+      })
+      setCommentContent(editedComment)
+      setEditedComment(editedComment)
+    }
+    else if(answerId) {
+      console.log(answerId, commentId)
+      axios.patch(`/answers/${answerId}/comments/${commentId}`,{
+        member1:1,
+        content : editedComment
+      })
+      toast.success(`댓글이 수정되었습니다!`)
+      setCommentContent(editedComment)
+      setEditedComment(editedComment)
+    }
     setIsCommentEditMode(false)
   }
 
-
+  const handleCommentLike = async() => {
+    axios.post(`/comments/${commentId}/like`,{
+      memberId:1
+    })
+    .then((res)=>console.log(res))
+  }
 
   return (
     <Layout themeState={themeState}>
+      <Toast />
       <CommentInfo>
         <CommentWriter>
           <img src={profileImg} alt='프로필사진' />
@@ -59,10 +87,10 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
                     </div>
         ) : (
           <>
-          <div className='commentContent'>{content}</div>
+          <div className='commentContent'>{commentContent}</div>
           </>
         )}
-        <div className='commentlikes'>❤️{likeCount}</div>
+        <div className='commentlikes' onClick={()=>handleCommentLike()}>❤️{likeCount}</div>
       </CommentContent>
     </Layout>
   );
@@ -139,5 +167,6 @@ const CommentContent = styled.div`
     cursor: pointer;
   }
 `;
+
 
 export default Comment;
