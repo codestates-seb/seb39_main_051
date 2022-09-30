@@ -16,26 +16,10 @@ const QuestionBoardPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
-  const [data, setData] = useState([
-    {
-      id: 0,
-      title: '질문1',
-      category: '자바',
-      likes: 1,
-      writer: '작성자1',
-      createdAt: '22.01.24',
-    },
-    {
-      id: 1,
-      title: '질문2',
-      category: '자바',
-      likes: 10,
-      writer: '작성자2',
-      createdAt: '22.02.14',
-    },
-  ]);
+  const [data, setData] = useState([]);
 
   const navigate = useNavigate();
+  const { category } = useParams();
 
   const categoryArr = [
     '자바',
@@ -47,8 +31,6 @@ const QuestionBoardPage = () => {
     '데이터베이스',
     '네트워크',
   ];
-
-  const { category } = useParams();
 
   useEffect(() => {
     if (categoryArr.indexOf(category) !== -1) {
@@ -64,6 +46,12 @@ const QuestionBoardPage = () => {
       navigate('/questions');
     }
   }, [category]);
+
+  const handleOnClick = () => {
+    navigate('/post', {
+      state: { type: 'questions', category: '자바' },
+    });
+  };
 
   return (
     <>
@@ -82,6 +70,7 @@ const QuestionBoardPage = () => {
             backGroundColor='var(--color-orange)'
             fontSize='1.3rem'
             text='글 작성하기'
+            onClick={handleOnClick}
           />
         </ButtonWrapper>
         <PostSummaryWrapper>

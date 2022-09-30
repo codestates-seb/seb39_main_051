@@ -8,15 +8,15 @@ import { getCookie } from '../utils/cookie';
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
-  const [userEmail, setUserEmail] = useState('');
-
-  const isLoggedin = true;
+  const [nickName, setNickName] = useState('');
 
   useEffect(() => {
-    if (isLoggedin) {
-      setUserEmail(getCookie('email'));
+    if (getCookie('nickname')) {
+      setNickName(getCookie('nickname'));
     }
-  }, [userEmail]);
+  }, [nickName]);
+
+  const handleOnClick = () => {};
 
   return (
     <>
@@ -40,13 +40,15 @@ const NavigationBar = () => {
           </NavBarMenu>
           <DropDownMenu themeState={themeState} />
         </DropDown>
-        {isLoggedin ? (
+        {nickName !== '' ? (
           <NavBarRight web themeState={themeState}>
             <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/mypage'>
-              <NavBarButton themeState={themeState}>{userEmail}</NavBarButton>
+              <NavBarButton themeState={themeState}>{nickName}</NavBarButton>
             </a>
-            <NavBarButton themeState={themeState}>로그아웃</NavBarButton>
+            <NavBarButton themeState={themeState} onClick={handleOnClick}>
+              로그아웃
+            </NavBarButton>
           </NavBarRight>
         ) : (
           <NavBarRight web themeState={themeState}>
