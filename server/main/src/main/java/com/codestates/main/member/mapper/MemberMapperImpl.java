@@ -3,6 +3,7 @@ package com.codestates.main.member.mapper;
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.subscription.entity.Subscription;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -90,5 +91,23 @@ public class MemberMapperImpl implements MemberMapper{
         member.setPassword(memberLoginDTO.getPassword());
         //member.setRole(memberPostDTO.getRole());
         return member;
+    }
+
+    @Override
+    public MemberDTO.JwtResponse memberToMemberJwtResponseDTO(Member member){
+        if(member==null){
+            return null;
+        }
+        long memberId = 0L;
+        String email = null;
+        String nickname = null;
+        Member.ROLE role = null;
+        if ( member.getMemberId()!=0L ) {
+            memberId = member.getMemberId();
+        }
+        email = member.getEmail();
+        nickname = member.getNickname();
+        role = member.getRole();
+        return new MemberDTO.JwtResponse(memberId, email, nickname, role);
     }
 }

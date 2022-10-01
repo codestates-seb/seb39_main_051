@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,26 +39,21 @@ public class MyPageController {
     }
 
     @GetMapping
-    public ResponseEntity getMemberProfile(@RequestHeader(value = "Authorization") String jwtHeader){
-        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
-        }
-        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
-        Member member = memberService.findVerifiedMember(memberId);
+    public ResponseEntity getMemberProfile(){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        String email = String.valueOf(user.getPrincipal().toString());
+        Member member = memberService.findMemberByEmail(email);
         MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(member);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @PatchMapping("/patch")
-    public ResponseEntity patchMember(@RequestBody MemberDTO.Patch requestBody,
-                                      @RequestHeader(value = "Authorization") String jwtHeader){
-        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity patchMember(@RequestBody MemberDTO.Patch requestBody){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        String email = String.valueOf(user.getPrincipal().toString());
 
-        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
         Member member = memberMapper.memberPatchDTOToMember(requestBody);
-        member.setMemberId(memberId);
+        member.setEmail(email);
         Member updatedAnswer = memberService.updateMember(member);
         MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(updatedAnswer);
 
@@ -64,13 +61,11 @@ public class MyPageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile,
-                                    @RequestHeader(value = "Authorization") String jwtHeader) throws IOException {
-        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-            return new ResponseEntity<>(ExceptionCode.JWT_TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile) throws IOException {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        String email = String.valueOf(user.getPrincipal().toString());
 
-        long memberId = jwtTokenizer.getMemberIdFromJwtHeader(jwtHeader);
+        Member member = memberService.findMemberByEmail(email);
         String originName = multipartFile.getOriginalFilename();
         String type = Objects.requireNonNull(originName).split("\\.")[1];
         String path = System.getProperty("user.dir")
@@ -78,7 +73,7 @@ public class MyPageController {
                         +filePath;
         System.out.println(path);
 
-        File newFile = new File(path, memberId+"."+type); // 경로/파일.type\
+        File newFile = new File(path, member.getMemberId()+"."+type); // 경로/파일.type\
         if(!newFile.exists()){
             try {
                 if (newFile.createNewFile()){
@@ -95,8 +90,7 @@ public class MyPageController {
                 multipartFile.transferTo(newFile);
             }
         }
-        Member member = memberService.findVerifiedMember(memberId);
-        member.setPicture(path+"\\"+memberId);
+        member.setPicture(path+"\\"+member.getMemberId());
         memberService.updateMember(member);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
