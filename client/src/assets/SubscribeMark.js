@@ -4,7 +4,7 @@ const SubscribeMark = () => {
   return (
     <Layout>
           <svg
-      enable-background='new 0 0 64 64'
+      background='new 0 0 64 64'
       viewBox='0 0 64 64'
     >
       <path
