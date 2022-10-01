@@ -91,7 +91,6 @@ public class PostController {
         List<PostResponseDto> response = posts.stream().map(post -> new PostResponseDto(post))
                 .collect(Collectors.toList());
 
-
         return new ResponseEntity<>(
                 new MultiResponseDto<>(response, pagePosts), HttpStatus.OK
         );

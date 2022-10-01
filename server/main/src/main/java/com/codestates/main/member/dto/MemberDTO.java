@@ -57,4 +57,19 @@ public class MemberDTO {
         private String email;
         private String password;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PostResponse{   // 게시글 목록 조회 응답용 DTO
+        private long memberId;
+        private String nickname;
+        private String picture;
+        public PostResponse(Member member) {
+            this.memberId = member.getMemberId();
+            this.nickname = member.getNickname();
+            this.picture = member.getPicture();
+        }
+    }
 }
