@@ -93,10 +93,9 @@ const Form = (props) => {
         });
         const headers = await response.headers;
         setCookie('accessToken', headers.authorization, 60);
-        // setCookie('email', email);
         alert('Login Success');
-        // navigate('/');
-        // window.location.reload();
+        navigate('/');
+        window.location.reload();
       } catch (err) {
         alert('Check your Email and Password');
       }
@@ -104,18 +103,22 @@ const Form = (props) => {
       //회원가입 일시
       if (emailValid && passwordValid && rePasswordValid) {
         try {
-          const response = axios.post('/member/post', {
-            nickname: nickName,
-            email: email,
-            password: password,
-          });
-          alert('SignUp Success');
-          setCookie('email', response.email, 60);
-          setCookie('nickname', response.nickname, 60);
-          setCookie('accessToken', response.headers.authorization, 60);
-          navigate('/');
-          window.location.reload();
-          return response;
+          axios
+            .post('/member/post', {
+              email: email,
+              password: password,
+              nickname: nickName,
+            })
+            .then((res) => {
+              alert('SignUp Success');
+              navigate('/login');
+              window.location.reload();
+            })
+            .catch((err) =>
+              err.message.split(' ')[5] === '404'
+                ? alert('이미 존재하는 email입니다.')
+                : ''
+            );
         } catch (err) {
           alert('Check valid option');
         }

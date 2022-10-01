@@ -17,29 +17,29 @@ const DropDownMenu = (props) => {
       ) : (
         <ItemListWrapper themeState={props.themeState}>
           <ItemList>
-            <a href='/questions/java'>
-              <span>자바</span>
+            <a href='/questions/Java'>
+              <span>Java</span>
             </a>
-            <a href='/questions/javascript'>
-              <span>자바스크립트</span>
+            <a href='/questions/Javascript'>
+              <span>Javascript</span>
             </a>
-            <a href='/questions/react'>
-              <span>리액트</span>
+            <a href='/questions/React'>
+              <span>React</span>
             </a>
-            <a href='/questions/spring'>
-              <span>스프링</span>
+            <a href='/questions/Spring'>
+              <span>Spring</span>
             </a>
-            <a href='/questions/datastructure'>
-              <span>자료구조</span>
+            <a href='/questions/Data Structure'>
+              <span>Data Structure</span>
             </a>
-            <a href='/questions/os'>
-              <span>운영체제</span>
+            <a href='/questions/Operating System'>
+              <span>Operating System</span>
             </a>
-            <a href='/questions/database'>
-              <span>데이터베이스</span>
+            <a href='/questions/Database'>
+              <span>Database</span>
             </a>
-            <a href='/questions/network'>
-              <span>네트워크</span>
+            <a href='/questions/Network'>
+              <span>Network</span>
             </a>
           </ItemList>
           <ItemList>

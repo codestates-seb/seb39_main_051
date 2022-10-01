@@ -10,7 +10,7 @@ const PostSummary = (props) => {
         <PostCardInfo>
           <CategoryWrapper>{props.category}</CategoryWrapper>
           <WriterCreatedAt>
-            <div>❤️ {props.likes}</div>
+            {props.likes ? <div>❤️ {props.likes}</div> : <></>}
             <div>{props.writer}</div>
             <div>{props.createdAt}</div>
           </WriterCreatedAt>
@@ -26,7 +26,7 @@ const PostCardLayout = styled.div`
     props.themeState === 'light' ? '#FFE57A' : 'var(--color-gray )'};
   padding: 0.3rem 0;
   /* width: 80rem; */
-  width:100%;
+  width: 100%;
   padding: 1rem;
   @media screen and (max-width: 412px) {
     width: 36rem;
@@ -80,7 +80,5 @@ const CategoryWrapper = styled.div`
     margin: 0;
   }
 `;
-
-
 
 export default PostSummary;

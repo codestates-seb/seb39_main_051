@@ -37,11 +37,11 @@ const FreeBoardPage = () => {
         });
       navigate('/free');
     }
-  }, [category]);
+  }, [category, page]);
 
   const handleOnClick = () => {
     navigate('/post', {
-      state: { type: 'free', category: '취업 정보' },
+      state: { type: 'free', category: category || '취업 정보' },
     });
   };
 
@@ -80,6 +80,7 @@ const FreeBoardPage = () => {
         </PostSummaryWrapper>
         <Pagination
           themeState={themeState}
+          type='자유게시판'
           page={page}
           size={size}
           total={total}

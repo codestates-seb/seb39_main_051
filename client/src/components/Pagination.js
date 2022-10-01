@@ -3,26 +3,84 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
 import BasicButton from './BasicButton';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Pagination = ({ total, size, page, setPage, setSize, setTotal }) => {
+const Pagination = ({
+  total,
+  size,
+  page,
+  setPage,
+  setSize,
+  setTotal,
+  type,
+}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const numPages = Math.ceil(total / size);
+
+  const questionCategoryArr = [
+    'Java',
+    'Javascript',
+    'Spring',
+    'React',
+    'Data Structure',
+    'Operating System',
+    'Database',
+    'Network',
+  ];
+  const freeCategoryArr = ['취업 정보', '고민 상담', '유머', '잡담'];
+  const suggestionCategoryArr = ['질문 추가 요청', '질문 수정 요청', '기타'];
+
+  const navigate = useNavigate();
+  const { category } = useParams();
 
   const handleOnClick = (e) => {
     setPage(Number(e.target.innerText));
   };
 
   useEffect(() => {
-    axios
-      .get(`/questions?page=${page}&size=${size}`)
-      .then((res) => {
-        // setTotal(Number(res.data.pageInfo.totalElements));
-        setSize(size);
-        setPage(page);
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (type === '질문 답변 공유 게시판') {
+      if (questionCategoryArr.indexOf(category) !== -1) {
+        axios
+          .get(
+            `/questions?questionCategory=${category}&page=${page}&size=${size}`
+          )
+          .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
+      } else {
+        axios.get(`/questions?page=${page}&size=${size}`).then((res) => {
+          setTotal(Number(res.data.pageInfo.totalElements));
+        });
+        navigate('/questions');
+      }
+    } else if (type === '자유게시판') {
+      if (freeCategoryArr.indexOf(category) !== -1) {
+        axios
+          .get(`/posts?category=${category}&page=${page}&size=${size}`)
+          .then((res) => {
+            setTotal(Number(res.data.pageInfo.totalElements));
+          });
+      } else {
+        axios
+          .get(`/posts?type=자유게시판&page=${page}&size=${size}`)
+          .then((res) => {
+            setTotal(Number(res.data.pageInfo.totalElements));
+          });
+        navigate('/free');
+      }
+    } else if (type === '건의게시판') {
+      if (suggestionCategoryArr.indexOf(category) !== -1) {
+        axios
+          .get(`/posts?category=${category}&page=${page}&size=${size}`)
+          .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
+      } else {
+        axios
+          .get(`/posts?type=건의게시판&page=${page}&size=${size}`)
+          .then((res) => {
+            setTotal(Number(res.data.pageInfo.totalElements));
+          });
+        navigate('/suggestion');
+      }
+    }
   }, [page, size]);
 
   return (
@@ -166,6 +224,11 @@ const Nav = styled.nav`
   align-items: center;
   gap: 0.5rem;
   color: var(--color-white);
+
+  & div {
+    color: var(--color-black);
+    font-size: 1.8rem;
+  }
 `;
 
 export default Pagination;

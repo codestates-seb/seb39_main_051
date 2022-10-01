@@ -37,11 +37,11 @@ const SuggestionBoardPage = () => {
         });
       navigate('/suggestion');
     }
-  }, [category]);
+  }, [category, page]);
 
   const handleOnClick = () => {
     navigate('/post', {
-      state: { type: 'suggestion', category: '질문 추가 요청' },
+      state: { type: 'suggestion', category: category || '질문 추가 요청' },
     });
   };
 
@@ -80,6 +80,7 @@ const SuggestionBoardPage = () => {
         </PostSummaryWrapper>
         <Pagination
           themeState={themeState}
+          type='건의게시판'
           page={page}
           size={size}
           total={total}

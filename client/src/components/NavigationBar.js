@@ -9,13 +9,15 @@ import Logo from '../assets/Logo';
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [nickName, setNickName] = useState('');
 
   useEffect(() => {
-    if (getCookie('nickname')) {
+    if (getCookie('accessToken')) {
+      setIsLoggedIn(true);
       setNickName(getCookie('nickname'));
     }
-  }, [nickName]);
+  }, [isLoggedIn]);
 
   const handleOnClick = () => {};
 
@@ -23,7 +25,7 @@ const NavigationBar = () => {
     <>
       <NavBar themeState={themeState}>
         <NavBarLogo themeState={themeState} href='/'>
-          <Logo/>
+          <Logo />
         </NavBarLogo>
         <DropDown mobile>
           <img
@@ -41,7 +43,7 @@ const NavigationBar = () => {
           </NavBarMenu>
           <DropDownMenu themeState={themeState} />
         </DropDown>
-        {nickName !== '' ? (
+        {isLoggedIn ? (
           <NavBarRight web themeState={themeState}>
             <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/mypage'>
