@@ -31,9 +31,20 @@ public class MailService {
     @Scheduled(cron = "*/60 * * * * *")     // 00/20/40 초 마다
     //@Scheduled(cron = "0 0 8 ? * MON-FRI") //실제 서비스 시 (주말 제외 모든 요일에 아침 8시)
     public void scheduleTest() throws MessagingException {
+        /*
+        * 로직
+        * 모든 멤버에 대해 실행
+        * 각 멤버 마다 구독 정보를 가져옴
+        * 각 구독(질문 카테고리) 마다 실행
+        * 각 질문마다 보내지 않은 문제부터 보내야함
+        *
+        *
+        *
+        * */
         List<Member> members = memberService.findMembers();
 
         for(Member member : members){
+            boolean sendable = false;
             List<Subscription> subscriptions = subscriptionService.findActiveMemberSubscriptions(member);
             if(subscriptions.size()==0){
                 System.out.println("유저의 구독 정보가 없음");
@@ -52,26 +63,44 @@ public class MailService {
             sb.append("<p><span style=\"font-size: 20px;\">현재 <strong>").append(member.getNickname()).append("</strong> 님이 구독 중인 카테고리 :&nbsp;</span></p>");
             for(Subscription subscription : subscriptions){
 
-                long received = subscription.getReceived();
-                int size = 2;
+                int received = (int)subscription.getReceived();
+                int size = 6;
                 QuestionCategory questionCategory = subscription.getQuestionCategory();
-                PageRequest pageRequest = PageRequest.of((int) received,size);                                   // received 부터 size 개 전송
-                List<Question> questions = questionService.findByQuestionCategory(questionCategory,pageRequest);
+                //PageRequest pageRequest = PageRequest.of((int) received-1,size);                                   // received 부터 size 개 전송
+                //List<Question> questions = questionService.findByQuestionCategory(questionCategory,pageRequest);
+                List<Question> questions = questionService.findByQuestionCategory(questionCategory);
+
+                ArrayList<Question> sendQuestions = new ArrayList<>();
+                // questions {1,2,3,4,5}, received = 4, size = 2
+                // i 5, size 2, q.size 5
+                // i 5
+                for(int i=received;i<received+size;i++){
+                    if(i<questions.size()){
+                        sendQuestions.add(questions.get(i));
+                    }
+
+                }
+                if(sendQuestions.size()==0){
+                    continue;
+                }
+                sendable=true;
                 //sb.append(questionCategory.getName()).append("\n");
                 sb.append("<p><strong>").append(questionCategory.getName()).append("</strong></p>");
                 sb.append("<ol>");
-                for(Question question : questions){
+                for(Question question : sendQuestions){
                     sb.append("<li>").append(question.getContent()).append(" &nbsp;<a href=\"http://www.google.com\">답변하러 가기</a></li>");
                     // 이곳에서 주소 추가
                 }
                 sb.append("</ol>");
-                subscription.setReceived(received+1);
+
+                subscription.setReceived(received+sendQuestions.size());
                 subscriptionService.createSubscription(subscription);
 
             }
             mailHelper.setText(sb.toString(),true);
-            javaMailSender.send(mimeMessage);
-            break; // 1명만 보냄
+            if(sendable){
+                javaMailSender.send(mimeMessage);
+            }
         }
 
         System.out.println(LocalDateTime.now());

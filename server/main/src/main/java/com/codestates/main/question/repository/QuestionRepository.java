@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question,Long> {
     List<Question> findByQuestionCategory(PageRequest pageRequest, QuestionCategory questionCategory);
+    List<Question> findByQuestionCategory(QuestionCategory questionCategory);
 
     Page<Question> findAllByQuestionCategory(Pageable pageable, QuestionCategory questionCategory);
 }

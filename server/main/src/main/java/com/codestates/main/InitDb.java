@@ -112,6 +112,13 @@ public class InitDb {
                     .build();
             questionService.creatQuestion(question2);
 
+            Question question3 = Question.builder()
+                    .content(i+10+" 번 질문 : 리액트 특징 4가지를 설명해주세요.")
+                    .member(member1)
+                    .questionCategory(questionCategory2)
+                    .build();
+            questionService.creatQuestion(question3);
+
             Answer answer = Answer.builder()
                     .content("고립에의 종류는 3가지가 있습니다.")
                     .member(member2)
