@@ -39,8 +39,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
-
-
         filterChain.doFilter(request, response); // (5)
     }
 
@@ -48,7 +46,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");  // (6-1)
-
         return authorization == null || !authorization.startsWith("Bearer");  // (6-2)
     }
 
@@ -62,17 +59,14 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     private void setAuthenticationToContext(Map<String, Object> claims) {
-        String email = (String) claims.get("email");   // (4-1
+        String email = (String) claims.get("email");
         String role = (String) claims.get("role");
         Member.ROLE memberRole = Member.ROLE.valueOf(role);
 
-        System.out.println(memberRole);
-          // (4-2)
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(memberRole);
-        System.out.println(authorities);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);  // (4-3)
-        SecurityContextHolder.getContext().setAuthentication(authentication); // (4-4)
+        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
     }
 

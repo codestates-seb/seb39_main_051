@@ -14,4 +14,6 @@ public interface MemberMapper {
     Member memberPatchDTOToMember(MemberDTO.Patch memberPatchDTO);
 
     Member memberLoginDTOToMember(MemberDTO.Login memberLoginDTO);
+
+    MemberDTO.JwtResponse memberToMemberJwtResponseDTO(Member member);
 }
