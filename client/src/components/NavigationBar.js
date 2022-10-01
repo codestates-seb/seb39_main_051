@@ -2,23 +2,12 @@ import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import DropDownMenu from './DropDownMenu';
 import DarkModeSwitch from './DarkModeSwitch';
-import { useEffect, useState } from 'react';
-import { getCookie } from '../utils/cookie';
 import Logo from '../assets/Logo';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [nickName, setNickName] = useState('');
-
-  useEffect(() => {
-    if (getCookie('accessToken')) {
-      setIsLoggedIn(true);
-      setNickName(getCookie('nickname'));
-    }
-  }, [isLoggedIn]);
-
+  const {isLoggedIn,nickName} = useSelector((state)=>state.userInfoSlice)
+  
   const handleOnClick = () => {};
 
   return (
