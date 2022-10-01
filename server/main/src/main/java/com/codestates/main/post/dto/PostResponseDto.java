@@ -1,5 +1,6 @@
 package com.codestates.main.post.dto;
 
+import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.post.entity.Post;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class PostResponseDto {
     private String category;
     private long likeCount;
 
-    private Member member;
+    private MemberDTO.PostResponse member;
 
     private LocalDateTime createdAt;
 
@@ -34,7 +35,7 @@ public class PostResponseDto {
         this.type = post.getType();
         this.category = post.getCategory();
         this.likeCount = post.getLikeCount();
-        this.member = post.getMember();
+        this.member = new MemberDTO.PostResponse(post.getMember());
         this.createdAt = post.getCreatedAt();
     }
 }

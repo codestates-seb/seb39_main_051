@@ -38,4 +38,4 @@ out/
 
 src/main/resources/application.yml
 src/main/resources/application-dev.yml
-src/main/resources/application-test.ymal
+src/main/resources/application-test.yaml
