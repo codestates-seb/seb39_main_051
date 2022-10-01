@@ -60,10 +60,8 @@ public class MemberService{
     }
 
     public Member updateMember(Member member) {
-        Member findMember = findVerifiedMember(member.getMemberId());
+        Member findMember = findMemberByEmail(member.getEmail());
 
-        Optional.ofNullable(member.getEmail())
-                .ifPresent(email -> findMember.setEmail(member.getEmail()));
         Optional.ofNullable(member.getPassword())
                 .ifPresent(password -> findMember.setPassword(member.getPassword()));
         Optional.ofNullable(member.getNickname())
@@ -80,6 +78,12 @@ public class MemberService{
         return optionalMember.orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
+    public Member findMemberByEmail(String email){
+        Optional<Member> optionalMember =
+                Optional.ofNullable(memberRepository.findByEmail(email));
+        return optionalMember.orElseThrow(()-> new BusinessLogicException(ExceptionCode.JWT_TOKEN_NOT_FOUND));
+    }
+
     public Member findMember(String email) {
         return memberRepository.findByEmail(email);
     }
@@ -90,6 +94,13 @@ public class MemberService{
 
     public Member findMemberWithActiveSubscription(long memberId){
         Member findMember = findVerifiedMember(memberId);
+        List<Subscription> subscriptions = subscriptionService.findActiveMemberSubscriptions(findMember);
+        findMember.setSubscriptions(subscriptions);
+        return findMember;
+    }
+
+    public Member findMemberWithActiveSubscription(String email){
+        Member findMember = findMemberByEmail(email);
         List<Subscription> subscriptions = subscriptionService.findActiveMemberSubscriptions(findMember);
         findMember.setSubscriptions(subscriptions);
         return findMember;

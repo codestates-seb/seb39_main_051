@@ -17,6 +17,17 @@ public class MemberDTO {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class JwtResponse{
+        private long id;
+        private String email;
+        private String nickname;
+        private Member.ROLE role;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post{
         private String email;
         private String password;

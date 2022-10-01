@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 @Component
 public class SecurityAspect {
-    @Value("${jwt.secret-key}")
-    private String secretKey;
     private final JwtTokenizer jwtTokenizer;
 
     @Autowired
@@ -35,6 +33,7 @@ public class SecurityAspect {
                 .getMemberIdFromJwtHeader(jwtToken);
         System.out.println("토큰: "+jwtToken);
         System.out.println("멤버: "+memberId);
-        return pjp.proceed(new Object[]{jwtToken});
+
+        return pjp.proceed(new Object[]{memberId});
     }
 }
