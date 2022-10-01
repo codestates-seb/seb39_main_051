@@ -65,6 +65,10 @@ public class QuestionService {
         return questionRepository.findByQuestionCategory(pageRequest,questionCategory);
     }
 
+    public List<Question> findByQuestionCategory(QuestionCategory questionCategory){
+        return questionRepository.findByQuestionCategory(questionCategory);
+    }
+
 
     public Page<Question> findQuestionsByQuestionCategory(int page, int size, String questionCategory) {
         QuestionCategory findQuestionCategory = questionCategoryRepository.findByName(questionCategory);
