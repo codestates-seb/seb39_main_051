@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
   const navigate = useNavigate();
   const { type, category } = useLocation().state;
   const [categoryContent, setCategoryContent] = useState('');
@@ -25,33 +26,43 @@ const PostPage = () => {
   };
 
   const handleCategory = (e) => {
-    switch (e) {
-      case '자바':
-        setCategoryContent(1);
+    console.log(e.target.innerText)
+    switch (e.target.innerText) {
+      case 'Java':
+        setSelected(e.target.innerText);
+        setCategoryContent(1)
         break;
-      case '리액트':
-        setCategoryContent(2);
+      case 'React':
+        setSelected(e.target.innerText);
+        setCategoryContent(2)
         break;
-      case '스프링':
-        setCategoryContent(3);
+      case 'Spring':
+        setSelected(e.target.innerText);
+        setCategoryContent(3)
         break;
-      case '자료구조':
-        setCategoryContent(4);
+      case 'Data Structure':
+        setSelected(e.target.innerText);
+        setCategoryContent(4)
         break;
-      case '운영체제':
-        setCategoryContent(5);
+      case 'Operating System':
+        setSelected(e.target.innerText);
+        setCategoryContent(5)
         break;
-      case '데이터베이스':
-        setCategoryContent(6);
+      case 'Database':
+        setSelected(e.target.innerText);
+        setCategoryContent(6)
         break;
-      case '자료구조':
-        setCategoryContent(7);
+      case 'Network':
+        setSelected(e.target.innerText);
+        setCategoryContent(7)
         break;
-      case '자바스크립트':
-        setCategoryContent(8);
+      case 'Javascript':
+        setSelected(e.target.innerText);
+        setCategoryContent(8)
         break;
         default:
-          setCategoryContent(e);
+          setSelected(e.target.innerText);
+          setCategoryContent(e.target.innerText)
           break
     }
   };
@@ -60,31 +71,29 @@ const PostPage = () => {
     e.preventDefault();
     if (type === 'questions') {
       await axios.post(`/questions`, {
-        memberId: 1,
-        questionCategoryId: 1,
+        memberId: userId,
+        questionCategoryId: categoryContent,
         content,
       })
-      .then((res)=>console.log(res))
+      navigate('/questions')
     } else if (type === 'free') {
-      console.log('title : ' ,title,  'content : ', content, 'type :', '자유게시판','categoryContent :', categoryContent,'memberId :', 1 )
       await axios.post(`/posts`, {
         title,
         content,
         type: '자유게시판',
         category: categoryContent,
-        memberId: 1,
+        memberId: userId,
       })
-      .then((res)=>console.log(res))
+      navigate('/free')
     } else if (type === 'suggestion') {
-      console.log('title : ' ,title,  'content : ', content, 'type :', '자유게시판','categoryContent :', categoryContent,'memberId :', 1 )
       await axios.post(`/posts`, {
         title,
         content,
         type: '건의게시판',
         category: categoryContent,
-        memberId: 1,
+        memberId: userId,
       })
-      .then((res)=>console.log(res))
+      navigate('/suggestion')
     }
   };
 
@@ -135,17 +144,19 @@ const PostPage = () => {
         <FormWrapper themeState={themeState}>
           <form>
             <h1>{boardName}</h1>
-            <InputWrapper themeState={themeState}>
-              <input
-                id='title'
-                name='title'
-                type='text'
-                placeholder='제목'
-                value={title}
-                onChange={handleTitle}
-                required
-              />
-            </InputWrapper>
+            {type==='questions' ? (<InputWrapper></InputWrapper>) : (
+                          <InputWrapper themeState={themeState}>
+                          <input
+                            id='title'
+                            name='title'
+                            type='text'
+                            placeholder='제목'
+                            value={title}
+                            onChange={handleTitle}
+                            required
+                          />
+                        </InputWrapper>
+            )}
             <DropDownList
               type={type}
               category={category}

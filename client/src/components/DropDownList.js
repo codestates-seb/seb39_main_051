@@ -13,10 +13,6 @@ const DropDownList = (props) => {
     setIsOpen(!isOpen);
   };
 
-  const handleSelect = (e) => {
-    props.setSelected(e.target.innerText);
-  };
-
   return (
     <>
       <DropDownWrapper onClick={handleClick}>
@@ -28,14 +24,14 @@ const DropDownList = (props) => {
           isOpen ? (
             <>
               <StyledUl active themeState={themeState}>
-                <li onClick={handleSelect}>Java</li>
-                <li onClick={handleSelect}>Javascript</li>
-                <li onClick={handleSelect}>React</li>
-                <li onClick={handleSelect}>Spring</li>
-                <li onClick={handleSelect}>Data Structure</li>
-                <li onClick={handleSelect}>Operating System</li>
-                <li onClick={handleSelect}>Database</li>
-                <li onClick={handleSelect}>Network</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Java</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Javascript</li>
+                <li onClick={(e)=>props.handleCategory(e)}>React</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Spring</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Data Structure</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Operating System</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Database</li>
+                <li onClick={(e)=>props.handleCategory(e)}>Network</li>
               </StyledUl>
             </>
           ) : (
@@ -45,10 +41,10 @@ const DropDownList = (props) => {
           isOpen ? (
             <>
               <StyledUl active themeState={themeState}>
-                <li onClick={handleSelect}>취업 정보</li>
-                <li onClick={handleSelect}>고민 상담</li>
-                <li onClick={handleSelect}>유머</li>
-                <li onClick={handleSelect}>잡담</li>
+                <li onClick={(e)=>props.handleCategory(e)}>취업 정보</li>
+                <li onClick={(e)=>props.handleCategory(e)}>고민 상담</li>
+                <li onClick={(e)=>props.handleCategory(e)}>유머</li>
+                <li onClick={(e)=>props.handleCategory(e)}>잡담</li>
               </StyledUl>
             </>
           ) : (
@@ -57,9 +53,9 @@ const DropDownList = (props) => {
         ) : isOpen ? (
           <>
             <StyledUl active themeState={themeState}>
-              <li onClick={handleSelect}>질문 추가 요청</li>
-              <li onClick={handleSelect}>질문 수정 요청</li>
-              <li onClick={handleSelect}>기타</li>
+              <li onClick={(e)=>props.handleCategory(e)}>질문 추가 요청</li>
+              <li onClick={(e)=>props.handleCategory(e)}>질문 수정 요청</li>
+              <li onClick={(e)=>props.handleCategory(e)}>기타</li>
             </StyledUl>
           </>
         ) : (
