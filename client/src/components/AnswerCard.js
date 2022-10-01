@@ -7,15 +7,19 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from './Toast';
-const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment, answerId}) => {
+import { useEffect } from 'react';
+const AnswerCard = ({profileImg, writer, createdAt, content, likeCount, comment, answerId, answer,setAnswer}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isCommentShow, setIsCommentShow] = useState(false);
   //답변 수정
+  const [answerContent, setAnswerContent ] = useState(content)
   const [isAnswerEditMode, setIsAnswerEditMode] = useState(false) 
   const [editedAnswer, setEditedAnswer] = useState(content)
   //답변의 댓글 작성
   const [commentContent, setCommentContent] = useState('')
   const [answerComment, setAnswerComment] = useState(comment)
+//좋아요
+const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
   const handleComment = (e) => {
     setCommentContent(e.target.value)
   }
@@ -45,18 +49,27 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
     setIsCommentShow(!isCommentShow);
   };
   const handleSubmitEditAnswer = () => {
-    console.log(editedAnswer)
+    axios.patch(`/answers/${answerId}`,{
+      content : editedAnswer
+    })
+    toast.success('답변이 수정되었습니다!')
+    setEditedAnswer(editedAnswer)
+    setAnswerContent(editedAnswer)
     setIsAnswerEditMode(false)
   }
   const handleDeleteAnswer = () => {
-    console.log('삭제')
+    if(window.confirm('답변을 삭제하시겠습니까?')){
+      axios.delete(`/answers/${answerId}`)
+      setAnswer(answer.filter((el)=>el.answerId !== answerId))
+      toast.success('답변이 삭제되었습니다.')
+    }
   }
   const handleAnswerLike = () => {
     console.log('답변좋아요')
     axios.post(`/answers/${answerId}/like`,{
       memberId:1
     })
-    .then((res)=>console.log(res))
+    .then((res)=>setAnswerLikeContent(res.data.likeCount))
   }
   return (
     <Layout themeState={themeState}>
@@ -67,7 +80,7 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
           {writer}
         </AnswerWriter>
         <AnswerEvent>
-          <div className='answerDate'>{modifiedAt}</div>
+          <div className='answerDate'>{createdAt}</div>
           {isAnswerEditMode ? (
           <>
           <div className='answerEdit' onClick={()=>handleSubmitEditAnswer()}>등록</div>
@@ -96,10 +109,10 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
           </div>
           ) : (
             <>
-                      <div className='answerContent'>{content}</div>
+                      <div className='answerContent'>{answerContent}</div>
             </>
           )}
-          <div className='answerLikes' onClick={()=>handleAnswerLike()}>❤️ {likeCount}</div>
+          <div className='answerLikes' onClick={()=>handleAnswerLike()}>❤️ {answerLikeContent}</div>
         </AnswerContent>
       </AnswerLayout>
       <AnswerCommentInput themeState={themeState}>
@@ -125,9 +138,11 @@ const AnswerCard = ({profileImg, writer, modifiedAt, content, likeCount, comment
               memberId = {el.memberId}
               nickname={el.nickname}
               content={el.content}
-              createdAt={el.createdAt}
+              createdAt={el.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')}
               likeCount={el.likeCount}
               profileImg={el.profileImg}
+              commentArr={answerComment}
+              setCommentArr={setAnswerComment}
             />
           ))}
         </>

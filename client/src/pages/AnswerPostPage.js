@@ -19,7 +19,7 @@ const AnswerPostPage = () => {
   }
   const handleSubmitAnswerPost = async() => {
     try{
-      const response = axios.post(`/answers`,{
+      const response =   axios.post(`/answers`,{
         memberId : 1,
         questionId : state.questionId,
         content: answerContent
@@ -30,6 +30,11 @@ const AnswerPostPage = () => {
       }
     }catch(err){
       console.log(err)
+    }
+  }
+  const handleAnswerPostCancel = () => {
+    if(window.confirm('답변 작성을 그만두시겠습니까?')){
+      navigate(`/question/${state.questionId}`)
     }
   }
   useEffect(()=>{
@@ -60,7 +65,7 @@ const AnswerPostPage = () => {
                 required
               />
             </InputWrapper>
-            <ButtonWrapper>solid
+            <ButtonWrapper>
               <BasicButton
                 themeState={themeState}
                 width='5.5rem'
@@ -69,6 +74,7 @@ const AnswerPostPage = () => {
                 backGroundColor='var(--color-orange)'
                 fontSize='1.8rem'
                 text='취소'
+                onClick={handleAnswerPostCancel}
               />
               <BasicButton
                 themeState={themeState}

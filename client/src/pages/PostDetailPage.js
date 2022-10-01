@@ -33,7 +33,7 @@ const PostDetailPage = () => {
     setPostCommentContent(e.target.value)
   }
   const handleSubmitPostComment = async() => {
-    axios.post(`/posts/${params.id}/comments`,{
+    await axios.post(`/posts/${params.id}/comments`,{
       memberId : 1,
       content : postCommentContent,
     })
@@ -51,9 +51,11 @@ const PostDetailPage = () => {
       console.log(res.data)
       setTitle(res.data.title)
       setCategory(res.data.category)
-      setCreatedAt(res.data.createdAt)
+      const newDate = res.data.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')
+      setCreatedAt(newDate)
       setContent(res.data.content)
-      setComments(res.data.comments)
+      setComments(res.data.comments.sort((a,b)=>
+      a.likeCount > b.likeCount ? -1 : 1) )
       setWriter(res.data.nickname)
       setPostId(res.data.postId)
       setLikeCount(res.data.likeCount)
@@ -79,9 +81,8 @@ const PostDetailPage = () => {
     console.log(editedTitle, eidtedContent);
     setIsPostEditMode(false);
   };
-  const handlePostLike = () => {
-    console.log('post좋아요')
-    axios.post(`/posts/${postId}/like`,{
+  const handlePostLike = async() => {
+    await axios.post(`/posts/${postId}/like`,{
       memberId:1
     })
     .then((res)=>console.log(res))
@@ -164,8 +165,10 @@ const PostDetailPage = () => {
           commentWriter={el.nickname}
           content={el.content}
           // profileImg={el.profileImg}
-          modifiedAt={el.modifiedAt}
+          createdAt={el.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')}
           likeCount={el.likeCount}
+          commentArr={comments}
+          setCommentArr={setComments}
         />
       ))}
     </BorderLayout>
