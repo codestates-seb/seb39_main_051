@@ -7,22 +7,24 @@ import { useSelector } from 'react-redux';
 import Comment from '../components/Comment';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
+import { useNavigate } from 'react-router-dom';
 
 const PostDetailPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
+  const navigate = useNavigate();
   const params = useParams()
-
   const [isPostEditMode, setIsPostEditMode] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
   const [eidtedContent, setEditedContent] = useState('');
-
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [category, setCategory] = useState('')
   const [createdAt, setCreatedAt] = useState('')
   const [modifiedAt, setModifiedAt] = useState([])
   const [comments, setComments] = useState([])
-  const [writer, setWriter] = useState('')
+  const [memberId, setMemberId] = useState('')
+  const [nickname, setNickname] = useState('')
   const [postId, setPostId] = useState('')
   const [likeCount, setLikeCount] = useState(0)
 
@@ -33,17 +35,23 @@ const PostDetailPage = () => {
     setPostCommentContent(e.target.value)
   }
   const handleSubmitPostComment = async() => {
-    await axios.post(`/posts/${params.id}/comments`,{
-      memberId : 1,
-      content : postCommentContent,
-    })
-    .then((res)=> {
-      let arr = comments
-      arr.push(res.data)
-      console.log(arr)
-      setComments(arr)
-      setPostCommentContent('')
-    })
+    if(isLoggedIn){
+      await axios.post(`/posts/${params.id}/comments`,{
+        memberId : 1,
+        content : postCommentContent,
+      })
+      .then((res)=> {
+        let arr = comments
+        arr.push(res.data)
+        console.log(arr)
+        setComments(arr)
+        setPostCommentContent('')
+      })
+    }else{
+      if(window.confirm('댓글을 작성하시려면 로그인이 필요합니다 로그인 하시겠습니까?')){
+        navigate('/login')
+      }
+    }
   }
   useEffect(()=>{
     axios.get(`/posts/${params.id}`)
@@ -51,12 +59,13 @@ const PostDetailPage = () => {
       console.log(res.data)
       setTitle(res.data.title)
       setCategory(res.data.category)
+      setMemberId(res.data.memberId)
       const newDate = res.data.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')
       setCreatedAt(newDate)
       setContent(res.data.content)
       setComments(res.data.comments.sort((a,b)=>
       a.likeCount > b.likeCount ? -1 : 1) )
-      setWriter(res.data.nickname)
+      setNickname(res.data.nickname)
       setPostId(res.data.postId)
       setLikeCount(res.data.likeCount)
     })
@@ -73,19 +82,36 @@ const PostDetailPage = () => {
   const handleEditContent = (e) => {
     setEditedContent(e.target.value);
   };
-  const handleDeletePost  = () => {
-
+  const handleDeletePost  = async() => {
+    if(window.confirm('정말 삭제 하시겠습니까?')){
+      await axios.delete(`/posts/${postId}`)
+      if(category==='취업 정보' || '고민 상담' || '유머' || '잡답'){
+        navigate('/free/')
+      }else{
+        navigate('/suggestion')
+      }
+    }
   };
 
-  const handleSubmitEditPost = () => {
+  const handleSubmitEditPost = async() => {
+    // axios.patch(`/posts/${postId}`,{
+    //   content : eidtedContent,
+    //   category 
+    // })
     console.log(editedTitle, eidtedContent);
     setIsPostEditMode(false);
   };
   const handlePostLike = async() => {
-    await axios.post(`/posts/${postId}/like`,{
-      memberId:1
-    })
-    .then((res)=>console.log(res))
+    if(isLoggedIn){
+      await axios.post(`/posts/${postId}/like`,{
+        memberId:1
+      })
+    }
+    else{
+      if(window.confirm('로그인이 필요합니다 로그인 하시겠습니까?')){
+        navigate('/login')
+      }
+    }
   }
   return (
     <BorderLayout>
@@ -111,20 +137,22 @@ const PostDetailPage = () => {
             src='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png'
             alt='프로필사진'
           />
-          {writer}
+          {nickname}
         </Writer>
         <Date themeState={themeState}>{createdAt}</Date>
-        {isPostEditMode ? (
-          <>
-            <EditDelete onClick={() => handleSubmitEditPost()}>등록</EditDelete>
-            <EditDelete onClick={() => handlePostEditMode()}>취소</EditDelete>
-          </>
-        ) : (
-          <>
-            <EditDelete onClick={() => handlePostEditMode()}>수정</EditDelete>
-            <EditDelete onClick={() => handleDeletePost()}>삭제</EditDelete>
-          </>
-        )}
+        {userId==memberId ? (
+          isPostEditMode ? (
+            <>
+              <EditDelete onClick={() => handleSubmitEditPost()}>등록</EditDelete>
+              <EditDelete onClick={() => handlePostEditMode()}>취소</EditDelete>
+            </>
+          ) : (
+            <>
+              <EditDelete onClick={() => handlePostEditMode()}>수정</EditDelete>
+              <EditDelete onClick={() => handleDeletePost()}>삭제</EditDelete>
+            </>
+          )
+        ) : (<></>)}
       </ContentInfo>
       {isPostEditMode ? (
         <FormWrapper themeState={themeState}>
@@ -142,7 +170,7 @@ const PostDetailPage = () => {
         </Content>
       )}
       <LikesWrapper>
-        <div onClick={()=>handlePostLike()}>❤️{likeCount}</div>
+        <div onClick={()=>handlePostLike()}>❤️ {likeCount}</div>
       </LikesWrapper>
       <CommentToTal themeState={themeState}>
         댓글 {comments.length}개
@@ -162,6 +190,7 @@ const PostDetailPage = () => {
           key={el.commentId}
           postId={postId}
           commentId={el.commentId}
+          memberId = {el.memberId}
           commentWriter={el.nickname}
           content={el.content}
           // profileImg={el.profileImg}

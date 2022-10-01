@@ -11,6 +11,7 @@ import axios from 'axios';
 
 const QuestionPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
   const params = useParams()
   const navigate = useNavigate();
   const [content, setContent] = useState('');
@@ -24,7 +25,6 @@ const QuestionPage = () => {
   //질문수정
   const [isQuestionEditMode, setIsQuestionEditMode] = useState(false);
   const [editedQuestion, setEditedQuestion] = useState('');
-
   const handleEditQuestion = (e) => {
     setEditedQuestion(e.target.value);
   };
@@ -59,18 +59,25 @@ const QuestionPage = () => {
 
 
   const navigatePostAnswer = () => {
-    navigate('/answer/post', {
-      state: {
-        questionId : questionId,
-        questionContent: content,
-        questionCategory: category,
-      },
-    });
+    if(isLoggedIn){
+      navigate('/answer/post', {
+        state: {
+          questionId : questionId,
+          questionContent: content,
+          questionCategory: category,
+        },
+      });
+    }else{
+      if(window.confirm('답변을 작성하시려면 로그인이 필요합니다 로그인 하시겠습니까?')){
+        navigate('/login')
+      }
+    }
   };
 
   useEffect(() => {
     axios.get(`/questions/${params.id}`)
     .then((res)=>{
+      console.log(res.data)
     setContent(res.data.content);
     setEditedQuestion(res.data.content);
     setQuestionId(res.data.questionId)
@@ -118,30 +125,35 @@ const QuestionPage = () => {
             {nickname}
           </Writer >
           <Date themeState={themeState}>{createdAt}</Date>
-          {isQuestionEditMode ? (
-            <>
-              <EditDelete onClick={() => handleSubmitEditQuestion()}>
-                등록
-              </EditDelete>
-              <EditDelete onClick={() => handleQuestionEditMode()}>
-                취소
-              </EditDelete>
-            </>
-          ) : (
-            <>
-              <EditDelete onClick={() => handleQuestionEditMode()}>
-                수정
-              </EditDelete>
-              <EditDelete onClick={() => handleDeleteQuestion()}>
-                삭제
-              </EditDelete>
-            </>
+          {userId==memberId ? (
+            isQuestionEditMode ? (
+              <>
+                <EditDelete onClick={() => handleSubmitEditQuestion()}>
+                  등록
+                </EditDelete>
+                <EditDelete onClick={() => handleQuestionEditMode()}>
+                  취소
+                </EditDelete>
+              </>
+            ) : (
+              <>
+                <EditDelete onClick={() => handleQuestionEditMode()}>
+                  수정
+                </EditDelete>
+                <EditDelete onClick={() => handleDeleteQuestion()}>
+                  삭제
+                </EditDelete>
+              </>
+            )
+            ) : (
+          <></>
           )}
+
         </ContentInfo>
         <CenterWrapper>
-          <CommentToTal themeState={themeState}>
+          <AnswerToTal themeState={themeState}>
             답변 {answer.length}개
-          </CommentToTal>
+          </AnswerToTal>
           <BasicButton
             width={'5%'}
             height={'5%'}
@@ -157,8 +169,9 @@ const QuestionPage = () => {
         (
           <AnswerCard
             profileImg='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png'
-            writer={el.writer}
+            nickname={el.nickname}
             createdAt={el.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')}
+            memberId={el.memberId}
             // modifiedAt='2022.09.20'
             content={el.content}
             likeCount={el.likeCount}
@@ -252,7 +265,7 @@ const CenterWrapper = styled.section`
   }
 `;
 
-const CommentToTal = styled.div`
+const AnswerToTal = styled.div`
   font-weight: bold;
   margin-right: auto;
   color: ${(props) =>
