@@ -54,10 +54,16 @@ const SubscribePage = () => {
     }
   }
 
-  // useEffect(()=>{
-  //   axios.get('/subscription')
-  //   .then((res)=>console.log(res))
-  // })
+  useEffect(()=>{
+    // console.log('Bearer 20eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwibmlja25hbWUiOiJtb25zdGVyIiwiZW1haWwiOiJreWxlMTEyMUBuYXZlci5jb20iLCJtZW1iZXJJZCI6MTMsInN1YiI6IkpXVCBUb2tlbiIsImlhdCI6MTY2NDY3NDAwOSwiZXhwIjoxNjY0Njc2NDA5fQ.4vpiRQ6KZOK9dMzTPo-8BLG7P1McTVXD4ZpHL-dJGf3AsWewraIIp30nkFTRFHjll6L1F1fnibzg3AgQ3nZe6Q)
+    console.log(isLoggedIn)
+    axios.get('/subscription',{
+      headers:  {
+        Authorization : `Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwibmlja25hbWUiOiJtb25zdGVyIiwiZW1haWwiOiJreWxlMTEyMUBuYXZlci5jb20iLCJtZW1iZXJJZCI6MTMsInN1YiI6IkpXVCBUb2tlbiIsImlhdCI6MTY2NDY5MTE4OCwiZXhwIjoxNjY0NjkzNTg4fQ.8CfwBoLGT5b58LsvRYZ1OITl9i3JjEJ7wtzb1cMJA6_BSVgOOUFV7chrriG0N9HPWA86qK_z106LoWDtutXNkQ` 
+      }
+    })
+    .then((res)=>console.log(res))
+  })
   return (
     <BorderLayout>
       <Message themeState={themeState}>
