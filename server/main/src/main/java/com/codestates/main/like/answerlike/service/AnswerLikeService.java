@@ -2,6 +2,7 @@ package com.codestates.main.like.answerlike.service;
 
 import com.codestates.main.answer.entity.Answer;
 import com.codestates.main.answer.service.AnswerService;
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.like.answerlike.entity.AnswerLike;
 import com.codestates.main.like.answerlike.repository.AnswerLikeRepository;
 import com.codestates.main.member.entity.Member;
@@ -20,9 +21,9 @@ public class AnswerLikeService {
     private final AnswerLikeRepository answerLikeRepository;
     private final MemberService memberService;
     private final AnswerService answerService;
-    public boolean postLike(Long answerId, Long memberId) {
+    public boolean postLike(Long answerId) {
         Answer findAnswer = answerService.findAnswer(answerId);
-        Member findMember = memberService.findVerifiedMember(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
         Optional<AnswerLike> optionalAnswerLike = answerLikeRepository.findByAnswerAndMember(findAnswer, findMember);
 
         optionalAnswerLike.ifPresentOrElse(
