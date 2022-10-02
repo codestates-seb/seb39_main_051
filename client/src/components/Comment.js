@@ -5,10 +5,12 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from './Toast';
-
+import { useNavigate } from 'react-router-dom';
 
 const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, profileImg, postId, answerId, commentArr, setCommentArr}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
+  const navigate = useNavigate();
   //댓글수정
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
   const [editedComment, setEditedComment] = useState(content)
@@ -53,10 +55,17 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
   }
 
   const handleCommentLike = async() => {
-    await axios.post(`/comments/${commentId}/like`,{
-      memberId:1
-    })
-    .then((res)=>setCommentLikeContent(res.data.likeCount))
+    console.log('@@@')
+    if(isLoggedIn){
+      await axios.post(`/comments/${commentId}/like`,{
+        memberId:1
+      })
+      .then((res)=>setCommentLikeContent(res.data.likeCount))
+    }else{
+      if(window.confirm('로그인이 필요합니다 로그인 하시겠습니까?')){
+        navigate('/login')
+      }
+    }
   }
 
   return (
@@ -67,19 +76,21 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
           <img src={profileImg} alt='프로필사진' />
           {nickname}
         </CommentWriter>
-        {isCommentEditMode ? (
-                  <CommentEvent>
-                  <div className='commentDate'>{createdAt}</div>
-                  <div className='commentEdit' onClick={()=>handleSubmitEditComment()} >등록</div>
-                  <div className='commentEdit' onClick={()=>handleCommentEditMode()}>취소</div>
-                </CommentEvent>
-        ) : (
-          <CommentEvent>
-          <div className='commentDate'>{createdAt}</div>
-          <div className='commentEdit' onClick={()=>handleCommentEditMode()} >수정</div>
-          <div className='commentEdit' onClick={()=>handleDeleteComment()}>삭제</div>
-        </CommentEvent>
-        )}
+        {userId==memberId ? (
+          isCommentEditMode ? (
+            <CommentEvent>
+            <div className='commentDate'>{createdAt}</div>
+            <div className='commentEdit' onClick={()=>handleSubmitEditComment()} >등록</div>
+            <div className='commentEdit' onClick={()=>handleCommentEditMode()}>취소</div>
+          </CommentEvent>
+  ) : (
+    <CommentEvent>
+    <div className='commentDate'>{createdAt}</div>
+    <div className='commentEdit' onClick={()=>handleCommentEditMode()} >수정</div>
+    <div className='commentEdit' onClick={()=>handleDeleteComment()}>삭제</div>
+  </CommentEvent>
+  )
+        ) : (<></>)}
       </CommentInfo>
       <CommentContent themeState={themeState}>
         {isCommentEditMode ? (

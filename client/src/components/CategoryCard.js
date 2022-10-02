@@ -16,10 +16,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 
-const CategoryCard = (props) => {
+const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscribe}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isHovering, setIsHovering] = useState(false);
-  console.log(props.isSubscribe);
   const handleMouseOver = () => {
     setIsHovering(true);
   };
@@ -28,29 +27,29 @@ const CategoryCard = (props) => {
   };
 
   let content = null;
-  switch (props.name) {
-    case '리액트':
+  switch (categoryName) {
+    case 'React':
       content = <FontAwesomeIcon icon={faReact} size='2x' />;
       break;
-    case '자바스크립트':
+    case 'Javascript':
       content = <FontAwesomeIcon icon={faSquareJs} size='2x' />;
       break;
-    case '자바':
+    case 'Java':
       content = <FontAwesomeIcon icon={faJava} size='2x' />;
       break;
-    case '스프링':
+    case 'Spring':
       content = <FontAwesomeIcon icon={faLeaf} size='2x' />;
       break;
-    case '자료구조':
+    case 'Data Structure':
       content = <FontAwesomeIcon icon={faFolderTree} size='2x' />;
       break;
-    case '데이터베이스':
+    case 'Database':
       content = <FontAwesomeIcon icon={faDatabase} size='2x' />;
       break;
-    case '네트워크':
+    case 'Network':
       content = <FontAwesomeIcon icon={faNetworkWired} size='2x' />;
       break;
-    case '운영체제':
+    case 'OS':
       content = <FontAwesomeIcon icon={faGear} size='2x' />;
       break;
     default:
@@ -60,17 +59,17 @@ const CategoryCard = (props) => {
   return (
     <>
       <CategoryCardLayout
-        onClick={() => props.handleClick(props.name)}
+        onClick={() => handleClick(questionCategoryId,categoryName, isSubscribe)}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       >
         {isHovering ? (
-          props.isSubscribe ? (
+          isSubscribe ? (
             <>
-              <CategoryCardWrapper themeState={themeState} isSubscribe={props.isSubscribe}>
+              <CategoryCardWrapper themeState={themeState} isSubscribe={isSubscribe}>
                 <SubscribeMark />
                 <LogoLayout>
-                  <div>{props.name}</div>
+                  <div>{categoryName}</div>
                   <div>구독취소하기</div>
                 </LogoLayout>
               </CategoryCardWrapper>
@@ -78,32 +77,32 @@ const CategoryCard = (props) => {
             </>
           ) : (
             <>
-              <CategoryCardWrapper themeState={themeState}  isSubscribe={props.isSubscribe}>
+              <CategoryCardWrapper themeState={themeState}  isSubscribe={isSubscribe}>
                 <LogoLayout>
-                  <div>{props.name}</div>
+                  <div>{categoryName}</div>
                   <div>구독하기</div>
                 </LogoLayout>
               </CategoryCardWrapper>
               <div className='subscribe-web'>ㅤ</div>
             </>
           )
-        ) : props.isSubscribe ? (
+        ) : isSubscribe ? (
           <>
-            <CategoryCardWrapper themeState={themeState}  isSubscribe={props.isSubscribe}>
+            <CategoryCardWrapper themeState={themeState}  isSubscribe={isSubscribe}>
               <SubscribeMark />
               <LogoLayout>
                 <div>{content}</div>
-                <NameWrapper>{props.name}</NameWrapper>
+                <NameWrapper>{categoryName}</NameWrapper>
               </LogoLayout>
             </CategoryCardWrapper>
             <div className='subscribe-web'>구독 중</div>
           </>
         ) : (
           <>
-            <CategoryCardWrapper themeState={themeState}  isSubscribe={props.isSubscribe}>
+            <CategoryCardWrapper themeState={themeState}  isSubscribe={isSubscribe}>
               <LogoLayout>
                 <div>{content}</div>
-                <NameWrapper>{props.name}</NameWrapper>
+                <NameWrapper>{categoryName}</NameWrapper>
               </LogoLayout>
             </CategoryCardWrapper>
             <div className='subscribe-web'>ㅤ</div>
