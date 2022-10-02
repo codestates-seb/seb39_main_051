@@ -41,6 +41,7 @@ const Form = (props) => {
     /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
   const regEmail =
     /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
   const emailValidation = () => {
     if (regEmail.test(email)) {
       setEmailValid(true);
@@ -50,6 +51,7 @@ const Form = (props) => {
       setEmailDesc('이메일 형식이 유효하지 않습니다.');
     }
   };
+
   const passwordValidation = () => {
     if (
       7 < password.length &&
@@ -67,6 +69,7 @@ const Form = (props) => {
       );
     }
   };
+
   const rePasswordValidation = () => {
     if (rePassword === password) {
       setRePasswordValid(true);
@@ -181,7 +184,6 @@ const Form = (props) => {
             </InputWrapper>
             <InputWrapper themeState={themeState}>
               <label id='password'>비밀번호</label>
-              <span>{passwordDesc}</span>
               <input
                 id='password'
                 name='password'
@@ -190,10 +192,10 @@ const Form = (props) => {
                 onKeyUp={passwordValidation}
                 required
               />
+              <span>{passwordDesc}</span>
             </InputWrapper>
             <InputWrapper themeState={themeState}>
               <label id='rePassword'>비밀번호 확인</label>
-              <span>{rePasswordDesc}</span>
               <input
                 id='rePassword'
                 name='rePassword'
@@ -202,6 +204,7 @@ const Form = (props) => {
                 onKeyUp={rePasswordValidation}
                 required
               />
+              <span>{rePasswordDesc}</span>
             </InputWrapper>
           </>
         )}
@@ -273,7 +276,6 @@ const InputWrapper = styled.div`
   margin: 1rem 0;
   span {
     color: #808080;
-    margin-left: 0.5rem;
   }
   label {
     display: inline;

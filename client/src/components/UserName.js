@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from './BasicButton';
@@ -5,15 +7,45 @@ import BasicButton from './BasicButton';
 const UserName = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
+  const [nickName, setNickName] = useState(
+    useSelector((state) => state.userInfoSlice).nickName
+  );
+
+  const headers = {
+    Authorization: useSelector(
+      (state) => state.userInfoSlice
+    ).isLoggedIn.replace('%20', ' '),
+  };
+
+  const handleInput = (e) => {
+    setNickName(e.target.value);
+  };
+
+  const handleOnClick = () => {
+    axios
+      .patch(
+        'http://localhost:8080/my-page/patch',
+        {
+          email: 'test1@google.com',
+          password: '1234qwer~',
+          nickname: nickName,
+        },
+        { headers }
+      )
+      .then((res) => console.log(res));
+  };
+
   return (
     <>
       <Title>닉네임 변경</Title>
       <ContentWrapper>
         <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
         <div>
+          <span>{nickName}</span>
           <UserNameInput
             themeState={themeState}
             placeholder='변경할 닉네임을 입력하세요.'
+            onChange={handleInput}
           />
           <BasicButton
             themeState={themeState}
@@ -23,6 +55,7 @@ const UserName = () => {
             backGroundColor='var(--color-orange)'
             fontSize='1.3rem'
             text='변경하기'
+            onClick={handleOnClick}
           />
         </div>
       </ContentWrapper>

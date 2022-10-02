@@ -6,11 +6,12 @@ const PostSummary = (props) => {
   return (
     <PostCardLayout themeState={themeState}>
       <PostCardWrapper>
-        <PostCardTitle>{props.title}</PostCardTitle>
+        <PostCardTitle onClick={props.onClick}>{props.title}</PostCardTitle>
         <PostCardInfo>
           <CategoryWrapper>{props.category}</CategoryWrapper>
           <WriterCreatedAt>
             {props.likes ? <div>❤️ {props.likes}</div> : <></>}
+            <img src={props.picture} />
             <div>{props.writer}</div>
             <div>{props.createdAt}</div>
           </WriterCreatedAt>
@@ -33,19 +34,23 @@ const PostCardLayout = styled.div`
     height: 10rem;
   }
 `;
+
 const PostCardWrapper = styled.div`
   display: flex;
+  align-items: center;
   @media screen and (max-width: 412px) {
     display: flex;
     flex-direction: column;
     height: 100%;
   }
 `;
+
 const PostCardTitle = styled.a`
   flex: 4;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
   @media screen and (max-width: 412px) {
     white-space: normal;
     overflow: hidden;
@@ -59,6 +64,7 @@ const PostCardTitle = styled.a`
 
 const PostCardInfo = styled.div`
   display: flex;
+  align-items: center;
   font-weight: bold;
   @media screen and (max-width: 412px) {
     display: flex;
@@ -69,6 +75,7 @@ const PostCardInfo = styled.div`
 
 const WriterCreatedAt = styled.div`
   display: flex;
+  align-items: center;
   div {
     margin: 0 1rem;
   }
