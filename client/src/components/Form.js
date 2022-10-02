@@ -90,7 +90,8 @@ const Form = (props) => {
         const response = await axios.post('/login', {
           email: email,
           password: password,
-        });
+        })
+        console.log(response)
         const headers = await response.headers;
         setCookie('accessToken', headers.authorization, 60);
         alert('Login Success');

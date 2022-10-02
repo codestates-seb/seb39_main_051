@@ -17,7 +17,6 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 
 const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscribe}) => {
-  console.log(categoryName, isSubscribe)
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
