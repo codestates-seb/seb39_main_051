@@ -4,10 +4,12 @@ import com.codestates.main.answer.entity.Answer;
 import com.codestates.main.answer.repository.AnswerRepository;
 import com.codestates.main.comment.entity.Comment;
 import com.codestates.main.comment.repository.CommentRepository;
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.exception.BusinessLogicException;
 import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.repository.MemberRepository;
+import com.codestates.main.member.service.MemberService;
 import com.codestates.main.post.entity.Post;
 import com.codestates.main.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +27,15 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final AnswerRepository answerRepository;
+    private final MemberService memberService;
 
-    public Comment creatComment(Comment comment, Long postId, Long memberId) {
+    public Comment creatComment(Comment comment, Long postId) {
         System.out.println("CommentService.creatComment");
-
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
+//        Optional<Member> optionalMember = memberRepository.findById(memberId);
         Optional<Post> optionalPost = postRepository.findById(postId);
-        Member findMember = optionalMember.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//        Member findMember = optionalMember.orElseThrow(() ->
+//                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         Post findPost = optionalPost.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
         comment.addMember(findMember);
@@ -40,13 +43,13 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment creatAnswerComment(Comment comment, Long answerId, Long memberId) {
+    public Comment creatAnswerComment(Comment comment, Long answerId) {
         System.out.println("CommentService.creatAnswerComment");
-
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
+//        Optional<Member> optionalMember = memberRepository.findById(memberId);
         Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
-        Member findMember = optionalMember.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//        Member findMember = optionalMember.orElseThrow(() ->
+//                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         Answer findAnswer = optionalAnswer.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
         comment.addMember(findMember);
