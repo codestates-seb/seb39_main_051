@@ -1,5 +1,7 @@
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
@@ -9,7 +11,76 @@ import UserPassword from '../components/UserPassword';
 const UserPasswordPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
-  const handleClick = (e) => {};
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [rePasswordValid, setRePasswordValid] = useState(false);
+  const [passwordDesc, setPasswordDesc] = useState('');
+  const [rePasswordDesc, setRePasswordDesc] = useState('');
+  const [inputValue, setInputValue] = useState({
+    password: '',
+    rePassword: '',
+  });
+  const { password, rePassword } = inputValue;
+
+  const headers = {
+    Authorization: useSelector(
+      (state) => state.userInfoSlice
+    ).isLoggedIn.replace('%20', ' '),
+  };
+
+  const regNumber = /[0-9]/g;
+  const regString = /[a-zA-Z]/g;
+  const regSpecialCharacter =
+    /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+
+  const passwordValidation = () => {
+    if (
+      7 < password.length &&
+      password.length < 21 &&
+      regNumber.test(password) &&
+      regString.test(password) &&
+      regSpecialCharacter.test(password)
+    ) {
+      setPasswordValid(true);
+      setPasswordDesc('');
+    } else {
+      setPasswordValid(false);
+      setPasswordDesc(
+        '8~20자 영문 대 소문자, 숫자, 특수문자를 포함하여야 합니다. '
+      );
+    }
+  };
+
+  const rePasswordValidation = () => {
+    if (rePassword === password) {
+      setRePasswordValid(true);
+      setRePasswordDesc('');
+    } else {
+      setRePasswordValid(false);
+      setRePasswordDesc('비밀번호가 일치하지 않습니다.');
+    }
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+  const handleOnClick = () => {
+    if (passwordValid & rePasswordValid) {
+      axios
+        .patch(
+          'http://localhost:8080/my-page/patch',
+          {
+            password: password,
+          },
+          { headers }
+        )
+        .then((res) => console.log(res));
+    }
+  };
 
   return (
     <>
@@ -37,13 +108,19 @@ const UserPasswordPage = () => {
                   themeState={themeState}
                   type='password'
                   placeholder='새 비밀번호'
+                  onChange={handleInput}
+                  onKeyUp={passwordValidation}
                 />
+                <span>{passwordDesc}</span>
                 <UserPasswordInput
                   id='checkpassword'
                   themeState={themeState}
                   type='password'
                   placeholder='새 비밀번호 확인'
+                  onChange={handleInput}
+                  onKeyUp={rePasswordValidation}
                 />
+                <span>{rePasswordDesc}</span>
                 <BasicButton
                   themeState={themeState}
                   width='30%'
@@ -52,6 +129,7 @@ const UserPasswordPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.3rem'
                   text='변경하기'
+                  onClick={handleOnClick}
                 />
               </form>
             </div>
@@ -66,7 +144,6 @@ const UserPasswordPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='대쉬보드'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/userimg'>
@@ -78,7 +155,6 @@ const UserPasswordPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='프로필 사진 변경'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/username'>
@@ -90,7 +166,6 @@ const UserPasswordPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='닉네임 변경'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/userpassword'>
@@ -102,7 +177,6 @@ const UserPasswordPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='비밀번호 변경'
-                  onClick={handleClick}
                   selected
                 />
               </a>
@@ -120,7 +194,14 @@ const UserPasswordPage = () => {
             </div>
           </LeftContent>
           <RightContent themeState={themeState}>
-            <UserPassword />
+            <UserPassword
+              handleInput={handleInput}
+              handleOnClick={handleOnClick}
+              passwordValidation={passwordValidation}
+              rePasswordValidation={rePasswordValidation}
+              passwordDesc={passwordDesc}
+              rePasswordDesc={rePasswordDesc}
+            />
           </RightContent>
         </Layout>
       </BorderLayout>
