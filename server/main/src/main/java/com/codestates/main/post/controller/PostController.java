@@ -1,5 +1,6 @@
 package com.codestates.main.post.controller;
 
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.dto.MultiResponseDto;
 import com.codestates.main.post.dto.PostPatchDto;
 import com.codestates.main.post.dto.PostPostDto;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +40,9 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity postPost(@Valid @RequestBody PostPostDto postPostDto) {
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
+
         System.out.println("PostController.postPost");
-        Long memberId = postPostDto.getMemberId();
-        Member findMember = memberService.findVerifiedMember(memberId);
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.addMember(findMember);
         Post createdPost = postService.createPost(post);
