@@ -2,6 +2,7 @@ package com.codestates.main.like.commentlike.service;
 
 import com.codestates.main.comment.entity.Comment;
 import com.codestates.main.comment.service.CommentService;
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.like.commentlike.entity.CommentLike;
 import com.codestates.main.like.commentlike.repository.CommentLikeRepository;
 import com.codestates.main.member.entity.Member;
@@ -20,9 +21,9 @@ public class CommentLikeService {
     private final CommentLikeRepository commentLikeRepository;
     private final CommentService commentService;
     private final MemberService memberService;
-    public boolean commentLike(Long commentId, Long memberId) {
+    public boolean commentLike(Long commentId) {
         Comment findComment = commentService.findComment(commentId);
-        Member findMember = memberService.findVerifiedMember(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
         Optional<CommentLike> optionalCommentLike = commentLikeRepository.findByCommentAndMember(findComment, findMember);
 
         optionalCommentLike.ifPresentOrElse(

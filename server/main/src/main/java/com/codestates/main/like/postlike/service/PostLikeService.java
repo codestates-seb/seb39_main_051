@@ -1,5 +1,6 @@
 package com.codestates.main.like.postlike.service;
 
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.like.postlike.entity.PostLike;
 import com.codestates.main.like.postlike.repository.PostLikeRepository;
 import com.codestates.main.member.entity.Member;
@@ -20,9 +21,9 @@ public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final MemberService memberService;
     private final PostService postService;
-    public boolean postLike(Long postId, Long memberId) {
+    public boolean postLike(Long postId) {
         Post findPost = postService.findPost(postId);
-        Member findMember = memberService.findVerifiedMember(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
         Optional<PostLike> optionalPostLike = postLikeRepository.findByPostAndMember(findPost, findMember);
 
         optionalPostLike.ifPresentOrElse(

@@ -1,5 +1,6 @@
 package com.codestates.main.question.controller;
 
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.dto.MultiResponseDto;
 import com.codestates.main.dto.SingleResponseDto;
 import com.codestates.main.member.entity.Member;
@@ -38,9 +39,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto){
         System.out.println("QuestionController.postQuestion");
-
-        Long memberId = questionPostDto.getMemberId();
-        Member findMember = memberService.findVerifiedMember(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
         Long questionCategoryId = questionPostDto.getQuestionCategoryId();
         QuestionCategory findQuestionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
         Question question = mapper.questionPostDtoToQuestion(questionPostDto);

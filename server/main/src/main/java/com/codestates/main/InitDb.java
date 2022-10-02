@@ -93,8 +93,8 @@ public class InitDb {
                     .post(post)
                     .member(member1)
                     .build();
-            commentService.creatComment(comment, post.getPostId(), member2.getMemberId());
-            commentService.creatComment(comment1, post.getPostId(), member2.getMemberId());
+//            commentService.creatComment(comment, post.getPostId(), member2.getMemberId());
+//            commentService.creatComment(comment1, post.getPostId(), member2.getMemberId());
 
             QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(1L);
             QuestionCategory questionCategory2 = questionCategoryService.findQuestionCategory(2L);
@@ -137,8 +137,8 @@ public class InitDb {
                     .answer(answer)
                     .member(member2)
                     .build();
-            commentService.creatAnswerComment(comment2, answer.getAnswerId(), member1.getMemberId());
-            commentService.creatAnswerComment(comment3, answer.getAnswerId(), member2.getMemberId());
+//            commentService.creatAnswerComment(comment2, answer.getAnswerId(), member1.getMemberId());
+//            commentService.creatAnswerComment(comment3, answer.getAnswerId(), member2.getMemberId());
 
         }
     }
