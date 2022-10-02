@@ -7,6 +7,7 @@ import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
 import NavigationBar from '../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
+import BorderLayout from '../components/BorderLayout';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -138,14 +139,12 @@ const PostPage = () => {
   }
 
   return (
-    <>
-      <NavigationBar themeState={themeState} />
-      <ContentWrapper>
-        <FormWrapper themeState={themeState}>
-          <form>
+    <BorderLayout>
+      <form>
             <h1>{boardName}</h1>
             {type==='questions' ? (<InputWrapper></InputWrapper>) : (
                           <InputWrapper themeState={themeState}>
+                            <label id='title' /> 
                           <input
                             id='title'
                             name='title'
@@ -165,9 +164,10 @@ const PostPage = () => {
               handleCategory={handleCategory}
             />
             <InputWrapper themeState={themeState}>
+              <label id='content'/>
               <textarea
-                id='body'
-                name='body'
+                id='content'
+                name='content'
                 type='text'
                 placeholder='내용'
                 value={content}
@@ -198,89 +198,9 @@ const PostPage = () => {
               />
             </ButtonWrapper>
           </form>
-        </FormWrapper>
-      </ContentWrapper>
-    </>
+    </BorderLayout>
   );
 };
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 8rem;
-`;
-
-const FormWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 85%;
-  min-height: 80rem;
-  color: ${(props) =>
-    props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
-  background-color: ${(props) =>
-    props.themeState === 'light'
-      ? 'var(--color-white)'
-      : 'var(--color-dark-bg-color)'};
-  border: ${(props) =>
-    props.themeState === 'light'
-      ? '1.5rem var(--color-orange) solid'
-      : '1.5rem var(--color-gray) solid'};
-  border-radius: 1rem;
-  padding: 4rem 0;
-
-  & form {
-    display: flex;
-    flex-direction: column;
-    width: 95%;
-    h1 {
-      font-size: 300%;
-      font-weight: bold;
-      color: ${(props) =>
-        props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
-    }
-    button {
-      margin: 2rem 0 2rem 2rem;
-    }
-    select {
-      max-width: 20rem;
-      height: 4rem;
-      font-size: 1.8rem;
-      border: none;
-      background-color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-orange)'
-          : 'var(--color-gray)'};
-      color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-white)'
-          : 'var(--color-white)'};
-      border-radius: 1rem;
-      margin: 2rem 0;
-      -webkit-appearance: none; /* 네이티브 외형 감추기 */
-      -moz-appearance: none;
-      appearance: none;
-    }
-
-    option {
-      background-color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-orange)'
-          : 'var(--color-gray)'};
-      color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-white)'
-          : 'var(--color-gray)'};
-      -webkit-appearance: none; /* 네이티브 외형 감추기 */
-      -moz-appearance: none;
-      appearance: none;
-    }
-  }
-`;
 
 const InputWrapper = styled.div`
   margin: 1rem 0;
@@ -323,6 +243,9 @@ const InputWrapper = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  button{
+    margin: 2rem 0 2rem 2rem;
+  }
 `;
 
 export default PostPage;
