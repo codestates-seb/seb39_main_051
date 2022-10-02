@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class QuestionPostDto {
 
     private String content;
-    private Long memberId;
     private Long questionCategoryId;
 }
