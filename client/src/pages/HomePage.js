@@ -17,26 +17,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getCookie, setCookie } from '../utils/cookie';
 import { useEffect } from 'react';
 import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 const HomePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   useEffect(() => {
     if (getCookie('accessToken')) {
-      // axios
-      //   .get('/getUserInfo', {
-      //     headers: {
-      //       Authorization: getCookie('accessToken'),
-      //     },
-      //   })
-      //   .then((res) => {
-      //     setCookie('memberId', res.data.memberId, 60);
-      //     setCookie('nickname', res.data.nickname, 60);
-      //   });
-
-      //임시 유저 정보
-      setCookie('memberId', 1, 60);
-      setCookie('nickname', 'han', 60);
+      axiosInstance.get('/home').then((res) => {
+        setCookie('memberId', res.data.id, 60);
+        setCookie('nickname', res.data.nickname, 60);
+        setCookie('role', res.data.role, 60);
+      });
     }
   });
 
