@@ -7,10 +7,13 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from './Toast';
-import { useEffect } from 'react';
-const AnswerCard = ({profileImg, writer, createdAt, content, likeCount, comment, answerId, answer,setAnswer}) => {
+import { useNavigate } from 'react-router-dom';
+
+const AnswerCard = ({profileImg, nickname, memberId,createdAt, content, likeCount, comment, answerId, answer,setAnswer}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
   const [isCommentShow, setIsCommentShow] = useState(false);
+  const navigate = useNavigate();
   //답변 수정
   const [answerContent, setAnswerContent ] = useState(content)
   const [isAnswerEditMode, setIsAnswerEditMode] = useState(false) 
@@ -65,11 +68,17 @@ const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
     }
   }
   const handleAnswerLike = () => {
-    console.log('답변좋아요')
-    axios.post(`/answers/${answerId}/like`,{
-      memberId:1
-    })
-    .then((res)=>setAnswerLikeContent(res.data.likeCount))
+    if(isLoggedIn){
+      console.log('답변좋아요')
+      axios.post(`/answers/${answerId}/like`,{
+        memberId:1
+      })
+      .then((res)=>setAnswerLikeContent(res.data.likeCount))
+    }else{
+      if(window.confirm('로그인이 필요합니다 로그인 하시겠습니까?')){
+        navigate('/login')
+      }
+    }
   }
   return (
     <Layout themeState={themeState}>
@@ -77,21 +86,22 @@ const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
       <AnswerInfo>
         <AnswerWriter>
           <img src={profileImg} />
-          {writer}
+          {nickname}
         </AnswerWriter>
         <AnswerEvent>
           <div className='answerDate'>{createdAt}</div>
-          {isAnswerEditMode ? (
-          <>
-          <div className='answerEdit' onClick={()=>handleSubmitEditAnswer()}>등록</div>
-          <div className='answerEdit' onClick={()=>handleEditMode()}>취소</div>
-          </>
-          ) : (
-          <>
-            <div className='answerEdit' onClick={()=>handleEditMode()}>수정</div>
-          <div className='answerEdit' onClick={()=>handleDeleteAnswer()}>삭제</div>
-          </>)
-          }
+          {userId==memberId ? (
+            isAnswerEditMode ? (
+              <>
+              <div className='answerEdit' onClick={()=>handleSubmitEditAnswer()}>등록</div>
+              <div className='answerEdit' onClick={()=>handleEditMode()}>취소</div>
+              </>
+              ) : (
+              <>
+                <div className='answerEdit' onClick={()=>handleEditMode()}>수정</div>
+              <div className='answerEdit' onClick={()=>handleDeleteAnswer()}>삭제</div>
+              </>)
+          ) : (<></>)}
           </AnswerEvent>
       </AnswerInfo>
       <AnswerLayout themeState={themeState}>

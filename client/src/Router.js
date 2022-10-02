@@ -14,7 +14,8 @@ import UserImgPage from './pages/UserImgPage';
 import UserNamePage from './pages/UserNamePage';
 import UserPasswordPage from './pages/UserPasswordPage';
 import AnswerPostPage from './pages/AnswerPostPage'
-
+import EditBoardPage from './pages/EditBoardPage';
+import EditQuestionPage from './pages/EditQuestionPage';
 const Router = () => {
   return (
     <Routes>
@@ -36,6 +37,8 @@ const Router = () => {
       <Route path='/username' element={<UserNamePage />} />
       <Route path='/userpassword' element={<UserPasswordPage />} />
       <Route path='/answer/post' element={<AnswerPostPage />} />
+      <Route path='/edit/board' element={<EditBoardPage />} /> 
+      <Route path='/edit/question' element={<EditQuestionPage/>} />
     </Routes>
   );
 };

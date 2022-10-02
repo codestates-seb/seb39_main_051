@@ -7,9 +7,11 @@ import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
 import NavigationBar from '../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
+import BorderLayout from '../components/BorderLayout';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
   const navigate = useNavigate();
   const { type, category } = useLocation().state;
   const [categoryContent, setCategoryContent] = useState('');
@@ -25,33 +27,43 @@ const PostPage = () => {
   };
 
   const handleCategory = (e) => {
-    switch (e) {
-      case '자바':
-        setCategoryContent(1);
+    console.log(e.target.innerText)
+    switch (e.target.innerText) {
+      case 'Java':
+        setSelected(e.target.innerText);
+        setCategoryContent(1)
         break;
-      case '리액트':
-        setCategoryContent(2);
+      case 'React':
+        setSelected(e.target.innerText);
+        setCategoryContent(2)
         break;
-      case '스프링':
-        setCategoryContent(3);
+      case 'Spring':
+        setSelected(e.target.innerText);
+        setCategoryContent(3)
         break;
-      case '자료구조':
-        setCategoryContent(4);
+      case 'Data Structure':
+        setSelected(e.target.innerText);
+        setCategoryContent(4)
         break;
-      case '운영체제':
-        setCategoryContent(5);
+      case 'Operating System':
+        setSelected(e.target.innerText);
+        setCategoryContent(5)
         break;
-      case '데이터베이스':
-        setCategoryContent(6);
+      case 'Database':
+        setSelected(e.target.innerText);
+        setCategoryContent(6)
         break;
-      case '자료구조':
-        setCategoryContent(7);
+      case 'Network':
+        setSelected(e.target.innerText);
+        setCategoryContent(7)
         break;
-      case '자바스크립트':
-        setCategoryContent(8);
+      case 'Javascript':
+        setSelected(e.target.innerText);
+        setCategoryContent(8)
         break;
         default:
-          setCategoryContent(e);
+          setSelected(e.target.innerText);
+          setCategoryContent(e.target.innerText)
           break
     }
   };
@@ -60,31 +72,29 @@ const PostPage = () => {
     e.preventDefault();
     if (type === 'questions') {
       await axios.post(`/questions`, {
-        memberId: 1,
-        questionCategoryId: 1,
+        memberId: userId,
+        questionCategoryId: categoryContent,
         content,
       })
-      .then((res)=>console.log(res))
+      navigate('/questions')
     } else if (type === 'free') {
-      console.log('title : ' ,title,  'content : ', content, 'type :', '자유게시판','categoryContent :', categoryContent,'memberId :', 1 )
       await axios.post(`/posts`, {
         title,
         content,
         type: '자유게시판',
         category: categoryContent,
-        memberId: 1,
+        memberId: userId,
       })
-      .then((res)=>console.log(res))
+      navigate('/free')
     } else if (type === 'suggestion') {
-      console.log('title : ' ,title,  'content : ', content, 'type :', '자유게시판','categoryContent :', categoryContent,'memberId :', 1 )
       await axios.post(`/posts`, {
         title,
         content,
         type: '건의게시판',
         category: categoryContent,
-        memberId: 1,
+        memberId: userId,
       })
-      .then((res)=>console.log(res))
+      navigate('/suggestion')
     }
   };
 
@@ -129,23 +139,23 @@ const PostPage = () => {
   }
 
   return (
-    <>
-      <NavigationBar themeState={themeState} />
-      <ContentWrapper>
-        <FormWrapper themeState={themeState}>
-          <form>
+    <BorderLayout>
+      <form>
             <h1>{boardName}</h1>
-            <InputWrapper themeState={themeState}>
-              <input
-                id='title'
-                name='title'
-                type='text'
-                placeholder='제목'
-                value={title}
-                onChange={handleTitle}
-                required
-              />
-            </InputWrapper>
+            {type==='questions' ? (<InputWrapper></InputWrapper>) : (
+                          <InputWrapper themeState={themeState}>
+                            <label id='title' /> 
+                          <input
+                            id='title'
+                            name='title'
+                            type='text'
+                            placeholder='제목'
+                            value={title}
+                            onChange={handleTitle}
+                            required
+                          />
+                        </InputWrapper>
+            )}
             <DropDownList
               type={type}
               category={category}
@@ -154,9 +164,10 @@ const PostPage = () => {
               handleCategory={handleCategory}
             />
             <InputWrapper themeState={themeState}>
+              <label id='content'/>
               <textarea
-                id='body'
-                name='body'
+                id='content'
+                name='content'
                 type='text'
                 placeholder='내용'
                 value={content}
@@ -187,89 +198,9 @@ const PostPage = () => {
               />
             </ButtonWrapper>
           </form>
-        </FormWrapper>
-      </ContentWrapper>
-    </>
+    </BorderLayout>
   );
 };
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 8rem;
-`;
-
-const FormWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 85%;
-  min-height: 80rem;
-  color: ${(props) =>
-    props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-gray)'};
-  background-color: ${(props) =>
-    props.themeState === 'light'
-      ? 'var(--color-white)'
-      : 'var(--color-dark-bg-color)'};
-  border: ${(props) =>
-    props.themeState === 'light'
-      ? '1.5rem var(--color-orange) solid'
-      : '1.5rem var(--color-gray) solid'};
-  border-radius: 1rem;
-  padding: 4rem 0;
-
-  & form {
-    display: flex;
-    flex-direction: column;
-    width: 95%;
-    h1 {
-      font-size: 300%;
-      font-weight: bold;
-      color: ${(props) =>
-        props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
-    }
-    button {
-      margin: 2rem 0 2rem 2rem;
-    }
-    select {
-      max-width: 20rem;
-      height: 4rem;
-      font-size: 1.8rem;
-      border: none;
-      background-color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-orange)'
-          : 'var(--color-gray)'};
-      color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-white)'
-          : 'var(--color-white)'};
-      border-radius: 1rem;
-      margin: 2rem 0;
-      -webkit-appearance: none; /* 네이티브 외형 감추기 */
-      -moz-appearance: none;
-      appearance: none;
-    }
-
-    option {
-      background-color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-orange)'
-          : 'var(--color-gray)'};
-      color: ${(props) =>
-        props.themeState === 'light'
-          ? 'var(--color-white)'
-          : 'var(--color-gray)'};
-      -webkit-appearance: none; /* 네이티브 외형 감추기 */
-      -moz-appearance: none;
-      appearance: none;
-    }
-  }
-`;
 
 const InputWrapper = styled.div`
   margin: 1rem 0;
@@ -312,6 +243,9 @@ const InputWrapper = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  button{
+    margin: 2rem 0 2rem 2rem;
+  }
 `;
 
 export default PostPage;

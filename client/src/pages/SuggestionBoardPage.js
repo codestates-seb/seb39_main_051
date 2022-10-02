@@ -45,6 +45,10 @@ const SuggestionBoardPage = () => {
     });
   };
 
+  const navigateToPostSumary = (id) => {
+    navigate(`/board/${id}`);
+  };
+
   return (
     <>
       <NavigationBar />
@@ -69,12 +73,14 @@ const SuggestionBoardPage = () => {
           {data.map((el) => (
             <PostSummary
               themeState={themeState}
-              key={el.id}
+              key={el.postId}
               title={el.title}
               category={el.category}
               likes={el.likes}
-              writer={el.writer}
+              picture={el.member.picture}
+              writer={el.member.nickname}
               createdAt={el.createdAt}
+              onClick={() => navigateToPostSumary(el.postId)}
             />
           ))}
         </PostSummaryWrapper>

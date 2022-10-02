@@ -37,5 +37,11 @@ const Wrapper = styled.div`
       ? '1rem solid var(--color-orange);'
       : '1rem solid var(--color-gray);'};
   border-radius: 1.5rem;
+  h1 {
+      font-size: 200%;
+      font-weight: bold;
+      color: ${(props) =>
+        props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
+    }
 `;
 export default BorderLayout;
