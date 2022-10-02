@@ -54,6 +54,10 @@ const QuestionBoardPage = () => {
     });
   };
 
+  const navigateToQuestionPage = (id) => {
+    navigate(`/question/${id}`);
+  };
+
   return (
     <>
       <NavigationBar />
@@ -83,6 +87,7 @@ const QuestionBoardPage = () => {
               category={el.questionCategory.name}
               writer={el.member.nickname}
               createdAt={el.createdAt}
+              onClick={() => navigateToQuestionPage(el.questionId)}
             />
           ))}
         </PostSummaryWrapper>
