@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getCookie } from '../../utils/cookie'
 const isTokenAlive = getCookie('accessToken')
 const getNickName = getCookie('nickname')
-const getuUerId = getCookie('memberId')
+const getUserId = getCookie('memberId')
 
 let initialState = {
     isLoggedIn : isTokenAlive,
-    userId  : getuUerId,
+    userId  : getUserId,
     nickName : getNickName
 }
 
