@@ -14,9 +14,12 @@ import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import com.codestates.main.subscription.entity.Subscription;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +35,16 @@ public class InitDb {
     String[] categories = new String[]{"Java", "React", "Spring", "Data Structure", "Operating System", "Database", "Network", "Javascript"};
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
+//        ClassPathResource resource = new ClassPathResource("default.png");
+//        File file = new File(String.valueOf(resource.getFile()));
+//
+//        String filePath="resources"+File.separator+"images";
+//        String current = System.getProperty("user.dir");
+//        String path = current+ File.separator+filePath+File.separator;
+//        if(true){
+//            return;
+//        }
         Member member = Member.builder()
                 .email("shb03207@naver.com")
                 .nickname("관리자")
