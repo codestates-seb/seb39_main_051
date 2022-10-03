@@ -82,10 +82,13 @@ public class MemberDTO {
         private long memberId;
         private String nickname;
         private String picture;
+
+        private String email;
         public PostResponse(Member member) {
             this.memberId = member.getMemberId();
             this.nickname = member.getNickname();
             this.picture = member.getPicture();
+            this.email = member.getEmail();
         }
     }
 }
