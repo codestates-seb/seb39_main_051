@@ -27,6 +27,8 @@ public class AnswerResponseDto2 {
 
     private long likeCount;
 
+    private String picture;
+
     private LocalDateTime createdAt;
 
     private List<CommentResponseDto> comments;
@@ -38,6 +40,7 @@ public class AnswerResponseDto2 {
         this.content = answer.getContent();
         this.nickname = answer.getMember().getNickname();
         this.likeCount = answer.getLikeCount();
+        this.picture = answer.getMember().getPicture();
         this.createdAt = answer.getCreatedAt();
         this.comments = answer.getComments()
                 .stream()

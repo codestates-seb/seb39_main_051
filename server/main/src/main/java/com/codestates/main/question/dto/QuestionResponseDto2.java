@@ -32,6 +32,7 @@ public class QuestionResponseDto2 {
     private Long questionCategoryId;
 
     private String questionCategoryName;
+    private String picture;
     private LocalDateTime createdAt;
 
     private List<AnswerResponseDto2> answers;
@@ -44,6 +45,7 @@ public class QuestionResponseDto2 {
         this.content = question.getContent();
         this.questionCategoryId = question.getQuestionCategory().getQuestionCategoryId();
         this.questionCategoryName = question.getQuestionCategory().getName();
+        this.picture = question.getMember().getPicture();
         this.createdAt = question.getCreatedAt();
         this.answers = question.getAnswers().
                 stream()
