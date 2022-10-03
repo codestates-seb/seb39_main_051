@@ -5,11 +5,24 @@ import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import BorderLayout from '../components/BorderLayout';
 import UserImg from '../components/UserImg';
+import axiosInstance from '../utils/axiosInstance';
 
 const UserImgPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
-  const handleClick = (e) => {};
+  const formData = new FormData();
+
+  const handleImgInput = (e) => {
+    if (e.target.files) {
+      formData.append('files', e.target.files[0]);
+    }
+  };
+
+  const handleOnClick = () => {
+    axiosInstance
+      .post('/my-page/upload', formData)
+      .then((res) => console.log(res));
+  };
 
   return (
     <>
@@ -28,7 +41,11 @@ const UserImgPage = () => {
               <div>
                 <span>사진을 드래그해주세요.</span>
                 <InputImgWrapper themeState={themeState}>
-                  <InputImg type='file' accept='image/*' />
+                  <InputImg
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImgInput}
+                  />
                 </InputImgWrapper>
                 <BasicButton
                   themeState={themeState}
@@ -38,6 +55,7 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.3rem'
                   text='변경하기'
+                  onClick={handleOnClick}
                 />
               </div>
             </div>
@@ -52,7 +70,6 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='대쉬보드'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/userimg'>
@@ -64,7 +81,6 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='프로필 사진 변경'
-                  onClick={handleClick}
                   selected
                 />
               </a>
@@ -77,7 +93,6 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='닉네임 변경'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/userpassword'>
@@ -89,7 +104,6 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='비밀번호 변경'
-                  onClick={handleClick}
                 />
               </a>
               <a>
@@ -106,7 +120,10 @@ const UserImgPage = () => {
             </div>
           </LeftContent>
           <RightContent themeState={themeState}>
-            <UserImg />
+            <UserImg
+              handleImgInput={handleImgInput}
+              handleOnClick={handleOnClick}
+            />
           </RightContent>
         </Layout>
       </BorderLayout>

@@ -117,11 +117,7 @@ const Form = (props) => {
               navigate('/login');
               window.location.reload();
             })
-            .catch((err) =>
-              err.message.split(' ')[5] === '404'
-                ? alert('이미 존재하는 email입니다.')
-                : ''
-            );
+            .catch((err) => alert('이미 존재하는 email입니다.'));
         } catch (err) {
           alert('Check valid option');
         }
@@ -263,6 +259,7 @@ const Layout = styled.div`
     }
   }
   @media screen and (max-width: 412px) {
+    min-width: 0;
     width: 34rem;
   }
 `;

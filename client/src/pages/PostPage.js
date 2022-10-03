@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
-import NavigationBar from '../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
 import BorderLayout from '../components/BorderLayout';
 import axiosInstance from '../utils/axiosInstance';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
+  const { userId } = useSelector((state) => state.userInfoSlice);
   const navigate = useNavigate();
   const { type, category } = useLocation().state;
   const [categoryContent, setCategoryContent] = useState('');
@@ -28,55 +26,55 @@ const PostPage = () => {
   };
 
   const handleCategory = (e) => {
-    console.log(e.target.innerText)
+    console.log(e.target.innerText);
     switch (e.target.innerText) {
       case 'Java':
         setSelected(e.target.innerText);
-        setCategoryContent(1)
+        setCategoryContent(1);
         break;
       case 'React':
         setSelected(e.target.innerText);
-        setCategoryContent(2)
+        setCategoryContent(2);
         break;
       case 'Spring':
         setSelected(e.target.innerText);
-        setCategoryContent(3)
+        setCategoryContent(3);
         break;
       case 'Data Structure':
         setSelected(e.target.innerText);
-        setCategoryContent(4)
+        setCategoryContent(4);
         break;
       case 'Operating System':
         setSelected(e.target.innerText);
-        setCategoryContent(5)
+        setCategoryContent(5);
         break;
       case 'Database':
         setSelected(e.target.innerText);
-        setCategoryContent(6)
+        setCategoryContent(6);
         break;
       case 'Network':
         setSelected(e.target.innerText);
-        setCategoryContent(7)
+        setCategoryContent(7);
         break;
       case 'Javascript':
         setSelected(e.target.innerText);
-        setCategoryContent(8)
+        setCategoryContent(8);
         break;
-        default:
-          setSelected(e.target.innerText);
-          setCategoryContent(e.target.innerText)
-          break
+      default:
+        setSelected(e.target.innerText);
+        setCategoryContent(e.target.innerText);
+        break;
     }
   };
 
-  const handleSubmitPost =  async(e) => {
+  const handleSubmitPost = async (e) => {
     e.preventDefault();
     if (type === 'questions') {
       await axiosInstance.post(`/questions`, {
         questionCategoryId: categoryContent,
         content,
-      })
-      navigate('/questions')
+      });
+      navigate('/questions');
     } else if (type === 'free') {
       await axiosInstance.post(`/posts`, {
         title,
@@ -84,19 +82,17 @@ const PostPage = () => {
         type: '자유게시판',
         category: categoryContent,
       })
-      navigate('/free')
+      navigate('/free');
     } else if (type === 'suggestion') {
       await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '건의게시판',
         category: categoryContent,
-      })
-      navigate('/suggestion')
+      });
+      navigate('/suggestion');
     }
   };
-
-  
 
   useEffect(() => {
     if ((type === 'questions') & !category) {
@@ -109,7 +105,6 @@ const PostPage = () => {
       setSelected(category);
     }
   }, []);
-
 
   const handleCancel = () => {
     if (type === 'questions') {
@@ -139,27 +134,20 @@ const PostPage = () => {
   return (
     <BorderLayout>
       <form>
-            <h1>{boardName}</h1>
-            {type==='questions' ? (<InputWrapper></InputWrapper>) : (
-                          <InputWrapper themeState={themeState}>
-                            <label id='title' /> 
-                          <input
-                            id='title'
-                            name='title'
-                            type='text'
-                            placeholder='제목'
-                            value={title}
-                            onChange={handleTitle}
-                            required
-                          />
-                        </InputWrapper>
-            )}
-            <DropDownList
-              type={type}
-              category={category}
-              seleted={seleted}
-              setSelected={setSelected}
-              handleCategory={handleCategory}
+        <h1>{boardName}</h1>
+        {type === 'questions' ? (
+          <InputWrapper></InputWrapper>
+        ) : (
+          <InputWrapper themeState={themeState}>
+            <label id='title' />
+            <input
+              id='title'
+              name='title'
+              type='text'
+              placeholder='제목'
+              value={title}
+              onChange={handleTitle}
+              required
             />
             <InputWrapper themeState={themeState}>
               <label id='content'/>
@@ -253,7 +241,7 @@ const InputWrapper = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  button{
+  button {
     margin: 2rem 0 2rem 2rem;
   }
 `;

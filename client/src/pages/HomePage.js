@@ -16,7 +16,6 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getCookie, setCookie } from '../utils/cookie';
 import { useEffect } from 'react';
-import axios from 'axios';
 import axiosInstance from '../utils/axiosInstance';
 
 const HomePage = () => {
@@ -30,7 +29,7 @@ const HomePage = () => {
         setCookie('role', res.data.role, 60);
       });
     }
-  });
+  }, []);
 
   return (
     <BorderLayout>

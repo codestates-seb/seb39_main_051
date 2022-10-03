@@ -18,35 +18,33 @@ const UserPassword = ({
       <ContentWrapper>
         <form>
           <InputWrapper themeState={themeState}>
-            <label htmlFor='password'>현재 비밀번호: </label>
+            <label htmlFor='newPassword'>새 비밀번호: </label>
             <UserPasswordInput
-              id='password'
-              themeState={themeState}
-              type='password'
-            ></UserPasswordInput>
-          </InputWrapper>
-          <InputWrapper themeState={themeState}>
-            <label htmlFor='newpassword'>새 비밀번호: </label>
-            <UserPasswordInput
-              id='newpassword'
+              id='newPassword'
+              name='newPassword'
               themeState={themeState}
               type='password'
               onChange={handleInput}
               onKeyUp={passwordValidation}
             ></UserPasswordInput>
           </InputWrapper>
-          <span>{passwordDesc}</span>
+          <div className='warning'>
+            <span>{passwordDesc}</span>
+          </div>
           <InputWrapper themeState={themeState}>
-            <label htmlFor='checkpassword'>새 비밀번호 확인: </label>
+            <label htmlFor='checkPassword'>새 비밀번호 확인: </label>
             <UserPasswordInput
-              id='checkpassword'
+              id='checkPassword'
+              name='checkPassword'
               themeState={themeState}
               type='password'
               onChange={handleInput}
               onKeyUp={rePasswordValidation}
             ></UserPasswordInput>
           </InputWrapper>
-          <span>{rePasswordDesc}</span>
+          <div className='warning'>
+            <span>{rePasswordDesc}</span>
+          </div>
           <BasicButton
             themeState={themeState}
             width='30%'
@@ -85,6 +83,14 @@ const ContentWrapper = styled.div`
     & div {
       display: flex;
       justify-content: space-between;
+    }
+
+    .warning {
+      position: relative;
+      bottom: 3rem;
+      display: flex;
+      justify-content: start;
+      width: 100%;
     }
   }
 `;
