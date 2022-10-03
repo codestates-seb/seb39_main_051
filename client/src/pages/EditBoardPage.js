@@ -6,6 +6,7 @@ import BasicButton from '../components/BasicButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DropDownList from '../components/DropDownList';
 import BorderLayout from '../components/BorderLayout';
+import axiosInstance from '../utils/axiosInstance';
 
 const EditBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -30,10 +31,12 @@ const EditBoardPage = () => {
 
   const handleSubmitEditPost = async () => {
     console.log(editedContent, select);
-    axios.patch(`/posts/${state.postId}`, {
+    axiosInstance.patch(`/posts/${state.postId}`, {
+      title: editedTitle,
       content: editedContent,
       category: select,
-    });
+    })
+    .then((res)=>console.log(res))
     alert('게시물이 수정되었습니다!')
     navigate(`/${type}`);
   };
