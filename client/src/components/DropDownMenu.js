@@ -106,11 +106,11 @@ const ItemList = styled.div`
   }
 
   &:nth-child(1) {
-    margin: ${(props) => (props.mobile ? '0 2rem' : '0 0 0 2rem')};
+    margin: ${(props) => (props.mobile ? '0 2rem' : 0)};
   }
 
   &:nth-child(2) {
-    margin-left: 6rem;
+    margin-left: 4.5rem;
   }
 
   &:nth-child(3) {

@@ -31,8 +31,6 @@ const DashBoardPage = () => {
     faNetworkWired,
   ];
 
-  const handleClick = (e) => {};
-
   return (
     <>
       <BorderLayout>
@@ -48,7 +46,6 @@ const DashBoardPage = () => {
                 backGroundColor='var(--color-orange)'
                 fontSize='1.8rem'
                 text='대쉬보드'
-                onClick={handleClick}
                 selected
               />
             </a>
@@ -68,7 +65,6 @@ const DashBoardPage = () => {
                 backGroundColor='var(--color-orange)'
                 fontSize='1.8rem'
                 text='프로필 사진 변경'
-                onClick={handleClick}
               />
             </a>
             <a href='/username'>
@@ -80,7 +76,6 @@ const DashBoardPage = () => {
                 backGroundColor='var(--color-orange)'
                 fontSize='1.8rem'
                 text='닉네임 변경'
-                onClick={handleClick}
               />
             </a>
             <a href='/userpassword'>
@@ -92,7 +87,6 @@ const DashBoardPage = () => {
                 backGroundColor='var(--color-orange)'
                 fontSize='1.8rem'
                 text='비밀번호 변경'
-                onClick={handleClick}
               />
             </a>
             <a>

@@ -20,3 +20,7 @@ export const getCookie = (cookie_name) => {
     }
   }
 };
+
+export const deleteCookie = (cookie_name) => {
+  setCookie(cookie_name, '', 0);
+};
