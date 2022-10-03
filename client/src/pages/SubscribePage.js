@@ -6,12 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from '../components/Toast';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 const SubscribePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const { isLoggedIn, userId, nickName } = useSelector((state) => state.userInfoSlice);
-  const [subscribeArr, setSubscribeArr] = useState([1,2,3,4,5,6,7,8]);
+  const { isLoggedIn, userId, nickName } = useSelector(
+    (state) => state.userInfoSlice
+  );
+  const [subscribeArr, setSubscribeArr] = useState([]);
   const arr = [
     { categoryName: 'React', questionCategoryId: 2 },
     { categoryName: 'Javascript', questionCategoryId: 8 },
@@ -23,47 +25,50 @@ const SubscribePage = () => {
     { categoryName: 'Network', questionCategoryId: 7 },
   ];
 
-  const handleSubscribe = (id, categoryName, isSubscribe) => {
-    if(isSubscribe){
-      //구독해제상황
-      // await axios.post('/member/subscription',{
-      //   questionCategoryId:id
-      // })
-      toast.success(`${categoryName} 구독을 해제합니다!`)
-      const origin = subscribeArr
-      setSubscribeArr(origin.filter((el)=>el !== id))
-    }
-    else{
-      if(categoryName==='Spring'){
-        // await axios.post('/member/subscription',{
-        //   questionCategoryId:id
-        // })
-        toast.success(`${categoryName}을 구독합니다!`)
-        const origin = subscribeArr
-        origin.push(id)
-        setSubscribeArr([...origin])
-      }else{
-        // await axios.post('/member/subscription',{
-        //   questionCategoryId:id
-        // })
-        toast.success(`${categoryName}를 구독합니다!`)
-        const origin = subscribeArr
-        origin.push(id)
-        setSubscribeArr([...origin])
-      }
-    }
-  }
+  const handleSubscribe = async (id, categoryName, isSubscribe) => {
+    // console.log(id)
+    if (isSubscribe) {
+      // 구독해제상황
+      await axiosInstance.post('/member/subscription', {
+        questionCategoryId: id,
+      })
+      .then((res)=>console.log('구독해제', res))
+      toast.success(`${categoryName} 구독을 해제합니다!`);
+      // const origin = subscribeArr;
+      // setSubscribeArr(origin.filter((el) => el !== id));
+    } else {
+      if (categoryName === 'Spring') {
+        await axiosInstance.post('/member/subscription', {
+          questionCategoryId: id,
+        })
+        .then((res)=>console.log('구독', res))
+        toast.success(`${categoryName}을 구독합니다!`);
+        // const origin = subscribeArr;
+        // origin.push(id);
+        // setSubscribeArr([...origin]);
+      } else {
+        await axiosInstance.post('/member/subscription', {
+          questionCategoryId: id,
+        })
+        .then((res)=>console.log('구독', res))
 
-  useEffect(()=>{
-    // console.log('Bearer 20eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwibmlja25hbWUiOiJtb25zdGVyIiwiZW1haWwiOiJreWxlMTEyMUBuYXZlci5jb20iLCJtZW1iZXJJZCI6MTMsInN1YiI6IkpXVCBUb2tlbiIsImlhdCI6MTY2NDY3NDAwOSwiZXhwIjoxNjY0Njc2NDA5fQ.4vpiRQ6KZOK9dMzTPo-8BLG7P1McTVXD4ZpHL-dJGf3AsWewraIIp30nkFTRFHjll6L1F1fnibzg3AgQ3nZe6Q)
-    console.log(isLoggedIn)
-    axios.get('/subscription',{
-      headers:  {
-        Authorization : `Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwibmlja25hbWUiOiJtb25zdGVyIiwiZW1haWwiOiJreWxlMTEyMUBuYXZlci5jb20iLCJtZW1iZXJJZCI6MTMsInN1YiI6IkpXVCBUb2tlbiIsImlhdCI6MTY2NDY5MTE4OCwiZXhwIjoxNjY0NjkzNTg4fQ.8CfwBoLGT5b58LsvRYZ1OITl9i3JjEJ7wtzb1cMJA6_BSVgOOUFV7chrriG0N9HPWA86qK_z106LoWDtutXNkQ` 
+        toast.success(`${categoryName}를 구독합니다!`);
+        // const origin = subscribeArr;
+        // origin.push(id);
+        // setSubscribeArr([...origin]);
       }
-    })
-    .then((res)=>console.log(res))
-  })
+    }
+  };
+
+  useEffect(() => {
+    axiosInstance
+      .get('/subscription')
+      .then((res) =>{
+        console.log(res)
+        setSubscribeArr(res.data.subscriptions.map((el)=>el.subscriptionId))
+      }
+      )
+  },[]);
   return (
     <BorderLayout>
       <Message themeState={themeState}>
@@ -71,7 +76,7 @@ const SubscribePage = () => {
       </Message>
       <Toast />
       <GridLayout>
-        {arr.map((el,idx) => (
+        {arr.map((el, idx) => (
           <CategoryCard
             key={el.questionCategoryId}
             categoryName={el.categoryName}
@@ -84,6 +89,7 @@ const SubscribePage = () => {
     </BorderLayout>
   );
 };
+
 
 const GridLayout = styled.div`
   display: grid;

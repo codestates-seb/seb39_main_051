@@ -36,7 +36,7 @@ public class CommentController {
         System.out.println("CommentController.postComment");
 
         Comment comment = mapper.commentPostDtoToComment(commentPostDto);
-        Comment createdComment = commentService.creatComment(comment, postId, commentPostDto.getMemberId());
+        Comment createdComment = commentService.creatComment(comment, postId);
         CommentResponseDto commentResponseDto = new CommentResponseDto(createdComment);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
@@ -49,7 +49,7 @@ public class CommentController {
     public ResponseEntity postAnswerComment(@PathVariable("answer-id") Long answerId,
                                       @RequestBody CommentPostDto commentPostDto) {
         Comment comment = mapper.commentPostDtoToComment(commentPostDto);
-        Comment creatComment = commentService.creatAnswerComment(comment, answerId, commentPostDto.getMemberId());
+        Comment creatComment = commentService.creatAnswerComment(comment, answerId);
         CommentResponseDto commentResponseDto = new CommentResponseDto(creatComment);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }

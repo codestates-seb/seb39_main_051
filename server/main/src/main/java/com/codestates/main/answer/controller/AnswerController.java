@@ -6,6 +6,7 @@ import com.codestates.main.answer.dto.AnswerResponseDto;
 import com.codestates.main.answer.entity.Answer;
 import com.codestates.main.answer.mapper.AnswerMapper;
 import com.codestates.main.answer.service.AnswerService;
+import com.codestates.main.config.SecurityUtils;
 import com.codestates.main.dto.SingleResponseDto;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.service.MemberService;
@@ -34,9 +35,10 @@ public class AnswerController {
 
     @PostMapping
     public ResponseEntity postAnswer(@Valid @RequestBody AnswerPostDto answerPostDto){
-        Long memberId = answerPostDto.getMemberId();
+//        Long memberId = answerPostDto.getMemberId();
         Long questionId = answerPostDto.getQuestionId();
-        Member findMember = memberService.findVerifiedMember(memberId);
+        Member findMember = SecurityUtils.getCurrentMember(memberService);
+//        Member findMember = memberService.findVerifiedMember(memberId);
         Question findQuestion = questionService.findVerifiedQuestion(questionId);
         Answer answer = mapper.answerPostDtoToAnswer(answerPostDto);
         answer.setMember(findMember);

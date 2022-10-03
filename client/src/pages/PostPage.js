@@ -71,7 +71,6 @@ const PostPage = () => {
     e.preventDefault();
     if (type === 'questions') {
       await axiosInstance.post(`/questions`, {
-        memberId: userId,
         questionCategoryId: categoryContent,
         content,
       });
@@ -82,8 +81,7 @@ const PostPage = () => {
         content,
         type: '자유게시판',
         category: categoryContent,
-        memberId: userId,
-      });
+      })
       navigate('/free');
     } else if (type === 'suggestion') {
       await axiosInstance.post(`/posts`, {
@@ -91,7 +89,6 @@ const PostPage = () => {
         content,
         type: '건의게시판',
         category: categoryContent,
-        memberId: userId,
       });
       navigate('/suggestion');
     }
@@ -152,50 +149,53 @@ const PostPage = () => {
               onChange={handleTitle}
               required
             />
-          </InputWrapper>
-        )}
-        <DropDownList
-          type={type}
-          category={category}
-          seleted={seleted}
-          setSelected={setSelected}
-          handleCategory={handleCategory}
-        />
-        <InputWrapper themeState={themeState}>
-          <label id='content' />
-          <textarea
-            id='content'
-            name='content'
-            type='text'
-            placeholder='내용'
-            value={content}
-            onChange={handleContent}
-            required
-          />
-        </InputWrapper>
-        <ButtonWrapper>
-          <BasicButton
-            themeState={themeState}
-            width='5.5rem'
-            height='4rem'
-            color='var(--color-white)'
-            backGroundColor='var(--color-orange)'
-            fontSize='1.8rem'
-            text='취소'
-            onClick={handleCancel}
-          />
-          <BasicButton
-            themeState={themeState}
-            width='5.5rem'
-            height='4rem'
-            color='var(--color-white)'
-            backGroundColor='var(--color-orange)'
-            fontSize='1.8rem'
-            text='등록'
-            onClick={handleSubmitPost}
-          />
-        </ButtonWrapper>
-      </form>
+            <InputWrapper themeState={themeState}>
+              <label id='content'/>
+              {type === 'questions' ? (
+                              <textarea
+                              id='content'
+                              name='content'
+                              type='text'
+                              placeholder='제목'
+                              value={content}
+                              onChange={handleContent}
+                              required
+                            />
+              ) : (
+                <textarea
+                id='content'
+                name='content'
+                type='text'
+                placeholder='내용'
+                value={content}
+                onChange={handleContent}
+                required
+              />
+              )}
+            </InputWrapper>
+            <ButtonWrapper>
+              <BasicButton
+                themeState={themeState}
+                width='5.5rem'
+                height='4rem'
+                color='var(--color-white)'
+                backGroundColor='var(--color-orange)'
+                fontSize='1.8rem'
+                text='취소'
+                onClick={handleCancel}
+              />
+              <BasicButton
+                themeState={themeState}
+                width='5.5rem'
+                height='4rem'
+                color='var(--color-white)'
+                backGroundColor='var(--color-orange)'
+                fontSize='1.8rem'
+                text='등록'
+                onClick={handleSubmitPost}
+              />
+            </ButtonWrapper>
+          </form>
     </BorderLayout>
   );
 };

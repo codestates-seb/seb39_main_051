@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from './Toast';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../utils/axiosInstance';
 
 const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, profileImg, postId, answerId, commentArr, setCommentArr}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -17,6 +18,7 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
   const [commentContent, setCommentContent] = useState(content)
   // 좋아요
   const [commentLikeContent, setCommentLikeContent] = useState(likeCount)
+  const [date, time] = createdAt.split('T')
 
 
   const handleEditComment = (e) => {
@@ -28,13 +30,14 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
   }
   const handleDeleteComment = async() => {
     if(window.confirm('댓글을 삭제하시겠습니까?')){
-      await axios.delete(`/comments/${commentId}`)
+      await axiosInstance.delete(`/comments/${commentId}`)
       setCommentArr(commentArr.filter((el)=>el.commentId !== commentId))
     }
   }
+
   const handleSubmitEditComment = async() => {
     if(postId){
-      await axios.patch(`/posts/${postId}/comments/${commentId}`,{
+      await axiosInstance.patch(`/posts/${postId}/comments/${commentId}`,{
         memberId: 1,
         content : editedComment
       })
@@ -43,7 +46,7 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
       setEditedComment(editedComment)
     }
     else if(answerId) {
-      await axios.patch(`/answers/${answerId}/comments/${commentId}`,{
+      await axiosInstance.patch(`/answers/${answerId}/comments/${commentId}`,{
         member1:1,
         content : editedComment
       })
@@ -55,12 +58,12 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
   }
 
   const handleCommentLike = async() => {
-    console.log('@@@')
     if(isLoggedIn){
-      await axios.post(`/comments/${commentId}/like`,{
+      await axiosInstance.post(`/comments/${commentId}/like`,{
         memberId:1
       })
       .then((res)=>setCommentLikeContent(res.data.likeCount))
+      .catch((err)=>console.log(err))
     }else{
       if(window.confirm('로그인이 필요합니다 로그인 하시겠습니까?')){
         navigate('/login')
@@ -76,21 +79,27 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
           <img src={profileImg} alt='프로필사진' />
           {nickname}
         </CommentWriter>
+        <CommentEvent>
         {userId==memberId ? (
           isCommentEditMode ? (
-            <CommentEvent>
-            <div className='commentDate'>{createdAt}</div>
-            <div className='commentEdit' onClick={()=>handleSubmitEditComment()} >등록</div>
-            <div className='commentEdit' onClick={()=>handleCommentEditMode()}>취소</div>
-          </CommentEvent>
+            <>
+            <div className='commentDate'>{date}/<span id='time'>{time}</span></div>
+            <div className='wrapper'>
+              <div className='commentEdit leftOne' onClick={()=>handleSubmitEditComment()} >등록</div>
+              <div className='commentEdit' onClick={()=>handleCommentEditMode()}>취소</div>
+            </div>
+          </>
   ) : (
-    <CommentEvent>
-    <div className='commentDate'>{createdAt}</div>
-    <div className='commentEdit' onClick={()=>handleCommentEditMode()} >수정</div>
+    <>
+    <div className='commentDate'>{date}/<span id='time'>{time}</span></div>
+    <div className='wrapper'>
+    <div className='commentEdit leftOne' onClick={()=>handleCommentEditMode()} >수정</div>
     <div className='commentEdit' onClick={()=>handleDeleteComment()}>삭제</div>
-  </CommentEvent>
+    </div>
+    </>
   )
         ) : (<></>)}
+        </CommentEvent>
       </CommentInfo>
       <CommentContent themeState={themeState}>
         {isCommentEditMode ? (
@@ -130,6 +139,9 @@ const CommentEvent = styled.div`
   .commentDate {
     margin-right: 0.5%;
   }
+  .leftOne {
+    margin-right:1%;
+  }
   .commentEdit {
     min-width: 2.1rem;
     color: #d4d4d4;
@@ -139,8 +151,13 @@ const CommentEvent = styled.div`
   @media screen and (max-width: 412px) {
     flex-direction:column;
     vertical-align: bottom;
-    .commentDate {
-      margin-right: 0rem;
+    .commentEdit{
+      display:inline;
+      margin-right:0;
+      margin-left:auto;
+    }
+    #time{
+      display:none;
     }
   }
 `;

@@ -63,7 +63,7 @@ public class MemberService{
         Member findMember = findMemberByEmail(member.getEmail());
 
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(member.getPassword()));
+                .ifPresent(password -> findMember.setPassword(bCryptPasswordEncoder.encode(member.getPassword())));
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname -> findMember.setNickname(member.getNickname()));
         Optional.ofNullable(member.getPicture())
