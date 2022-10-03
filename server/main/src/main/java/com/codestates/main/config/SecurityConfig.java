@@ -24,8 +24,6 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig{
-    private final CorsFilter corsFilter;
-    private final MemberRepository memberRepository;
     private final JwtTokenizer jwtTokenizer;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,8 +38,16 @@ public class SecurityConfig{
                 .and()
                 .authorizeHttpRequests(authorize -> authorize  // (3) 추가
                                 .antMatchers(HttpMethod.GET, "/member/get").hasRole("USER")
-                                //.antMatchers(HttpMethod.GET, "/my-page/**").hasAnyRole("USER", "ADMIN")  // (4) 추가
                                 .antMatchers("/my-page/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.POST,"/posts/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.DELETE,"/posts/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.PATCH,"/posts/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.POST,"/answers/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.DELETE,"/answers/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.PATCH,"/answers/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.POST,"/comments/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.DELETE,"/comments/**").hasAnyRole("USER", "ADMIN")
+                                .antMatchers(HttpMethod.PATCH,"/comments/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll());
                 //.authorizeRequests()
                 //.antMatchers("/answer/**")
