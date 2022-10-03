@@ -86,15 +86,21 @@ public class QuestionController {
     @GetMapping("/search")
     public ResponseEntity getQuestions(@RequestParam int page,
                                        @RequestParam int size,
-                                       @RequestParam String keyword){
-        System.out.println("QuestionController.getQuestions");
-        Page<Question> questionPage = questionService.search(page - 1, size, keyword);
-        List<Question> questions = questionPage.getContent();
+                                       @RequestParam String keyword,
+                                       @RequestParam Optional<String> questionCategory){
+        Page<Question> pageQuestions;
+        if (questionCategory.isPresent()) {
+           pageQuestions = questionService.searchByQuestionCategoryAndKeyword(page-1, size, questionCategory.get(), keyword);
+        } else {
+           pageQuestions = questionService.searchByKeyword(page-1, size, keyword);
+        }
+
+        List<Question> questions = pageQuestions.getContent();
         List<QuestionResponseDto> responseDtos = questions.stream()
                 .map(question -> new QuestionResponseDto(question))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(
-                new MultiResponseDto<>(responseDtos,questionPage), HttpStatus.OK
+                new MultiResponseDto<>(responseDtos,pageQuestions), HttpStatus.OK
         );
     }
 
