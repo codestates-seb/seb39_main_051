@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import BasicButton from '../components/BasicButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 import Toast from '../components/Toast';
+import axiosInstance from '../utils/axiosInstance';
 
 const QuestionPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -18,7 +18,8 @@ const QuestionPage = () => {
   const navigate = useNavigate();
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
-  const [createdAt, setCreatedAt] = useState([]);
+  const [date, setDate] = useState([])
+  const [time, setTime] = useState([])
   const [modifiedAt, setModifiedAt] = useState([]);
   const [answer, setAnswer] = useState([]);
   const [memberId, setMemberId] = useState('');
@@ -28,9 +29,8 @@ const QuestionPage = () => {
   const handleDeleteQuestion = async () => {
     try {
       if (window.confirm('정말 질문을 삭제하시겠습니까?/')) {
-        const response = await axios.delete(`/questions/${params.id}`);
+        const response = await axiosInstance.delete(`/questions/${params.id}`);
         navigate('/questions');
-        console.log(response);
       }
     } catch (error) {
       console.log(error);
@@ -59,18 +59,19 @@ const QuestionPage = () => {
   };
 
   useEffect(() => {
-    axios
+    axiosInstance
       .get(`/questions/${params.id}`)
       .then((res) => {
-        console.log(res.data);
+        console.log(res)
         setContent(res.data.content);
         setQuestionId(res.data.questionId);
-        // setCategory(res.data.questionCategory);
+        setCategory(res.data.questionCategoryName);
         const newDate = res.data.createdAt
           .split('.')[0]
           .replace(/-/g, '.')
-          .replace(/T/, '/');
-        setCreatedAt(newDate);
+          .split('T')
+          setDate(newDate[0])
+          setTime(newDate[1])
         // setModifiedAt(res.data.modifiedAt);
         setMemberId(res.data.memberId);
         setNickname(res.data.nickname);
@@ -88,7 +89,7 @@ const QuestionPage = () => {
       state: {
         questionId: questionId,
         question: content,
-        // category :questionCategory,
+        category :category,
       },
     });
   };
@@ -106,7 +107,8 @@ const QuestionPage = () => {
             />
             {nickname}
           </Writer>
-          <Date themeState={themeState}>{createdAt}</Date>
+          <InfoWrapper>
+          <Date themeState={themeState}>{date}<span id='time'>{time}</span></Date>
           {userId == memberId ? (
             <>
               <EditDelete onClick={() => navigateEditQuestion()}>
@@ -119,6 +121,7 @@ const QuestionPage = () => {
           ) : (
             <></>
           )}
+          </InfoWrapper>
         </ContentInfo>
         <CenterWrapper>
               <AnswerToTal themeState={themeState}>
@@ -137,12 +140,12 @@ const QuestionPage = () => {
             </CenterWrapper>
             {answer.map((el, i) => (
               <AnswerCard
+              key={el.answerId}
                 profileImg='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png'
                 nickname={el.nickname}
                 createdAt={el.createdAt
                   .split('.')[0]
-                  .replace(/-/g, '.')
-                  .replace(/T/, '/')}
+                  .replace(/-/g, '.')}
                 memberId={el.memberId}
                 // modifiedAt='2022.09.20'
                 content={el.content}
@@ -185,10 +188,14 @@ const Category = styled.div`
       ? ' var(--color-orange)'
       : 'var(--color-gray)'};
   min-width: 8.8rem;
+  @media screen and (max-width: 413px) {
+    padding:0.5rem;
+  }
 `;
 const EditDelete = styled.div`
   color: #d2d2d2;
   margin-right: 0.5%;
+  min-width:2.3rem;
   cursor: pointer;
 `;
 const Writer = styled.div`
@@ -208,6 +215,12 @@ const Date = styled.div`
   margin-right: 0.5%;
   color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
+      @media screen and (max-width: 413px) {
+        span{
+          display:none;
+        }
+  }
+    
 `;
 
 const CenterWrapper = styled.section`
@@ -231,6 +244,14 @@ const AnswerToTal = styled.div`
   color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
 `;
+const InfoWrapper = styled.div`
+  display:flex;
+  @media screen and (max-width: 413px) {
+    flex-direction:column;
+    justify-content:flex-end;
+  }
+
+`
 
 
 export default QuestionPage;

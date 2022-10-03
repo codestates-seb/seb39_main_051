@@ -8,6 +8,7 @@ import DropDownList from '../components/DropDownList';
 import NavigationBar from '../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
 import BorderLayout from '../components/BorderLayout';
+import axiosInstance from '../utils/axiosInstance';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -71,28 +72,25 @@ const PostPage = () => {
   const handleSubmitPost =  async(e) => {
     e.preventDefault();
     if (type === 'questions') {
-      await axios.post(`/questions`, {
-        memberId: userId,
+      await axiosInstance.post(`/questions`, {
         questionCategoryId: categoryContent,
         content,
       })
       navigate('/questions')
     } else if (type === 'free') {
-      await axios.post(`/posts`, {
+      await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '자유게시판',
         category: categoryContent,
-        memberId: userId,
       })
       navigate('/free')
     } else if (type === 'suggestion') {
-      await axios.post(`/posts`, {
+      await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '건의게시판',
         category: categoryContent,
-        memberId: userId,
       })
       navigate('/suggestion')
     }
@@ -165,7 +163,18 @@ const PostPage = () => {
             />
             <InputWrapper themeState={themeState}>
               <label id='content'/>
-              <textarea
+              {type === 'questions' ? (
+                              <textarea
+                              id='content'
+                              name='content'
+                              type='text'
+                              placeholder='제목'
+                              value={content}
+                              onChange={handleContent}
+                              required
+                            />
+              ) : (
+                <textarea
                 id='content'
                 name='content'
                 type='text'
@@ -174,6 +183,7 @@ const PostPage = () => {
                 onChange={handleContent}
                 required
               />
+              )}
             </InputWrapper>
             <ButtonWrapper>
               <BasicButton

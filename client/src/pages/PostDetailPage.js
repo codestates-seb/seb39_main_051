@@ -9,6 +9,7 @@ import BasicButton from '../components/BasicButton';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../components/Toast';
 import { toast } from 'react-toastify';
+import axiosInstance from '../utils/axiosInstance';
 
 
 const PostDetailPage = () => {
@@ -19,13 +20,14 @@ const PostDetailPage = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [category, setCategory] = useState('')
-  const [createdAt, setCreatedAt] = useState('')
+  const [date, setDate] = useState([])
+  const [time, setTime] = useState([])
   const [modifiedAt, setModifiedAt] = useState([])
   const [comments, setComments] = useState([])
   const [memberId, setMemberId] = useState('')
   const [nickname, setNickname] = useState('')
   const [postId, setPostId] = useState('')
-  const [likeCount, setLikeCount] = useState(0)
+  const [likeCount, setLikeCount] = useState('')
   const[type, setType] = useState('')
   const [postCommentContent, setPostCommentContent] = useState('');
 
@@ -36,8 +38,9 @@ const PostDetailPage = () => {
       setTitle(res.data.title)
       setCategory(res.data.category)
       setMemberId(res.data.memberId)
-      const newDate = res.data.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')
-      setCreatedAt(newDate)
+      const newDate = res.data.createdAt.split('.')[0].replace(/-/g,'.') .split('T')
+      setDate(newDate[0])
+      setTime(newDate[1])
       setContent(res.data.content)
       setComments(res.data.comments.sort((a,b)=>
       a.likeCount > b.likeCount ? -1 : 1) )
@@ -59,8 +62,7 @@ const PostDetailPage = () => {
   }
   const handleSubmitPostComment = async() => {
     if(isLoggedIn){
-      await axios.post(`/posts/${params.id}/comments`,{
-        memberId : 1,
+      await axiosInstance.post(`/posts/${params.id}/comments`,{
         content : postCommentContent,
       })
       .then((res)=> {
@@ -79,7 +81,7 @@ const PostDetailPage = () => {
   }
 const handleDeletePost  = async() => {
     if(window.confirm('정말 삭제 하시겠습니까?')){
-      await axios.delete(`/posts/${postId}`)
+      await axiosInstance.delete(`/posts/${postId}`)
       if(category==='취업 정보' || '고민 상담' || '유머' || '잡답'){
         navigate('/free/')
       }else{
@@ -90,8 +92,8 @@ const handleDeletePost  = async() => {
 
   const handlePostLike = async() => {
     if(isLoggedIn){
-      await axios.post(`/posts/${postId}/like`,{
-        memberId:1
+      await axiosInstance.post(`/posts/${postId}/like`,{
+        memberId:userId
       })
       .then((res)=>setLikeCount(res.data.likeCount))
     }
@@ -128,13 +130,15 @@ const handleDeletePost  = async() => {
           />
           {nickname}
         </Writer>
-        <Date themeState={themeState}>{createdAt}</Date>
+        <InfoWrapper>
+        <Date themeState={themeState}>{date}<span id='time'>{time}</span></Date>
         {userId==memberId ? (
                       <>
                       <EditDelete onClick={() => navigateEditAnswer()}>수정</EditDelete>
                       <EditDelete onClick={() => handleDeletePost()}>삭제</EditDelete>
                     </>
         ) : (<></>)}
+        </InfoWrapper>
       </ContentInfo>
         <Content>{content}
         </Content>
@@ -197,14 +201,21 @@ const Category = styled.div`
       ? ' var(--color-orange)'
       : 'var(--color-gray)'};
   min-width: 8.8rem;
+  @media screen and (max-width: 413px) {
+    padding:0.5rem;
+  }
 `;
 const EditDelete = styled.div`
   color: #d2d2d2;
   margin-right: 0.5%;
+  min-width:2.3rem;
   cursor: pointer;
 `;
 const Writer = styled.div`
   margin-right: 1rem;
+  min-width: 11.8rem;
+  color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
   img {
     display: inline;
     height: 2.4rem;
@@ -215,6 +226,13 @@ const Writer = styled.div`
 `;
 const Date = styled.div`
   margin-right: 0.5%;
+  color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
+      @media screen and (max-width: 413px) {
+        span{
+          display:none;
+        }
+  }
 `;
 const Content = styled.div`
   margin: 1% 0;
@@ -249,6 +267,8 @@ const PostCommentInput = styled.div`
         ? 'var(--color-white)'
         : 'var(--color-gray)'};
     border-radius: 0.3rem;
+    color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
   }
   button {
     width: 5%;
@@ -266,7 +286,14 @@ const PostCommentInput = styled.div`
       padding: 0.3rem;
     }
   }
+  
 `
+const InfoWrapper = styled.div`
+  display:flex;
+  @media screen and (max-width: 413px) {
+    flex-direction:column;
+  }
 
+`
 
 export default PostDetailPage;
