@@ -20,6 +20,7 @@ public class CommentResponseDto {
     private String email;
 
     private Long memberId;
+    private String picture;
     private String content;
 
     private long likeCount;
@@ -30,6 +31,7 @@ public class CommentResponseDto {
         this.nickname = comment.getMember().getNickname();
         this.email = comment.getMember().getEmail();
         this.memberId = comment.getMember().getMemberId();
+        this.picture = comment.getMember().getPicture();
         this.content = comment.getContent();
         this.likeCount = comment.getLikeCount();
         this.createdAt = comment.getCreatedAt();
