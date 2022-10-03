@@ -1,12 +1,12 @@
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import BorderLayout from '../components/BorderLayout';
 import UserPassword from '../components/UserPassword';
+import axiosInstance from '../utils/axiosInstance';
 
 const UserPasswordPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -16,16 +16,10 @@ const UserPasswordPage = () => {
   const [passwordDesc, setPasswordDesc] = useState('');
   const [rePasswordDesc, setRePasswordDesc] = useState('');
   const [inputValue, setInputValue] = useState({
-    password: '',
-    rePassword: '',
+    newPassword: '',
+    checkPassword: '',
   });
-  const { password, rePassword } = inputValue;
-
-  const headers = {
-    Authorization: useSelector(
-      (state) => state.userInfoSlice
-    ).isLoggedIn.replace('%20', ' '),
-  };
+  const { newPassword, checkPassword } = inputValue;
 
   const regNumber = /[0-9]/g;
   const regString = /[a-zA-Z]/g;
@@ -34,11 +28,11 @@ const UserPasswordPage = () => {
 
   const passwordValidation = () => {
     if (
-      7 < password.length &&
-      password.length < 21 &&
-      regNumber.test(password) &&
-      regString.test(password) &&
-      regSpecialCharacter.test(password)
+      7 < newPassword.length &&
+      newPassword.length < 21 &&
+      regNumber.test(newPassword) &&
+      regString.test(newPassword) &&
+      regSpecialCharacter.test(newPassword)
     ) {
       setPasswordValid(true);
       setPasswordDesc('');
@@ -51,7 +45,7 @@ const UserPasswordPage = () => {
   };
 
   const rePasswordValidation = () => {
-    if (rePassword === password) {
+    if (checkPassword === newPassword) {
       setRePasswordValid(true);
       setRePasswordDesc('');
     } else {
@@ -68,17 +62,29 @@ const UserPasswordPage = () => {
     });
   };
 
-  const handleOnClick = () => {
+  const handleOnClick = async (e) => {
+    e.preventDefault();
+
+    if (!newPassword || !checkPassword) {
+      alert('새 비밀번호를 작성해주세요.');
+      return;
+    }
+
     if (passwordValid & rePasswordValid) {
-      axios
-        .patch(
-          'http://localhost:8080/my-page/patch',
-          {
-            password: password,
-          },
-          { headers }
-        )
-        .then((res) => console.log(res));
+      try {
+        axiosInstance
+          .patch('/my-page/patch', {
+            password: newPassword,
+          })
+          .then((res) => {
+            alert('비밀번호가 변경되었습니다.');
+            console.log(newPassword);
+            console.log(res);
+          })
+          .catch((err) => console.log(err));
+      } catch (err) {
+        alert('비밀 번호 조건에 따라 작성해주세요.');
+      }
     }
   };
 
@@ -98,29 +104,29 @@ const UserPasswordPage = () => {
               <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
               <form>
                 <UserPasswordInput
-                  id='password'
-                  themeState={themeState}
-                  type='password'
-                  placeholder='현재 비밀번호'
-                />
-                <UserPasswordInput
-                  id='newpassword'
+                  className='newPassword'
+                  name='newPassword'
                   themeState={themeState}
                   type='password'
                   placeholder='새 비밀번호'
                   onChange={handleInput}
                   onKeyUp={passwordValidation}
                 />
-                <span>{passwordDesc}</span>
+                <div className='warning'>
+                  <span>{passwordDesc}</span>
+                </div>
                 <UserPasswordInput
-                  id='checkpassword'
+                  className='checkPassword'
+                  name='checkPassword'
                   themeState={themeState}
                   type='password'
                   placeholder='새 비밀번호 확인'
                   onChange={handleInput}
                   onKeyUp={rePasswordValidation}
                 />
-                <span>{rePasswordDesc}</span>
+                <div className='warning'>
+                  <span>{rePasswordDesc}</span>
+                </div>
                 <BasicButton
                   themeState={themeState}
                   width='30%'
@@ -258,6 +264,14 @@ const LeftContent = styled.div`
         flex-direction: column;
         align-items: flex-end;
         height: 100%;
+
+        .warning {
+          position: relative;
+          bottom: 3rem;
+          display: flex;
+          justify-content: start;
+          width: 100%;
+        }
       }
     }
   }
