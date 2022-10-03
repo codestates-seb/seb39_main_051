@@ -10,6 +10,8 @@ public class PostPatchDto {
     @Setter
     private Long postId;
 
+    private String title;
+
     private String content;
 
     private String category;
