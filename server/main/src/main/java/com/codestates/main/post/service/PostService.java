@@ -68,4 +68,12 @@ public class PostService {
         Post findPost = findVerifiedPost(postId);
         postRepository.delete(findPost);
     }
+
+    public Page<Post> searchByTypeAndKeyword(int page, int size, String type, String keyword) {
+        return postRepository.findAllByTypeAndTitleContaining(PageRequest.of(page,size), type, keyword);
+    }
+
+    public Page<Post> searchByCategoryAndKeyword(int page, int size, String category, String keyword) {
+        return postRepository.findAllByCategoryAndTitleContaining(PageRequest.of(page,size), category, keyword);
+    }
 }
