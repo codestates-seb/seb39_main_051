@@ -2,16 +2,22 @@ package com.codestates.main.member.mapper;
 
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
+import com.codestates.main.subscription.dto.SubscriptionDTO;
 import com.codestates.main.subscription.entity.Subscription;
+import com.codestates.main.subscription.mapper.SubscriptionMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class MemberMapperImpl implements MemberMapper{
-
+    private final SubscriptionMapper subscriptionMapper;
     @Override
     public MemberDTO.Post memberToMemberPostDTO(Member member) {
         if(member==null){
@@ -50,19 +56,26 @@ public class MemberMapperImpl implements MemberMapper{
         long memberId = 0L;
         String email = null;
         String nickname = null;
+        String picture = null;
         Member.ROLE role = null;
         LocalDateTime createdDate = null;
         List<Subscription> subscriptionList = null;
+        List<SubscriptionDTO.Response> response = new ArrayList<>();
         if ( member.getMemberId()!=0L ) {
             memberId = member.getMemberId();
         }
         email = member.getEmail();
         nickname = member.getNickname();
+        picture = member.getPicture();
         role = member.getRole();
         createdDate = member.getCreatedAt();
         subscriptionList = member.getSubscriptions();
-        return new MemberDTO.Response(memberId, email, nickname, role,createdDate, subscriptionList);
-        //return new MemberDTO.Response(memberId, email, nickname);
+        System.out.println(subscriptionList.toString());
+        for(Subscription subscription : subscriptionList){
+            response.add(subscriptionMapper.subscriptionToSubscriptionResponseDTO(subscription));
+        }
+
+        return new MemberDTO.Response(memberId, email, nickname, picture, role,createdDate, response);
     }
 
     @Override
@@ -102,12 +115,14 @@ public class MemberMapperImpl implements MemberMapper{
         String email = null;
         String nickname = null;
         Member.ROLE role = null;
+        String picture = null;
         if ( member.getMemberId()!=0L ) {
             memberId = member.getMemberId();
         }
         email = member.getEmail();
         nickname = member.getNickname();
         role = member.getRole();
-        return new MemberDTO.JwtResponse(memberId, email, nickname, role);
+        picture = member.getPicture();
+        return new MemberDTO.JwtResponse(memberId, email, nickname, picture, role);
     }
 }

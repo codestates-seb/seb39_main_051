@@ -2,6 +2,7 @@ package com.codestates.main.member.dto;
 
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.questionCategory.entity.QuestionCategory;
+import com.codestates.main.subscription.dto.SubscriptionDTO;
 import com.codestates.main.subscription.entity.Subscription;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberDTO {
 
@@ -21,6 +23,7 @@ public class MemberDTO {
         private long id;
         private String email;
         private String nickname;
+        private String picture;
         private Member.ROLE role;
     }
 
@@ -43,17 +46,22 @@ public class MemberDTO {
         private long id;
         private String email;
         private String nickname;
+        private String picture;
         private Member.ROLE role;
         private LocalDateTime createdDate;
-        private List<Subscription> subscriptions;
+        private List<SubscriptionDTO.Response> subscriptions;
 
         public Response(Member member) {
             this.id = member.getMemberId();
             this.email = member.getEmail();
+            this.picture = member.getPicture();
             this.nickname = member.getNickname();
             this.role = member.getRole();
             this.createdDate = member.getCreatedAt();
-            this.subscriptions = member.getSubscriptions();
+            this.subscriptions = member.getSubscriptions()
+                    .stream()
+                    .map(SubscriptionDTO.Response::new)
+                    .collect(Collectors.toList());
         }
     }
 
