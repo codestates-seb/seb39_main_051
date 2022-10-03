@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import DropDownList from '../components/DropDownList';
-import NavigationBar from '../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
 import BorderLayout from '../components/BorderLayout';
+import axiosInstance from '../utils/axiosInstance';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
+  const { userId } = useSelector((state) => state.userInfoSlice);
   const navigate = useNavigate();
   const { type, category } = useLocation().state;
   const [categoryContent, setCategoryContent] = useState('');
@@ -27,78 +26,76 @@ const PostPage = () => {
   };
 
   const handleCategory = (e) => {
-    console.log(e.target.innerText)
+    console.log(e.target.innerText);
     switch (e.target.innerText) {
       case 'Java':
         setSelected(e.target.innerText);
-        setCategoryContent(1)
+        setCategoryContent(1);
         break;
       case 'React':
         setSelected(e.target.innerText);
-        setCategoryContent(2)
+        setCategoryContent(2);
         break;
       case 'Spring':
         setSelected(e.target.innerText);
-        setCategoryContent(3)
+        setCategoryContent(3);
         break;
       case 'Data Structure':
         setSelected(e.target.innerText);
-        setCategoryContent(4)
+        setCategoryContent(4);
         break;
       case 'Operating System':
         setSelected(e.target.innerText);
-        setCategoryContent(5)
+        setCategoryContent(5);
         break;
       case 'Database':
         setSelected(e.target.innerText);
-        setCategoryContent(6)
+        setCategoryContent(6);
         break;
       case 'Network':
         setSelected(e.target.innerText);
-        setCategoryContent(7)
+        setCategoryContent(7);
         break;
       case 'Javascript':
         setSelected(e.target.innerText);
-        setCategoryContent(8)
+        setCategoryContent(8);
         break;
-        default:
-          setSelected(e.target.innerText);
-          setCategoryContent(e.target.innerText)
-          break
+      default:
+        setSelected(e.target.innerText);
+        setCategoryContent(e.target.innerText);
+        break;
     }
   };
 
-  const handleSubmitPost =  async(e) => {
+  const handleSubmitPost = async (e) => {
     e.preventDefault();
     if (type === 'questions') {
-      await axios.post(`/questions`, {
+      await axiosInstance.post(`/questions`, {
         memberId: userId,
         questionCategoryId: categoryContent,
         content,
-      })
-      navigate('/questions')
+      });
+      navigate('/questions');
     } else if (type === 'free') {
-      await axios.post(`/posts`, {
+      await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '자유게시판',
         category: categoryContent,
         memberId: userId,
-      })
-      navigate('/free')
+      });
+      navigate('/free');
     } else if (type === 'suggestion') {
-      await axios.post(`/posts`, {
+      await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '건의게시판',
         category: categoryContent,
         memberId: userId,
-      })
-      navigate('/suggestion')
+      });
+      navigate('/suggestion');
     }
   };
-
-  
 
   useEffect(() => {
     if ((type === 'questions') & !category) {
@@ -111,7 +108,6 @@ const PostPage = () => {
       setSelected(category);
     }
   }, []);
-
 
   const handleCancel = () => {
     if (type === 'questions') {
@@ -141,63 +137,65 @@ const PostPage = () => {
   return (
     <BorderLayout>
       <form>
-            <h1>{boardName}</h1>
-            {type==='questions' ? (<InputWrapper></InputWrapper>) : (
-                          <InputWrapper themeState={themeState}>
-                            <label id='title' /> 
-                          <input
-                            id='title'
-                            name='title'
-                            type='text'
-                            placeholder='제목'
-                            value={title}
-                            onChange={handleTitle}
-                            required
-                          />
-                        </InputWrapper>
-            )}
-            <DropDownList
-              type={type}
-              category={category}
-              seleted={seleted}
-              setSelected={setSelected}
-              handleCategory={handleCategory}
+        <h1>{boardName}</h1>
+        {type === 'questions' ? (
+          <InputWrapper></InputWrapper>
+        ) : (
+          <InputWrapper themeState={themeState}>
+            <label id='title' />
+            <input
+              id='title'
+              name='title'
+              type='text'
+              placeholder='제목'
+              value={title}
+              onChange={handleTitle}
+              required
             />
-            <InputWrapper themeState={themeState}>
-              <label id='content'/>
-              <textarea
-                id='content'
-                name='content'
-                type='text'
-                placeholder='내용'
-                value={content}
-                onChange={handleContent}
-                required
-              />
-            </InputWrapper>
-            <ButtonWrapper>
-              <BasicButton
-                themeState={themeState}
-                width='5.5rem'
-                height='4rem'
-                color='var(--color-white)'
-                backGroundColor='var(--color-orange)'
-                fontSize='1.8rem'
-                text='취소'
-                onClick={handleCancel}
-              />
-              <BasicButton
-                themeState={themeState}
-                width='5.5rem'
-                height='4rem'
-                color='var(--color-white)'
-                backGroundColor='var(--color-orange)'
-                fontSize='1.8rem'
-                text='등록'
-                onClick={handleSubmitPost}
-              />
-            </ButtonWrapper>
-          </form>
+          </InputWrapper>
+        )}
+        <DropDownList
+          type={type}
+          category={category}
+          seleted={seleted}
+          setSelected={setSelected}
+          handleCategory={handleCategory}
+        />
+        <InputWrapper themeState={themeState}>
+          <label id='content' />
+          <textarea
+            id='content'
+            name='content'
+            type='text'
+            placeholder='내용'
+            value={content}
+            onChange={handleContent}
+            required
+          />
+        </InputWrapper>
+        <ButtonWrapper>
+          <BasicButton
+            themeState={themeState}
+            width='5.5rem'
+            height='4rem'
+            color='var(--color-white)'
+            backGroundColor='var(--color-orange)'
+            fontSize='1.8rem'
+            text='취소'
+            onClick={handleCancel}
+          />
+          <BasicButton
+            themeState={themeState}
+            width='5.5rem'
+            height='4rem'
+            color='var(--color-white)'
+            backGroundColor='var(--color-orange)'
+            fontSize='1.8rem'
+            text='등록'
+            onClick={handleSubmitPost}
+          />
+        </ButtonWrapper>
+      </form>
     </BorderLayout>
   );
 };
@@ -243,7 +241,7 @@ const InputWrapper = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  button{
+  button {
     margin: 2rem 0 2rem 2rem;
   }
 `;
