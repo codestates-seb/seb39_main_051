@@ -1,27 +1,67 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CategoryCard from './CategoryCard';
+import { toast } from 'react-toastify';
 
 const DashBoard = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
+  const [subscribeArr, setSubscribeArr] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+
   const category = [
-    '자바',
-    '자바스크립트',
-    '리액트',
-    '스프링',
-    '자료구조',
-    '운영체제',
-    '데이터베이스',
-    '네트워크',
+    { categoryName: 'React', questionCategoryId: 2 },
+    { categoryName: 'Javascript', questionCategoryId: 8 },
+    { categoryName: 'Java', questionCategoryId: 1 },
+    { categoryName: 'Spring', questionCategoryId: 3 },
+    { categoryName: 'Data Structure', questionCategoryId: 4 },
+    { categoryName: 'OS', questionCategoryId: 5 },
+    { categoryName: 'Database', questionCategoryId: 6 },
+    { categoryName: 'Network', questionCategoryId: 7 },
   ];
+
+  const handleSubscribe = (id, categoryName, isSubscribe) => {
+    if (isSubscribe) {
+      //구독해제상황
+      // await axios.post('/member/subscription',{
+      //   questionCategoryId:id
+      // })
+      toast.success(`${categoryName} 구독을 해제합니다!`);
+      const origin = subscribeArr;
+      setSubscribeArr(origin.filter((el) => el !== id));
+    } else {
+      if (categoryName === 'Spring') {
+        // await axios.post('/member/subscription',{
+        //   questionCategoryId:id
+        // })
+        toast.success(`${categoryName}을 구독합니다!`);
+        const origin = subscribeArr;
+        origin.push(id);
+        setSubscribeArr([...origin]);
+      } else {
+        // await axios.post('/member/subscription',{
+        //   questionCategoryId:id
+        // })
+        toast.success(`${categoryName}를 구독합니다!`);
+        const origin = subscribeArr;
+        origin.push(id);
+        setSubscribeArr([...origin]);
+      }
+    }
+  };
 
   return (
     <>
       <Title>대쉬보드</Title>
       <Category>
-        {category.map((el) => (
-          <CategoryCard themeState={themeState} key={el} name={el} />
+        {category.map((el, idx) => (
+          <CategoryCard
+            key={el.questionCategoryId}
+            categoryName={el.categoryName}
+            questionCategoryId={el.questionCategoryId}
+            handleClick={handleSubscribe}
+            isSubscribe={subscribeArr.includes(el.questionCategoryId)}
+          />
         ))}
       </Category>
     </>
