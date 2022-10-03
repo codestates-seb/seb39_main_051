@@ -99,6 +99,28 @@ public class PostController {
         );
     }
 
+    @GetMapping("/search")
+    public ResponseEntity getQuestions(@RequestParam int page,
+                                       @RequestParam int size,
+                                       @RequestParam String keyword,
+                                       @RequestParam Optional<String> type,
+                                       @RequestParam Optional<String> category) {
+        Page<Post> pagePosts;
+        if (type.isPresent()) {
+            pagePosts = postService.searchByTypeAndKeyword(page - 1, size, type.get(), keyword);
+        }
+        else {
+            pagePosts = postService.searchByCategoryAndKeyword(page-1, size, category.get(), keyword);
+        }
+
+        List<Post> posts = pagePosts.getContent();
+        List<PostResponseDto> response = posts.stream().map(post -> new PostResponseDto(post))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(response, pagePosts), HttpStatus.OK
+        );
+    }
+
     @DeleteMapping("/{post-id}")
     public ResponseEntity deletePost(@PathVariable("post-id") Long postId) {
         postService.deletePost(postId);
