@@ -74,4 +74,8 @@ public class QuestionService {
         QuestionCategory findQuestionCategory = questionCategoryRepository.findByName(questionCategory);
         return questionRepository.findAllByQuestionCategory(PageRequest.of(page,size),findQuestionCategory);
     }
+
+    public Page<Question> search(int page, int size, String keyword)  {
+        return questionRepository.findAllByContentContaining(PageRequest.of(page, size), keyword);
+    }
 }

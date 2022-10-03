@@ -83,6 +83,23 @@ public class QuestionController {
         );
     }
 
+    @GetMapping("/search")
+    public ResponseEntity getQuestions(@RequestParam int page,
+                                       @RequestParam int size,
+                                       @RequestParam String keyword){
+        System.out.println("QuestionController.getQuestions");
+        Page<Question> questionPage = questionService.search(page - 1, size, keyword);
+        List<Question> questions = questionPage.getContent();
+        List<QuestionResponseDto> responseDtos = questions.stream()
+                .map(question -> new QuestionResponseDto(question))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(responseDtos,questionPage), HttpStatus.OK
+        );
+    }
+
+    
+
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(@PathVariable("question-id") long questionId,
                                 @RequestBody QuestionPatchDto questionPatchDto){

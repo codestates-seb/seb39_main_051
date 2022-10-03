@@ -26,7 +26,7 @@ public class QuestionResponseDto {
 
     private LocalDateTime createdAt;
 
-    private MemberDTO.Response member;
+    private MemberDTO.PostResponse member;
 
     private QuestionCategoryResponseDto questionCategory;
 
@@ -34,7 +34,7 @@ public class QuestionResponseDto {
         this.questionId = question.getQuestionId();
         this.content = question.getContent();
         this.createdAt = question.getCreatedAt();
-        this.member = new MemberDTO.Response(question.getMember());
+        this.member = new MemberDTO.PostResponse(question.getMember());
         this.questionCategory = new QuestionCategoryResponseDto(question.getQuestionCategory());
     }
 }
