@@ -3,12 +3,24 @@ import styled, { css } from 'styled-components';
 import DropDownMenu from './DropDownMenu';
 import DarkModeSwitch from './DarkModeSwitch';
 import Logo from '../assets/Logo';
+import { deleteCookie } from '../utils/cookie';
+import { useNavigate } from 'react-router-dom';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {isLoggedIn,nickName} = useSelector((state)=>state.userInfoSlice)
-  
-  const handleOnClick = () => {};
+  const { isLoggedIn, nickName } = useSelector((state) => state.userInfoSlice);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    deleteCookie('accessToken');
+    deleteCookie('nickname');
+    deleteCookie('memberId');
+    deleteCookie('role');
+    alert('로그아웃 되셨습니다.');
+    navigate('/');
+    window.location.reload();
+  };
 
   return (
     <>
@@ -38,7 +50,7 @@ const NavigationBar = () => {
             <a href='/mypage'>
               <NavBarButton themeState={themeState}>{nickName}</NavBarButton>
             </a>
-            <NavBarButton themeState={themeState} onClick={handleOnClick}>
+            <NavBarButton themeState={themeState} onClick={handleLogout}>
               로그아웃
             </NavBarButton>
           </NavBarRight>
