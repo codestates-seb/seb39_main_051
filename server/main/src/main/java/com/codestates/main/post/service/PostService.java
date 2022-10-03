@@ -35,6 +35,8 @@ public class PostService {
     public Post updatePost(Post post) {
         Post findPost = findVerifiedPost(post.getPostId());
 
+        Optional.ofNullable(post.getTitle())
+                        .ifPresent(title -> findPost.updateTitle(title));
         Optional.ofNullable(post.getContent())
                 .ifPresent(content -> findPost.updateContent(content));
         Optional.ofNullable(post.getCategory())
