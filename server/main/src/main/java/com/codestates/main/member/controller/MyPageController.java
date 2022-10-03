@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,10 +29,7 @@ public class MyPageController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
 
-    private final JwtTokenizer jwtTokenizer;
 
-    @Value("src\\main\\resources\\file\\images")
-    private String filePath;
 
     @GetMapping("/test")
     public String getTest(){
@@ -66,33 +64,43 @@ public class MyPageController {
         String email = String.valueOf(user.getPrincipal().toString());
 
         Member member = memberService.findMemberByEmail(email);
-        String originName = multipartFile.getOriginalFilename();
-        String type = Objects.requireNonNull(originName).split("\\.")[1];
-        String path = System.getProperty("user.dir")
-                        +File.separator
-                        +filePath;
-        System.out.println(path);
-
-        File newFile = new File(path, member.getMemberId()+"."+type); // 경로/파일.type\
-        if(!newFile.exists()){
-            try {
-                if (newFile.createNewFile()){
-                    System.out.println("파일 생성 성공");
-                    multipartFile.transferTo(newFile);
-                }
-                else
-                    System.out.println("파일 생성 실패");
-            } catch (IOException e) {
-                e.printStackTrace();
+        String filePath="resources"+File.separator+"images";
+        String contentType = multipartFile.getContentType();
+        String originalFileExtension;
+        String current = System.getProperty("user.dir");
+        String path = current+ File.separator+filePath+File.separator;
+        File file = new File(path);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        if(ObjectUtils.isEmpty(contentType)){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        else{
+            if(contentType.contains("image/jpeg")){
+                originalFileExtension = ".jpg";
             }
-        } else {	// 파일이 존재한다면
-            if(newFile.delete()){
-                multipartFile.transferTo(newFile);
+            else if(contentType.contains("image/png")){
+                originalFileExtension = ".png";
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         }
-        member.setPicture(path+"\\"+member.getMemberId());
-        memberService.updateMember(member);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        System.out.println(path);
+
+        file = new File(path, member.getMemberId()+originalFileExtension); // 경로/파일.type\
+        if(file.exists()){
+            System.out.println("exits");
+            if(file.delete()){
+                System.out.println("deleted");
+            }
+        }
+        multipartFile.transferTo(file);
+        member.setPicture(path+member.getMemberId()+originalFileExtension);
+        memberService.updateImage(member);
+        MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(member);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 }
