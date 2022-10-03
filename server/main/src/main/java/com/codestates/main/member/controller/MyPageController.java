@@ -68,7 +68,7 @@ public class MyPageController {
         String contentType = multipartFile.getContentType();
         String originalFileExtension;
         String current = System.getProperty("user.dir");
-        String path = current+ File.separator+filePath+File.separator;
+        String path = current+ File.separator+filePath+File.separator;  // 실제 파일이 저장되는 위치
         File file = new File(path);
         if(!file.exists()){
             file.mkdirs();

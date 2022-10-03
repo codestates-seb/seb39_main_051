@@ -14,12 +14,17 @@ import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import com.codestates.main.subscription.entity.Subscription;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Component
 @RequiredArgsConstructor
@@ -36,15 +41,24 @@ public class InitDb {
 
     @PostConstruct
     public void init() throws IOException {
-//        ClassPathResource resource = new ClassPathResource("default.png");
-//        File file = new File(String.valueOf(resource.getFile()));
-//
-//        String filePath="resources"+File.separator+"images";
-//        String current = System.getProperty("user.dir");
-//        String path = current+ File.separator+filePath+File.separator;
-//        if(true){
-//            return;
-//        }
+        String filePath="resources"+File.separator+"images";
+        String current = System.getProperty("user.dir");
+        String path = current+ File.separator+filePath+File.separator;
+
+        ClassPathResource resource = new ClassPathResource("default.png");
+
+
+
+        String from = current+File.separator
+                +"src" +File.separator
+                +"main" +File.separator
+                +"resources"+File.separator;
+
+        System.out.println(from);
+        System.out.println(path);
+        File file = new File(from,"default.png");
+        File newFile = new File(path,"default.png");
+        Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         Member member = Member.builder()
                 .email("shb03207@naver.com")
                 .nickname("관리자")
