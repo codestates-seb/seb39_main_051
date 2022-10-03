@@ -27,9 +27,11 @@ public class MemberService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final SubscriptionService subscriptionService;
-    @Value("src\\main\\resources\\file\\images\\default.png")
-    private String defaultFilePath;
+    static String filePath="resources"+File.separator+"images";
+    static String current = System.getProperty("user.dir");
+    static String path = current+ File.separator+filePath+File.separator;
     public Member createMember(Member member) {
+
         String email = member.getEmail();
         Member checkMember = findMember(email);
         if(checkMember!=null){
@@ -38,9 +40,7 @@ public class MemberService{
         String password = member.getPassword();
         member.setPassword(bCryptPasswordEncoder.encode(password));
         member.setRole(Member.ROLE.ROLE_USER);
-        member.setPicture(System.getProperty("user.dir")
-                + File.separator
-                +defaultFilePath);
+        member.setPicture(path+"default.png");
         return memberRepository.save(member);
     }
 
@@ -53,9 +53,7 @@ public class MemberService{
         String password = member.getPassword();
         member.setPassword(bCryptPasswordEncoder.encode(password));
         member.setRole(Member.ROLE.ROLE_ADMIN);
-        member.setPicture(System.getProperty("user.dir")
-                + File.separator
-                +defaultFilePath);
+        member.setPicture(path+"default.png");
         return memberRepository.save(member);
     }
 
@@ -66,6 +64,15 @@ public class MemberService{
                 .ifPresent(password -> findMember.setPassword(bCryptPasswordEncoder.encode(member.getPassword())));
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname -> findMember.setNickname(member.getNickname()));
+        Optional.ofNullable(member.getPicture())
+                .ifPresent(picture -> findMember.setPicture(member.getPicture()));
+
+        return memberRepository.save(findMember);
+    }
+
+    public Member updateImage(Member member) {
+        Member findMember = findMemberByEmail(member.getEmail());
+
         Optional.ofNullable(member.getPicture())
                 .ifPresent(picture -> findMember.setPicture(member.getPicture()));
 

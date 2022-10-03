@@ -64,16 +64,11 @@ public class MailService {
             for(Subscription subscription : subscriptions){
 
                 int received = (int)subscription.getReceived();
-                int size = 6;
+                int size = 2;
                 QuestionCategory questionCategory = subscription.getQuestionCategory();
-                //PageRequest pageRequest = PageRequest.of((int) received-1,size);                                   // received 부터 size 개 전송
-                //List<Question> questions = questionService.findByQuestionCategory(questionCategory,pageRequest);
                 List<Question> questions = questionService.findByQuestionCategory(questionCategory);
 
                 ArrayList<Question> sendQuestions = new ArrayList<>();
-                // questions {1,2,3,4,5}, received = 4, size = 2
-                // i 5, size 2, q.size 5
-                // i 5
                 for(int i=received;i<received+size;i++){
                     if(i<questions.size()){
                         sendQuestions.add(questions.get(i));
@@ -84,7 +79,6 @@ public class MailService {
                     continue;
                 }
                 sendable=true;
-                //sb.append(questionCategory.getName()).append("\n");
                 sb.append("<p><strong>").append(questionCategory.getName()).append("</strong></p>");
                 sb.append("<ol>");
                 for(Question question : sendQuestions){
