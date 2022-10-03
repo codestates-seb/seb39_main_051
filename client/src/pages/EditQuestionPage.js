@@ -12,17 +12,12 @@ const EditQuestionPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [editedQuestion, setEditedQuestion] = useState(state.question)
-  const [select, setSelected] = useState(state.category)
-  console.log(state)
   const handleEditQuestion = (e) => {
     setEditedQuestion(e.target.value);
   }
-  const handleQuestionCategory = (e) => {
-    setSelected(e.target.innerText);
-  };
   const handleEditQuestionCancel = () => {
     if(window.confirm('질문 수정을 그만두시겠습니까?')){
-      navigate(`/question/${state.handleEditQuestionCancel}`)
+      navigate(`/question/${state.questionId}`)
     }
     else{
       return
@@ -30,7 +25,7 @@ const EditQuestionPage = () => {
     
   }
   const handleSubmitEditQuestion = async() => {
-    const response = await axios.patch(`/questions/${state.questionId}`,{
+    await axios.patch(`/questions/${state.questionId}`,{
       content : editedQuestion})
       alert('질문이 수정되었습니다!')
       navigate('/questions')
@@ -38,7 +33,7 @@ const EditQuestionPage = () => {
   return (
     <BorderLayout>
       <form>
-        <h1>질문 답변 공유 게시판</h1>
+        <h1>질문 수정</h1>
         <InputWrapper themeState={themeState}>
           <label id='editetQuestion' />
           <input
@@ -51,12 +46,9 @@ const EditQuestionPage = () => {
             required
           />
         </InputWrapper>
-        <DropDownList
-          type='questions'
-          seleted={select}
-          setSelected={setSelected}
-          handleCategory={handleQuestionCategory}
-        />
+        <ContentInfo>
+                  <Category themeState={themeState}>{state.category}</Category>
+                  </ContentInfo>
       </form>
       <ButtonWrapper>
           <BasicButton
@@ -127,6 +119,25 @@ const ButtonWrapper = styled.div`
   button{
     margin: 2rem 0 2rem 2rem;
   }
+`;
+
+const ContentInfo = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 2% 0;
+`;
+const Category = styled.div`
+  margin-right: auto;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-white)' : '#D2D2D2'};
+  text-align: center;
+  background-color: ${(props) =>
+    props.themeState === 'light'
+      ? ' var(--color-orange)'
+      : 'var(--color-gray)'};
+  min-width: 8.8rem;
 `;
 
 export default EditQuestionPage;

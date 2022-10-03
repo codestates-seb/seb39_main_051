@@ -9,6 +9,7 @@ import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.questionCategory.service.QuestionCategoryService;
 import com.codestates.main.subscription.dto.SubscriptionDTO;
 import com.codestates.main.subscription.entity.Subscription;
+import com.codestates.main.subscription.mapper.SubscriptionMapper;
 import com.codestates.main.subscription.service.SubscriptionService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ public class MemberController {
 
     private final SubscriptionService subscriptionService;
 
+    private final SubscriptionMapper subscriptionMapper;
+
     @PostMapping("/post")
     public ResponseEntity<Object> postMember(@RequestBody MemberDTO.Post requestBody) throws BusinessLogicException {
         Member member = memberMapper.memberPostDTOToMember(requestBody);
@@ -50,7 +53,7 @@ public class MemberController {
 
         QuestionCategory questionCategory = questionCategoryService.findQuestionCategory(questionCategoryId);
         Subscription subscription = subscriptionService.findSubscriptionInfo(member,questionCategory);
-
-        return new ResponseEntity<>(subscription,HttpStatus.CREATED);
+        SubscriptionDTO.Response response = subscriptionMapper.subscriptionToSubscriptionResponseDTO(subscription);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 }

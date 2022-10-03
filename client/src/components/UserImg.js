@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from './BasicButton';
 
-const UserImg = () => {
+const UserImg = ({ handleImgInput, handleOnClick }) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   return (
@@ -13,7 +13,7 @@ const UserImg = () => {
         <div>
           <span>사진을 드래그해주세요.</span>
           <InputImgWrapper themeState={themeState}>
-            <InputImg type='file' accept='image/*' />
+            <InputImg type='file' accept='image/*' onChange={handleImgInput} />
           </InputImgWrapper>
           <BasicButton
             themeState={themeState}
@@ -23,6 +23,7 @@ const UserImg = () => {
             backGroundColor='var(--color-orange)'
             fontSize='1.3rem'
             text='변경하기'
+            onClick={handleOnClick}
           />
         </div>
       </ContentWrapper>

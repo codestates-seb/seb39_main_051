@@ -9,8 +9,6 @@ import UserName from '../components/UserName';
 const UserNamePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
-  const handleClick = (e) => {};
-
   return (
     <>
       <BorderLayout>
@@ -52,7 +50,6 @@ const UserNamePage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='대쉬보드'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/userimg'>
@@ -64,7 +61,6 @@ const UserNamePage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='프로필 사진 변경'
-                  onClick={handleClick}
                 />
               </a>
               <a href='/username'>
@@ -76,7 +72,6 @@ const UserNamePage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='닉네임 변경'
-                  onClick={handleClick}
                   selected
                 />
               </a>
@@ -89,7 +84,6 @@ const UserNamePage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='비밀번호 변경'
-                  onClick={handleClick}
                 />
               </a>
               <a>

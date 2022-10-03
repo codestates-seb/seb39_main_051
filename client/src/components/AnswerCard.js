@@ -3,76 +3,81 @@ import { useSelector } from 'react-redux';
 import BasicButton from './BasicButton';
 import Comment from './Comment';
 import { useState } from 'react';
-import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import Toast from './Toast';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../utils/axiosInstance';
 
 const AnswerCard = ({profileImg, nickname, memberId,createdAt, content, likeCount, comment, answerId, answer,setAnswer}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const navigate = useNavigate();
   const {isLoggedIn,userId,nickName} = useSelector((state)=>state.userInfoSlice)
   const [isCommentShow, setIsCommentShow] = useState(false);
-  const navigate = useNavigate();
-  //답변 수정
   const [answerContent, setAnswerContent ] = useState(content)
   const [isAnswerEditMode, setIsAnswerEditMode] = useState(false) 
   const [editedAnswer, setEditedAnswer] = useState(content)
-  //답변의 댓글 작성
   const [commentContent, setCommentContent] = useState('')
   const [answerComment, setAnswerComment] = useState(comment)
-//좋아요
 const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
+const [date, time] = createdAt.split('T')
+
+const toggleCommentShow = () => {
+  setIsCommentShow(!isCommentShow);
+};
+
   const handleComment = (e) => {
     setCommentContent(e.target.value)
   }
 
   const handleSubmitAnswerComment = () => {
-    axios.post(`/answers/${answerId}/comments`,{
-      memberId:1,
+    axiosInstance.post(`/answers/${answerId}/comments`,{
+      memberId:userId,
       content: commentContent
-    })
+    }
+    )
     .then((res)=>{
       let arr =answerComment
       arr.push(res.data)
       toast.success(`댓글이 작성되었습니다!`)
       setAnswerComment(arr)
       setCommentContent('')
-    }
-    )
+    })
+    .catch((err)=>console.log(err))
   }
+
   const handleEditAnswer = (e) => {
     setEditedAnswer(e.target.value)
   }
+
   const handleEditMode = () => {
     setIsAnswerEditMode(!isAnswerEditMode)
     setEditedAnswer(content)
   }
-  const toggleCommentShow = () => {
-    setIsCommentShow(!isCommentShow);
-  };
-  const handleSubmitEditAnswer = () => {
-    axios.patch(`/answers/${answerId}`,{
+
+  const handleSubmitEditAnswer =  () => {
+    axiosInstance.patch(`/answers/${answerId}`,{
       content : editedAnswer
     })
+    .then((res)=>console.log(res))
+    .catch((err)=>console.log(err))
     toast.success('답변이 수정되었습니다!')
     setEditedAnswer(editedAnswer)
     setAnswerContent(editedAnswer)
     setIsAnswerEditMode(false)
   }
+
   const handleDeleteAnswer = () => {
     if(window.confirm('답변을 삭제하시겠습니까?')){
-      axios.delete(`/answers/${answerId}`)
+      axiosInstance.delete(`/answers/${answerId}`)
       setAnswer(answer.filter((el)=>el.answerId !== answerId))
       toast.success('답변이 삭제되었습니다.')
     }
   }
+
   const handleAnswerLike = () => {
     if(isLoggedIn){
-      console.log('답변좋아요')
-      axios.post(`/answers/${answerId}/like`,{
-        memberId:1
-      })
+      axiosInstance.post(`/answers/${answerId}/like`)
       .then((res)=>setAnswerLikeContent(res.data.likeCount))
     }else{
       if(window.confirm('로그인이 필요합니다 로그인 하시겠습니까?')){
@@ -80,6 +85,8 @@ const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
       }
     }
   }
+
+
   return (
     <Layout themeState={themeState}>
       <Toast />
@@ -89,7 +96,7 @@ const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
           {nickname}
         </AnswerWriter>
         <AnswerEvent>
-          <div className='answerDate'>{createdAt}</div>
+          <div className='answerDate'>{date}<span id='time'>{time}</span></div>
           {userId==memberId ? (
             isAnswerEditMode ? (
               <>
@@ -148,7 +155,7 @@ const [answerLikeContent, setAnswerLikeContent]= useState(likeCount)
               memberId = {el.memberId}
               nickname={el.nickname}
               content={el.content}
-              createdAt={el.createdAt.split('.')[0].replace(/-/g,'.').replace(/T/,'/')}
+              createdAt={el.createdAt.split('.')[0].replace(/-/g,'.')}
               likeCount={el.likeCount}
               profileImg={el.profileImg}
               commentArr={answerComment}
@@ -210,6 +217,12 @@ const AnswerEvent = styled.div`
   @media screen and (max-width: 412px){
       flex-direction:column;
       vertical-align: bottom;
+      .answerEdit{
+        margin-left:auto;
+      }
+      span{
+        display:none;
+      }
     }
 `;
 const AnswerLayout = styled.div`
@@ -263,6 +276,8 @@ const AnswerCommentInput = styled.div`
         ? 'var(--color-white)'
         : 'var(--color-gray)'};
     border-radius: 0.3rem;
+    color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
   }
   button {
     width: 5%;
