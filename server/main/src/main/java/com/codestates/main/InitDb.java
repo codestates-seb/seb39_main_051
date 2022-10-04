@@ -39,7 +39,7 @@ public class InitDb {
 
     String[] categories = new String[]{"Java", "React", "Spring", "Data Structure", "Operating System", "Database", "Network", "Javascript"};
 
-    @PostConstruct
+//    @PostConstruct
     public void init() throws IOException {
 /*        String filePath="resources"+File.separator+"images";
         String current = System.getProperty("user.dir");
@@ -58,6 +58,13 @@ public class InitDb {
                 .nickname("관리자")
                 .password("1234")
                 .role(Member.ROLE.ROLE_ADMIN)
+                .build();
+        memberService.createMember(member);
+
+        member = Member.builder()
+                .email("test@gmail.com")
+                .nickname("유저")
+                .password("1234")
                 .build();
         memberService.createAdmin(member);
 
