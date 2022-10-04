@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import {useInterval} from 'react-use';
 const LoginPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const messageArr = ['실력을', '기르는', '습관', '매일메일과', '함께']
+  const messageArr = ['끈기가', '곧', '실력', '매일메일', 'Support Your habbit!']
   const [items, setItems] = useState(messageArr)
 
   return (
@@ -17,13 +17,13 @@ const LoginPage = () => {
           <MessageWrapper>
             <Message themeState={themeState}>
               <div>
-                응원합니다. 
+                언젠가는 반드시 
               </div>
               <div>
-                면접 질문 메일 서비스
+              자신감과 용기가 솟아나게 될 것입니다.
               </div>
               <div>
-                매일메일입니다
+              구독형 면접 질문 메일 서비스
               </div>
               <AnimationWrapper className='animated-text'>
                 {items.map((item, index)=>( 
