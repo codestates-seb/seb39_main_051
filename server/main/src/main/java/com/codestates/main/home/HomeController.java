@@ -20,6 +20,13 @@ public class HomeController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
+
+    @GetMapping("/hello")
+    public String oauth2() {
+        return "oauth2";
+    }
+
+
     @GetMapping("/home")
     public ResponseEntity home() {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();

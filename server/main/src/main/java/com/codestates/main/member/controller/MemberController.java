@@ -46,6 +46,7 @@ public class MemberController {
     public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody){
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(user.toString());
         String email = String.valueOf(user.getPrincipal());
         Member member = memberService.findMemberByEmail(email);
 
