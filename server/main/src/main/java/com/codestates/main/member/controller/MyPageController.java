@@ -29,8 +29,6 @@ public class MyPageController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
 
-
-
     @GetMapping("/test")
     public String getTest(){
         return "security test";

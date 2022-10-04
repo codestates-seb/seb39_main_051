@@ -88,7 +88,7 @@ public class MemberService{
     public Member findMemberByEmail(String email){
         Optional<Member> optionalMember =
                 Optional.ofNullable(memberRepository.findByEmail(email));
-        return optionalMember.orElseThrow(()-> new BusinessLogicException(ExceptionCode.JWT_TOKEN_NOT_FOUND));
+        return optionalMember.orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     public Member findMember(String email) {

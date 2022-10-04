@@ -27,6 +27,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.jwtTokenizer = jwtTokenizer;
     }
 
+    // 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X 사용 X
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {

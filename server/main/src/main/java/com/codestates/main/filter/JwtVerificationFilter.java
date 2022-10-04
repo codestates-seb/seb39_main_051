@@ -36,6 +36,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         } catch (ExpiredJwtException ee) {
             request.setAttribute("exception", ee);
+//            Map<String, Object> claims = verifyRefresh(request);
+//            setAuthenticationToContext(claims);
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
@@ -52,6 +54,15 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private Map<String, Object> verifyJws(HttpServletRequest request) {  //JWT를 검증하는데 사용되는 private 메서드
         // 파싱하는것 자체가 성공하면 서명 검증에 성공했다는 뜻임
         String jws = request.getHeader("Authorization").replace("Bearer ", ""); // 헤더 정보 가져오기
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); // JWT 서명(Signature)을 검증하기 위한 Secret Key
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // JWT에서 Claims를 파싱
+
+        return claims;
+    }
+
+    private Map<String, Object> verifyRefresh(HttpServletRequest request) {  // Refresh 토큰 검증하는데 사용되는 private 메서드
+        // 파싱하는것 자체가 성공하면 서명 검증에 성공했다는 뜻임
+        String jws = request.getHeader("Refresh"); // 헤더 정보 가져오기
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); // JWT 서명(Signature)을 검증하기 위한 Secret Key
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // JWT에서 Claims를 파싱
 
