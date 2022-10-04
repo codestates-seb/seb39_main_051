@@ -20,6 +20,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -48,6 +50,9 @@ public class SecurityConfig{
                                 .antMatchers(HttpMethod.POST,"/comments/**").hasAnyRole("USER", "ADMIN")
                                 .antMatchers(HttpMethod.DELETE,"/comments/**").hasAnyRole("USER", "ADMIN")
                                 .antMatchers(HttpMethod.PATCH,"/comments/**").hasAnyRole("USER", "ADMIN")
+//                                .anyRequest().authenticated()
+//                                )
+//                                .oauth2Login(withDefaults());
                                 .anyRequest().permitAll());
                 //.authorizeRequests()
                 //.antMatchers("/answer/**")
@@ -62,7 +67,6 @@ public class SecurityConfig{
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
             JwtAuthenticationFilter jwtAuthenticationFilter =new JwtAuthenticationFilter(authenticationManager,jwtTokenizer);
-            //jwtAuthenticationFilter.setFilterProcessesUrl("/login");
             jwtAuthenticationFilter.setFilterProcessesUrl("/member/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
@@ -71,10 +75,8 @@ public class SecurityConfig{
 
 
             builder
-                    //.addFilter(corsFilter)
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-                    //.addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository, jwtTokenizer));;
         }
     }
 }
