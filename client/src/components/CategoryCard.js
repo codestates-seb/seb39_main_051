@@ -16,7 +16,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 
-const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscribe}) => {
+const CategoryCard = ({
+  categoryName,
+  questionCategoryId,
+  handleClick,
+  isSubscribe,
+}) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
@@ -59,14 +64,19 @@ const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscrib
   return (
     <>
       <CategoryCardLayout
-        onClick={() => handleClick(questionCategoryId,categoryName, isSubscribe)}
+        onClick={() =>
+          handleClick(questionCategoryId, categoryName, isSubscribe)
+        }
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       >
         {isHovering ? (
           isSubscribe ? (
             <>
-              <CategoryCardWrapper themeState={themeState} isSubscribe={isSubscribe}>
+              <CategoryCardWrapper
+                themeState={themeState}
+                isSubscribe={isSubscribe}
+              >
                 <SubscribeMark />
                 <LogoLayout>
                   <div>{categoryName}</div>
@@ -77,7 +87,10 @@ const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscrib
             </>
           ) : (
             <>
-              <CategoryCardWrapper themeState={themeState}  isSubscribe={isSubscribe}>
+              <CategoryCardWrapper
+                themeState={themeState}
+                isSubscribe={isSubscribe}
+              >
                 <LogoLayout>
                   <div>{categoryName}</div>
                   <div>구독하기</div>
@@ -88,7 +101,10 @@ const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscrib
           )
         ) : isSubscribe ? (
           <>
-            <CategoryCardWrapper themeState={themeState}  isSubscribe={isSubscribe}>
+            <CategoryCardWrapper
+              themeState={themeState}
+              isSubscribe={isSubscribe}
+            >
               <SubscribeMark />
               <LogoLayout>
                 <div>{content}</div>
@@ -99,7 +115,10 @@ const CategoryCard = ({categoryName, questionCategoryId, handleClick, isSubscrib
           </>
         ) : (
           <>
-            <CategoryCardWrapper themeState={themeState}  isSubscribe={isSubscribe}>
+            <CategoryCardWrapper
+              themeState={themeState}
+              isSubscribe={isSubscribe}
+            >
               <LogoLayout>
                 <div>{content}</div>
                 <NameWrapper>{categoryName}</NameWrapper>
@@ -140,10 +159,18 @@ const CategoryCardWrapper = styled.div`
   border-radius: 1.5rem;
   cursor: pointer;
   background-color: ${(props) =>
-    props.themeState === 'light' ? props.isSubscribe ? 'var(--color-yellow)' :  '#FFE57A': props.isSubscribe ? 'var(--color-navy)' :  'var(--color-black)'}; //
+    props.themeState === 'light'
+      ? props.isSubscribe
+        ? 'var(--color-orange)'
+        : 'var(--color-yellow)'
+      : props.isSubscribe
+      ? 'var(--color-navy)'
+      : 'var(--color-black)'};
   :hover {
     background-color: ${(props) =>
-      props.themeState === 'light' ? '#FFE57A' : 'var(--color-navy)'};
+      props.themeState === 'light'
+        ? 'var(--color-orange)'
+        : 'var(--color-navy)'};
   }
 `;
 const LogoLayout = styled.div`
