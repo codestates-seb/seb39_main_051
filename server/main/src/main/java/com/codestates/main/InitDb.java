@@ -60,12 +60,6 @@ public class InitDb {
                 .role(Member.ROLE.ROLE_ADMIN)
                 .build();
         memberService.createAdmin(member);
-        member = Member.builder()
-                .email("test@gmail.com")
-                .nickname("유저")
-                .password("1234")
-                .build();
-        memberService.createMember(member);
 
         for(long i=0;i<categories.length;i++){
             QuestionCategory questionCategory = QuestionCategory.builder()
