@@ -83,6 +83,7 @@ const StyledUl = styled.ul`
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   border-radius: 1rem;
+  color:var(--color-white);
   cursor: pointer;
 
   ${(props) => {
