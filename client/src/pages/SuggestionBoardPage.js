@@ -17,6 +17,7 @@ const SuggestionBoardPage = () => {
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
   const [data, setData] = useState([]);
+  const [value, setValue] = useState('');
 
   const navigate = useNavigate();
 
@@ -25,7 +26,23 @@ const SuggestionBoardPage = () => {
   const { category } = useParams();
 
   useEffect(() => {
-    if (categoryArr.indexOf(category) !== -1) {
+    if ((value !== '') & (categoryArr.indexOf(category) !== -1)) {
+      axios
+        .get(
+          `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+        )
+        .then((res) => {
+          setData(res.data.data);
+        });
+    } else if (value !== '') {
+      axios
+        .get(
+          `/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
+        )
+        .then((res) => {
+          setData(res.data.data);
+        });
+    } else if (categoryArr.indexOf(category) !== -1) {
       axios
         .get(`/posts?category=${category}&page=${page}&size=${size}`)
         .then((res) => setData(res.data.data));
@@ -37,7 +54,7 @@ const SuggestionBoardPage = () => {
         });
       navigate('/suggestion');
     }
-  }, [category, page]);
+  }, [category, page, value]);
 
   const handleOnClick = () => {
     navigate('/post', {
@@ -49,13 +66,32 @@ const SuggestionBoardPage = () => {
     navigate(`/board/${id}`);
   };
 
+  const handleEnter = (e) => {
+    if (e.keyCode === 13) {
+      setValue(e.target.value);
+      if (categoryArr.indexOf(category) !== -1) {
+        axios
+          .get(
+            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => setData(res.data.data));
+      } else {
+        axios
+          .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+          .then((res) => {
+            setData(res.data.data);
+          });
+      }
+    }
+  };
+
   return (
     <>
       <NavigationBar />
       <ContentWrapper>
         <MenuWrapper>
           <TapMenu themeState={themeState} />
-          <Search themeState={themeState} />
+          <Search themeState={themeState} handleEnter={handleEnter} />
         </MenuWrapper>
         <ButtonWrapper>
           <BasicButton
@@ -93,6 +129,7 @@ const SuggestionBoardPage = () => {
           setPage={setPage}
           setSize={setSize}
           setTotal={setTotal}
+          value={value}
         />
       </ContentWrapper>
     </>

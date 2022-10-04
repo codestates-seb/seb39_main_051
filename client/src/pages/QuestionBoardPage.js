@@ -12,11 +12,13 @@ import axios from 'axios';
 
 const QuestionBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const { role } = useSelector((state) => state.userInfoSlice);
 
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
   const [data, setData] = useState([]);
+  const [value, setValue] = useState('');
 
   const navigate = useNavigate();
   const { category } = useParams();
@@ -33,7 +35,21 @@ const QuestionBoardPage = () => {
   ];
 
   useEffect(() => {
-    if (categoryArr.indexOf(category) !== -1) {
+    if ((value !== '') & (categoryArr.indexOf(category) !== -1)) {
+      axios
+        .get(
+          `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+        )
+        .then((res) => {
+          setData(res.data.data);
+        });
+    } else if (value !== '') {
+      axios
+        .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+        .then((res) => {
+          setData(res.data.data);
+        });
+    } else if (categoryArr.indexOf(category) !== -1) {
       axios
         .get(
           `/questions?questionCategory=${category}&page=${page}&size=${size}`
@@ -42,11 +58,10 @@ const QuestionBoardPage = () => {
     } else {
       axios.get(`/questions?page=${page}&size=${size}`).then((res) => {
         setData(res.data.data);
-        console.log(res.data.data);
       });
       navigate('/questions');
     }
-  }, [category, page]);
+  }, [category, page, value]);
 
   const handleOnClick = () => {
     navigate('/post', {
@@ -58,25 +73,48 @@ const QuestionBoardPage = () => {
     navigate(`/question/${id}`);
   };
 
+  const handleEnter = (e) => {
+    if (e.keyCode === 13) {
+      setValue(e.target.value);
+      if (categoryArr.indexOf(category) !== -1) {
+        axios
+          .get(
+            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => setData(res.data.data));
+      } else {
+        axios
+          .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+          .then((res) => {
+            setData(res.data.data);
+          });
+      }
+    }
+  };
+
   return (
     <>
       <NavigationBar />
       <ContentWrapper>
         <MenuWrapper>
           <TapMenu themeState={themeState} type='answer' />
-          <Search themeState={themeState} />
+          <Search themeState={themeState} handleEnter={handleEnter} />
         </MenuWrapper>
         <ButtonWrapper>
-          <BasicButton
-            themeState={themeState}
-            width='10rem'
-            height='4rem'
-            color='var(--color-white)'
-            backGroundColor='var(--color-orange)'
-            fontSize='1.3rem'
-            text='글 작성하기'
-            onClick={handleOnClick}
-          />
+          {role === 'ROLE_ADMIN' ? (
+            <BasicButton
+              themeState={themeState}
+              width='10rem'
+              height='4rem'
+              color='var(--color-white)'
+              backGroundColor='var(--color-orange)'
+              fontSize='1.3rem'
+              text='글 작성하기'
+              onClick={handleOnClick}
+            />
+          ) : (
+            <></>
+          )}
         </ButtonWrapper>
         <PostSummaryWrapper>
           {data.map((el) => (
@@ -99,6 +137,7 @@ const QuestionBoardPage = () => {
           setPage={setPage}
           setSize={setSize}
           setTotal={setTotal}
+          value={value}
           type='질문 답변 공유 게시판'
         />
       </ContentWrapper>
