@@ -1,35 +1,67 @@
-import {
-  faReact,
-  faJava,
-  faSquareJs,
-} from '@fortawesome/free-brands-svg-icons';
-import {
-  faNetworkWired,
-  faDatabase,
-  faLeaf,
-  faFolderTree,
-  faGear,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import BorderLayout from '../components/BorderLayout';
+import CategoryCardMobile from '../components/CategoryCardMobile';
 import DashBoard from '../components/DashBoard';
+import axiosInstance from '../utils/axiosInstance';
 
 const DashBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
+  const [subscribeArr, setSubscribeArr] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+
   const category = [
-    faSquareJs,
-    faJava,
-    faReact,
-    faLeaf,
-    faFolderTree,
-    faGear,
-    faDatabase,
-    faNetworkWired,
+    { categoryName: 'React', questionCategoryId: 2 },
+    { categoryName: 'Javascript', questionCategoryId: 8 },
+    { categoryName: 'Java', questionCategoryId: 1 },
+    { categoryName: 'Spring', questionCategoryId: 3 },
+    { categoryName: 'Data Structure', questionCategoryId: 4 },
+    { categoryName: 'OS', questionCategoryId: 5 },
+    { categoryName: 'Database', questionCategoryId: 6 },
+    { categoryName: 'Network', questionCategoryId: 7 },
   ];
+
+  const handleSubscribe = async (id, categoryName, isSubscribe) => {
+    if (isSubscribe) {
+      // 구독해제상황
+      await axiosInstance.post('/member/subscription', {
+        questionCategoryId: id,
+      });
+      toast.success(`${categoryName} 구독을 해제합니다!`);
+      const origin = subscribeArr;
+      setSubscribeArr(origin.filter((el) => el !== id));
+    } else {
+      if (categoryName === 'Spring') {
+        await axiosInstance.post('/member/subscription', {
+          questionCategoryId: id,
+        });
+        toast.success(`${categoryName}을 구독합니다!`);
+        const origin = subscribeArr;
+        origin.push(id);
+        setSubscribeArr([...origin]);
+      } else {
+        await axiosInstance.post('/member/subscription', {
+          questionCategoryId: id,
+        });
+
+        toast.success(`${categoryName}를 구독합니다!`);
+        const origin = subscribeArr;
+        origin.push(id);
+        setSubscribeArr([...origin]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    axiosInstance.get('/subscription').then((res) => {
+      setSubscribeArr(
+        res.data.subscriptions.map((el) => el.questionCategoryId)
+      );
+    });
+  }, []);
 
   return (
     <>
@@ -51,9 +83,13 @@ const DashBoardPage = () => {
             </a>
             <SubscribeWrapper themeState={themeState}>
               {category.map((el) => (
-                <LogoWrapper themeState={themeState}>
-                  <FontAwesomeIcon icon={el} size='2x' />
-                </LogoWrapper>
+                <CategoryCardMobile
+                  key={el.questionCategoryId}
+                  categoryName={el.categoryName}
+                  questionCategoryId={el.questionCategoryId}
+                  handleClick={handleSubscribe}
+                  isSubscribe={subscribeArr.includes(el.questionCategoryId)}
+                />
               ))}
             </SubscribeWrapper>
             <a href='/userimg'>
@@ -89,20 +125,13 @@ const DashBoardPage = () => {
                 text='비밀번호 변경'
               />
             </a>
-            <a>
-              <BasicButton
-                themeState={themeState}
-                width='100%'
-                height='4rem'
-                color='var(--color-white)'
-                backGroundColor='var(--color-orange)'
-                fontSize='1.8rem'
-                text='회원 탈퇴'
-              />
-            </a>
           </LeftContent>
           <RightContent themeState={themeState}>
-            <DashBoard />
+            <DashBoard
+              handleSubscribe={handleSubscribe}
+              subscribeArr={subscribeArr}
+              category={category}
+            />
           </RightContent>
         </Layout>
       </BorderLayout>
@@ -194,19 +223,6 @@ const SubscribeWrapper = styled.div`
   @media screen and (min-width: 1026px) {
     display: none;
   }
-`;
-
-const LogoWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 4rem;
-  height: 4rem;
-  background-color: ${(props) =>
-    props.themeState === 'light'
-      ? 'var(--color-orange)'
-      : 'var(--color-black)'};
-  border-radius: 1rem;
 `;
 
 export default DashBoardPage;
