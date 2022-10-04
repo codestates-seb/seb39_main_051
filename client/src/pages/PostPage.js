@@ -10,10 +10,9 @@ import axiosInstance from '../utils/axiosInstance';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const { userId } = useSelector((state) => state.userInfoSlice);
   const navigate = useNavigate();
   const { type, category } = useLocation().state;
-  const [categoryContent, setCategoryContent] = useState('');
+  const [categoryContent, setCategoryContent] = useState(1);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [seleted, setSelected] = useState('');
@@ -73,14 +72,16 @@ const PostPage = () => {
       await axiosInstance.post(`/questions`, {
         questionCategoryId: categoryContent,
         content,
-      });
+      })
+      .then((res)=>console.log(res))
+      .catch((err)=>console.log(err))
       navigate('/questions');
     } else if (type === 'free') {
       await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '자유게시판',
-        category: categoryContent,
+        category: seleted,
       })
       navigate('/free');
     } else if (type === 'suggestion') {
@@ -88,7 +89,7 @@ const PostPage = () => {
         title,
         content,
         type: '건의게시판',
-        category: categoryContent,
+        category: seleted,
       });
       navigate('/suggestion');
     }
@@ -134,20 +135,27 @@ const PostPage = () => {
   return (
     <BorderLayout>
       <form>
-        <h1>{boardName}</h1>
-        {type === 'questions' ? (
-          <InputWrapper></InputWrapper>
-        ) : (
-          <InputWrapper themeState={themeState}>
-            <label id='title' />
-            <input
-              id='title'
-              name='title'
-              type='text'
-              placeholder='제목'
-              value={title}
-              onChange={handleTitle}
-              required
+            <h1>{boardName}</h1>
+            {type==='questions' ? (<InputWrapper></InputWrapper>) : (
+                          <InputWrapper themeState={themeState}>
+                            <label id='title' /> 
+                          <input
+                            id='title'
+                            name='title'
+                            type='text'
+                            placeholder='제목'
+                            value={title}
+                            onChange={handleTitle}
+                            required
+                          />
+                        </InputWrapper>
+            )}
+            <DropDownList
+              type={type}
+              category={category}
+              seleted={seleted}
+              setSelected={setSelected}
+              handleCategory={handleCategory}
             />
             <InputWrapper themeState={themeState}>
               <label id='content'/>

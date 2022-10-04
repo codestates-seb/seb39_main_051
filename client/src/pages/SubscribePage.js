@@ -10,9 +10,6 @@ import axiosInstance from '../utils/axiosInstance';
 
 const SubscribePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const { isLoggedIn, userId, nickName } = useSelector(
-    (state) => state.userInfoSlice
-  );
   const [subscribeArr, setSubscribeArr] = useState([]);
   const arr = [
     { categoryName: 'React', questionCategoryId: 2 },
@@ -26,7 +23,6 @@ const SubscribePage = () => {
   ];
 
   const handleSubscribe = async (id, categoryName, isSubscribe) => {
-    // console.log(id)
     if (isSubscribe) {
       // 구독해제상황
       await axiosInstance.post('/member/subscription', {
@@ -34,8 +30,8 @@ const SubscribePage = () => {
       })
       .then((res)=>console.log('구독해제', res))
       toast.success(`${categoryName} 구독을 해제합니다!`);
-      // const origin = subscribeArr;
-      // setSubscribeArr(origin.filter((el) => el !== id));
+      const origin = subscribeArr;
+      setSubscribeArr(origin.filter((el) => el !== id));
     } else {
       if (categoryName === 'Spring') {
         await axiosInstance.post('/member/subscription', {
@@ -43,9 +39,9 @@ const SubscribePage = () => {
         })
         .then((res)=>console.log('구독', res))
         toast.success(`${categoryName}을 구독합니다!`);
-        // const origin = subscribeArr;
-        // origin.push(id);
-        // setSubscribeArr([...origin]);
+        const origin = subscribeArr;
+        origin.push(id);
+        setSubscribeArr([...origin]);
       } else {
         await axiosInstance.post('/member/subscription', {
           questionCategoryId: id,
@@ -53,9 +49,9 @@ const SubscribePage = () => {
         .then((res)=>console.log('구독', res))
 
         toast.success(`${categoryName}를 구독합니다!`);
-        // const origin = subscribeArr;
-        // origin.push(id);
-        // setSubscribeArr([...origin]);
+        const origin = subscribeArr;
+        origin.push(id);
+        setSubscribeArr([...origin]);
       }
     }
   };
@@ -65,14 +61,18 @@ const SubscribePage = () => {
       .get('/subscription')
       .then((res) =>{
         console.log(res)
-        setSubscribeArr(res.data.subscriptions.map((el)=>el.subscriptionId))
+        setSubscribeArr(res.data.subscriptions.map((el)=>el.questionCategoryId))
       }
       )
   },[]);
   return (
     <BorderLayout>
       <Message themeState={themeState}>
-        매일 받고 싶은 면접 주제를 선택하세요!
+        <section>
+          <div>주제를 클릭하여 구독해주세요</div>
+          <div>매일 아침 9시 이메일로 </div>
+          <div>구독중인 모든 주제의 면접 질문이 전달됩니다</div>
+        </section>
       </Message>
       <Toast />
       <GridLayout>
@@ -109,11 +109,16 @@ const GridLayout = styled.div`
   }
 `;
 const Message = styled.div`
-  text-align: center;
+  display:flex;
   font-weight: bold;
   font-size: 1vw;
   margin-bottom: 3%;
+  justify-content:center;
   color: ${(props) => (props.themeState === 'light') === 'var(--color-black)'};
+  div{
+    justify-content:start;
+    margin-bottom: 2%;
+  }
 `;
 
 export default SubscribePage;
