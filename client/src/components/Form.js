@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Form = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-
+  
   const navigate = useNavigate();
-
+  
   const [inputValue, setInputValue] = useState({
     nickName: '',
     email: '',
@@ -93,7 +93,7 @@ const Form = (props) => {
         const response = await axios.post('/member/login', {
           email: email,
           password: password,
-        });
+        })
         const headers = await response.headers;
         setCookie('accessToken', headers.authorization, 60);
         alert('Login Success');
@@ -117,7 +117,11 @@ const Form = (props) => {
               navigate('/login');
               window.location.reload();
             })
-            .catch((err) => alert('이미 존재하는 email입니다.'));
+            .catch((err) =>
+              err.message.split(' ')[5] === '404'
+                ? alert('이미 존재하는 email입니다.')
+                : ''
+            );
         } catch (err) {
           alert('Check valid option');
         }
@@ -213,18 +217,12 @@ const Form = (props) => {
         {props.status === 'login' ? (
           <Redirect themeState={themeState}>
             <a href='/signup'>
-              <FontAwesomeIcon icon={faGoogle} size='2x' />
               회원가입하러가기{' '}
             </a>
-            <a href='/'>구글계정으로 가입하기</a>
           </Redirect>
         ) : (
           <Redirect themeState={themeState}>
             <a href='/login'>로그인하러가기 </a>
-            <a href='/'>
-              <FontAwesomeIcon icon={faGoogle} size='2x' />
-              구글계정으로 로그인하기
-            </a>
           </Redirect>
         )}
       </form>
@@ -287,6 +285,8 @@ const InputWrapper = styled.div`
         : 'var(--color-gray)'};
     border: 1px solid #d2d2d2;
     border-radius: 0.3rem;
+    color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
   }
 `;
 const Redirect = styled.div`
@@ -305,4 +305,5 @@ const Redirect = styled.div`
     margin-right: 0.3rem;
   }
 `;
+
 export default Form;

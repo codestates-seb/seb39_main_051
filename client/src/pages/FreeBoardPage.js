@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const FreeBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-
+  const {isLoggedIn} = useSelector((state)=>state.userInfoSlice)
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
@@ -55,9 +55,17 @@ const FreeBoardPage = () => {
   }, [category, page, value]);
 
   const handleOnClick = () => {
-    navigate('/post', {
-      state: { type: 'free', category: category || '취업 정보' },
-    });
+    if(isLoggedIn){
+      navigate('/post', {
+        state: { type: 'free', category: category || '취업 정보' },
+      })
+    }else{
+      if(window.confirm('게시글을 작성하시려면 로그인이 필요합니다 로그인하시겠습니까?')){
+        navigate('/login')
+      }else{
+        return
+      }
+    }
   };
 
   const navigateToPostSumary = (id) => {

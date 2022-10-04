@@ -80,30 +80,26 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
           {nickname}
         </CommentWriter>
         <CommentEvent>
+        <EventWrapper>
+        <div>{date}</div><div className='time'>/{time}</div>
         {userId==memberId ? (
           isCommentEditMode ? (
-            <>
-            <div className='commentDate'>{date}/<span id='time'>{time}</span></div>
-            <div className='wrapper'>
-              <div className='commentEdit leftOne' onClick={()=>handleSubmitEditComment()} >등록</div>
-              <div className='commentEdit' onClick={()=>handleCommentEditMode()}>취소</div>
-            </div>
-          </>
+              <EditDelete>
+                <div className='edit leftOne' onClick={()=>handleSubmitEditComment()}>등록</div>
+                <div className='edit' onClick={()=>handleCommentEditMode()}>취소</div>
+              </EditDelete>
   ) : (
-    <>
-    <div className='commentDate'>{date}/<span id='time'>{time}</span></div>
-    <div className='wrapper'>
-    <div className='commentEdit leftOne' onClick={()=>handleCommentEditMode()} >수정</div>
-    <div className='commentEdit' onClick={()=>handleDeleteComment()}>삭제</div>
-    </div>
-    </>
+    <EditDelete>
+      <div className='edit leftOne' onClick={()=>handleCommentEditMode()}>수정</div>
+      <div className='edit' onClick={()=>handleDeleteComment()}>삭제</div>
+    </EditDelete>
   )
         ) : (<></>)}
+          </EventWrapper>
         </CommentEvent>
       </CommentInfo>
       <CommentContent themeState={themeState}>
         {isCommentEditMode ? (
-                    <div className='formWrapper'>
                     <form>
                       <label id='editedComment' />
                       <textarea
@@ -112,7 +108,6 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
                       onChange={handleEditComment}
                       />
                     </form>
-                    </div>
         ) : (
           <>
           <div className='commentContent'>{commentContent}</div>
@@ -125,7 +120,8 @@ const Comment = ({commentId, nickname, content,memberId, createdAt, likeCount, p
 };
 
 const Layout = styled.div`
-  margin: 1rem 0;
+  margin-top: 1%;
+  padding-bottom:1%;
   border-bottom: 1px solid #d4d4d4;
   width: 100%;
 `;
@@ -133,38 +129,11 @@ const CommentInfo = styled.div`
   display: flex;
   margin-bottom: 0.3rem;
 `;
-const CommentEvent = styled.div`
-  display: flex;
-  font-size: 1.2rem;
-  .commentDate {
-    margin-right: 0.5%;
-  }
-  .leftOne {
-    margin-right:1%;
-  }
-  .commentEdit {
-    min-width: 2.1rem;
-    color: #d4d4d4;
-    margin-right:0.5rem;
-    cursor: pointer;
-  }
-  @media screen and (max-width: 412px) {
-    flex-direction:column;
-    vertical-align: bottom;
-    .commentEdit{
-      display:inline;
-      margin-right:0;
-      margin-left:auto;
-    }
-    #time{
-      display:none;
-    }
-  }
-`;
+
 
 const CommentWriter = styled.div`
   font-weight: bold;
-  width:90%;
+  width:85%;
   img {
     display: inline;
     height: 2.4rem;
@@ -175,12 +144,8 @@ const CommentWriter = styled.div`
 `;
 const CommentContent = styled.div`
   display: flex;
-    .formWrapper{
-      display:flex;
-      width:90%;
-    }
     form{
-      width:100%;
+      width:85%;
     }
     textarea{
       font-size: 1.3rem;
@@ -193,8 +158,7 @@ const CommentContent = styled.div`
             color: ${(props)=>props.themeState ==='light' ? 'var(--color-black)': '#D4D4D4' };
     }
   .commentContent{
-    width:90%;
-    margin-right: 0.5%;
+    width:85%;
   }
   .commentlikes {
     width:5%;
@@ -203,6 +167,37 @@ const CommentContent = styled.div`
     cursor: pointer;
   }
 `;
+
+const CommentEvent = styled.div`
+  display: flex;
+  font-size: 1.2rem;
+`;
+
+const EventWrapper =styled.div`
+  display:flex;
+  @media screen and (max-width: 412px) {
+    display:block;
+    .time{
+      display:none;
+    }
+  }
+`
+const EditDelete = styled.div`
+  display:flex;
+  .edit {
+    min-width: 2.3rem;
+    color: #d4d4d4;
+    cursor: pointer;
+  }
+  .leftOne{
+    margin-right: 5%;
+  }
+  @media screen and (max-width: 412px) {
+    .edit{
+      margin-left:auto;
+    }
+  }
+`
 
 
 export default Comment;
