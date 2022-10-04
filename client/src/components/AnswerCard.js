@@ -31,19 +31,27 @@ const toggleCommentShow = () => {
   }
 
   const handleSubmitAnswerComment = () => {
-    axiosInstance.post(`/answers/${answerId}/comments`,{
-      memberId:userId,
-      content: commentContent
+    if(isLoggedIn){
+      axiosInstance.post(`/answers/${answerId}/comments`,{
+        memberId:userId,
+        content: commentContent
+      }
+      )
+      .then((res)=>{
+        let arr =answerComment
+        arr.push(res.data)
+        toast.success(`댓글이 작성되었습니다!`)
+        setAnswerComment(arr)
+        setCommentContent('')
+      })
+      .catch((err)=>console.log(err))
+    }else{
+      if(window.confirm( '댓글을 작성하시려면 로그인이 필요합니다 로그인 하시겠습니까?')){
+        navigate('/login')
+      }else{
+        return
+      }
     }
-    )
-    .then((res)=>{
-      let arr =answerComment
-      arr.push(res.data)
-      toast.success(`댓글이 작성되었습니다!`)
-      setAnswerComment(arr)
-      setCommentContent('')
-    })
-    .catch((err)=>console.log(err))
   }
 
   const handleEditAnswer = (e) => {
@@ -96,19 +104,22 @@ const toggleCommentShow = () => {
           {nickname}
         </AnswerWriter>
         <AnswerEvent>
-          <div className='answerDate'>{date}<span id='time'>{time}</span></div>
+        <EventWrapper>
+        <div>{date}</div><div className='time'>/{time}</div>
           {userId==memberId ? (
             isAnswerEditMode ? (
-              <>
-              <div className='answerEdit' onClick={()=>handleSubmitEditAnswer()}>등록</div>
-              <div className='answerEdit' onClick={()=>handleEditMode()}>취소</div>
-              </>
+              <EditDelete>
+                <div className='edit leftOne' onClick={()=>handleSubmitEditAnswer()}>등록</div>
+                <div className='edit' onClick={()=>handleEditMode()}>취소</div>
+              </EditDelete>
               ) : (
-              <>
-                <div className='answerEdit' onClick={()=>handleEditMode()}>수정</div>
-              <div className='answerEdit' onClick={()=>handleDeleteAnswer()}>삭제</div>
-              </>)
+                <EditDelete>
+                  <div className='edit leftOne' onClick={()=>handleEditMode()}>수정</div>
+                  <div className='edit' onClick={()=>handleDeleteAnswer()}>삭제</div>
+                  </EditDelete>
+              )
           ) : (<></>)}
+          </EventWrapper>
           </AnswerEvent>
       </AnswerInfo>
       <AnswerLayout themeState={themeState}>
@@ -129,7 +140,7 @@ const toggleCommentShow = () => {
                       <div className='answerContent'>{answerContent}</div>
             </>
           )}
-          <div className='answerLikes' onClick={()=>handleAnswerLike()}>❤️ {answerLikeContent}</div>
+          <div className='answerLikes' onClick={()=>handleAnswerLike()}>❤️{answerLikeContent}</div>
         </AnswerContent>
       </AnswerLayout>
       <AnswerCommentInput themeState={themeState}>
@@ -195,7 +206,7 @@ const AnswerInfo = styled.div`
 `;
 const AnswerWriter = styled.div`
   font-weight: bold;
-  width: 90%;
+  width: 85%;
   img {
     height: 2.4rem;
     width: 2.4rem;
@@ -206,24 +217,6 @@ const AnswerWriter = styled.div`
 const AnswerEvent = styled.div`
   display:flex;
   font-size: 1.2rem; 
-  .answerDate{
-    margin-right:0.5rem;
-  }
-  .answerEdit{
-    color: #d4d4d4;
-    margin-right:0.5rem;
-    cursor: pointer;
-  }
-  @media screen and (max-width: 412px){
-      flex-direction:column;
-      vertical-align: bottom;
-      .answerEdit{
-        margin-left:auto;
-      }
-      span{
-        display:none;
-      }
-    }
 `;
 const AnswerLayout = styled.div`
   display: flex;
@@ -236,7 +229,7 @@ const AnswerContent = styled.div`
     props.themeState === 'light' ? 'var(--color-white)' : 'var(--color-dark-bg-color )'};
     .formWrapper{
       display:flex;
-      width:90%;
+      width:85%;
     }
     form{
       width:100%;
@@ -252,23 +245,23 @@ const AnswerContent = styled.div`
     }
     .answerContent{
       font-size: 2rem;
-      width:90%;
+      width:85%;
       margin-right: 0.5%;
     }
     .answerLikes{
-      width:5%;
+      min-width:5%;
       cursor: pointer;
     }
   @media screen and (max-width: 412px) {
     margin-right: 1rem;
-    border: 1px solid #d4d4d4;
+
   }
 `;
 const AnswerCommentInput = styled.div`
   display: flex;
   margin: 1rem 0;
   input {
-    width: 90%;
+    width: 85%;
     margin-right: 0.5%;
     border: 1px solid #d4d4d4;
     background: ${(props) =>
@@ -302,6 +295,32 @@ const ToggleComment = styled.div`
   cursor: pointer;
   color: #d2d2d2;
 `;
+
+const EventWrapper =styled.div`
+  display:flex;
+  @media screen and (max-width: 412px) {
+    display:block;
+    .time{
+      display:none;
+    }
+  }
+`
+const EditDelete = styled.div`
+  display:flex;
+  .edit {
+    min-width: 2.3rem;
+    color: #d4d4d4;
+    cursor: pointer;
+  }
+  .leftOne{
+    margin-right: 5%;
+  }
+  @media screen and (max-width: 412px) {
+    .edit{
+      margin-left:auto;
+    }
+  }
+`
 
 
 export default AnswerCard;

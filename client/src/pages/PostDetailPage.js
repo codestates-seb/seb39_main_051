@@ -105,7 +105,7 @@ const handleDeletePost  = async() => {
   }
 
   //게시물 수정 페이지
-  const navigateEditAnswer = () => {
+  const navigateEditPost = () => {
     navigate('/edit/board', {
       state: {
         postId : postId,
@@ -130,15 +130,15 @@ const handleDeletePost  = async() => {
           />
           {nickname}
         </Writer>
-        <InfoWrapper>
-        <Date themeState={themeState}>{date}<span id='time'>{time}</span></Date>
-        {userId==memberId ? (
-                      <>
-                      <EditDelete onClick={() => navigateEditAnswer()}>수정</EditDelete>
-                      <EditDelete onClick={() => handleDeletePost()}>삭제</EditDelete>
-                    </>
+          <EventWrapper>
+          <div>{date}</div><div className='time'>/{time}</div>
+          {userId==memberId ? (
+                            <EditDelete>
+                            <div className='edit leftOne' onClick={()=>navigateEditPost()}>수정</div>
+                            <div className='edit' onClick={()=>handleDeletePost()}>삭제</div>
+                          </EditDelete>
         ) : (<></>)}
-        </InfoWrapper>
+          </EventWrapper>
       </ContentInfo>
         <Content>{content}
         </Content>
@@ -205,12 +205,6 @@ const Category = styled.div`
     padding:0.5rem;
   }
 `;
-const EditDelete = styled.div`
-  color: #d2d2d2;
-  margin-right: 0.5%;
-  min-width:2.3rem;
-  cursor: pointer;
-`;
 const Writer = styled.div`
   margin-right: 1rem;
   min-width: 11.8rem;
@@ -224,16 +218,7 @@ const Writer = styled.div`
     margin-right: 0.3rem;
   }
 `;
-const Date = styled.div`
-  margin-right: 0.5%;
-  color: ${(props) =>
-    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
-      @media screen and (max-width: 413px) {
-        span{
-          display:none;
-        }
-  }
-`;
+
 const Content = styled.div`
   margin: 1% 0;
   border: 1px solid #d4d4d4;
@@ -259,7 +244,7 @@ const PostCommentInput = styled.div`
   display: flex;
   margin: 1rem 0;
   input {
-    width: 90%;
+    width: 85%;
     margin-right: 0.5%;
     border: 1px solid #d4d4d4;
     background: ${(props) =>
@@ -293,7 +278,34 @@ const InfoWrapper = styled.div`
   @media screen and (max-width: 413px) {
     flex-direction:column;
   }
-
 `
+const EventWrapper =styled.div`
+  display:flex;
+  font-size: 1.2rem;
+  @media screen and (max-width: 412px) {
+    display:block;
+    .time{
+      display:none;
+    }
+  }
+`
+const EditDelete = styled.div`
+  display:flex;
+  .edit {
+    min-width: 2.3rem;
+    color: #d4d4d4;
+    cursor: pointer;
+  }
+  .leftOne{
+    margin-right: 5%;
+  }
+  @media screen and (max-width: 412px) {
+    .edit{
+      margin-left:auto;
+    }
+  }
+`
+
+
 
 export default PostDetailPage;
