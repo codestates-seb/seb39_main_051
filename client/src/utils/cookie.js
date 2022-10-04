@@ -2,8 +2,8 @@ export const setCookie = (cookie_name, value, miuntes) => {
   const exdate = new Date();
   exdate.setMinutes(exdate.getMinutes() + miuntes);
   const cookie_value =
-    escape(value) +
-    (miuntes == null ? '' : '; expires=' + exdate.toUTCString());
+    unescape(value) +
+    (miuntes == null ? '' : '; expires=' + exdate.toGMTString());
   document.cookie = cookie_name + '=' + cookie_value;
 };
 

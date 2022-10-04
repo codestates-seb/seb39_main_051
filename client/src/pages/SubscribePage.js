@@ -27,8 +27,7 @@ const SubscribePage = () => {
       // 구독해제상황
       await axiosInstance.post('/member/subscription', {
         questionCategoryId: id,
-      })
-      .then((res)=>console.log('구독해제', res))
+      });
       toast.success(`${categoryName} 구독을 해제합니다!`);
       const origin = subscribeArr;
       setSubscribeArr(origin.filter((el) => el !== id));
@@ -36,8 +35,7 @@ const SubscribePage = () => {
       if (categoryName === 'Spring') {
         await axiosInstance.post('/member/subscription', {
           questionCategoryId: id,
-        })
-        .then((res)=>console.log('구독', res))
+        });
         toast.success(`${categoryName}을 구독합니다!`);
         const origin = subscribeArr;
         origin.push(id);
@@ -45,8 +43,7 @@ const SubscribePage = () => {
       } else {
         await axiosInstance.post('/member/subscription', {
           questionCategoryId: id,
-        })
-        .then((res)=>console.log('구독', res))
+        });
 
         toast.success(`${categoryName}를 구독합니다!`);
         const origin = subscribeArr;
@@ -57,14 +54,12 @@ const SubscribePage = () => {
   };
 
   useEffect(() => {
-    axiosInstance
-      .get('/subscription')
-      .then((res) =>{
-        console.log(res)
-        setSubscribeArr(res.data.subscriptions.map((el)=>el.questionCategoryId))
-      }
-      )
-  },[]);
+    axiosInstance.get('/subscription').then((res) => {
+      setSubscribeArr(
+        res.data.subscriptions.map((el) => el.questionCategoryId)
+      );
+    });
+  }, []);
   return (
     <BorderLayout>
       <Message themeState={themeState}>
@@ -90,7 +85,6 @@ const SubscribePage = () => {
   );
 };
 
-
 const GridLayout = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 25%);
@@ -109,14 +103,14 @@ const GridLayout = styled.div`
   }
 `;
 const Message = styled.div`
-  display:flex;
+  display: flex;
   font-weight: bold;
   font-size: 1vw;
   margin-bottom: 3%;
-  justify-content:center;
+  justify-content: center;
   color: ${(props) => (props.themeState === 'light') === 'var(--color-black)'};
-  div{
-    justify-content:start;
+  div {
+    justify-content: start;
     margin-bottom: 2%;
   }
 `;

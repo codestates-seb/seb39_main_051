@@ -5,7 +5,7 @@ const isTokenAlive = getCookie('accessToken') || null;
 let token;
 
 if (isTokenAlive) {
-  token = isTokenAlive.replace('%20', ' ');
+  token = isTokenAlive;
 }
 
 const axiosInstance = axios.create({

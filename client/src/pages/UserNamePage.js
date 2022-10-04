@@ -86,17 +86,6 @@ const UserNamePage = () => {
                   text='비밀번호 변경'
                 />
               </a>
-              <a>
-                <BasicButton
-                  themeState={themeState}
-                  width='100%'
-                  height='4rem'
-                  color='var(--color-white)'
-                  backGroundColor='var(--color-orange)'
-                  fontSize='1.8rem'
-                  text='회원 탈퇴'
-                />
-              </a>
             </div>
           </LeftContent>
           <RightContent themeState={themeState}>

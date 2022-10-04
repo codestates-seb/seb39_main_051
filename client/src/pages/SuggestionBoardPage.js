@@ -12,7 +12,7 @@ import axios from 'axios';
 
 const SuggestionBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {isLoggedIn} = useSelector((state)=>state.userInfoSlice)
+  const { isLoggedIn } = useSelector((state) => state.userInfoSlice);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
@@ -57,15 +57,19 @@ const SuggestionBoardPage = () => {
   }, [category, page, value]);
 
   const handleOnClick = () => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       navigate('/post', {
         state: { type: 'suggestion', category: category || '질문 추가 요청' },
       });
-    }else{
-      if(window.confirm('게시글을 작성하시려면 로그인이 필요합니다 로그인하시겠습니까?')){
-        navigate('/login')
-      }else{
-        return
+    } else {
+      if (
+        window.confirm(
+          '게시글을 작성하시려면 로그인이 필요합니다 로그인하시겠습니까?'
+        )
+      ) {
+        navigate('/login');
+      } else {
+        return;
       }
     }
   };
@@ -80,12 +84,14 @@ const SuggestionBoardPage = () => {
       if (categoryArr.indexOf(category) !== -1) {
         axios
           .get(
-            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => setData(res.data.data));
       } else {
         axios
-          .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+          .get(
+            `/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
+          )
           .then((res) => {
             setData(res.data.data);
           });
