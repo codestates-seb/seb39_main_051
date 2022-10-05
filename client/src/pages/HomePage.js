@@ -87,32 +87,24 @@ const HomePage = () => {
                   <div className='sectionTwo web'>
                     매일 아침 여러분의 습관에 투자하세요
                   </div>
-                  
+
                   <div className='sectionTwo mobile'>
-                    면접에서 승리하기 위한 
+                    면접에서 승리하기 위한
                   </div>
                   <br />
-                  <div className='sectionTwo mobile'>
-                  평범하지만
-                  </div>
-                  <br />
-                  <div className='sectionTwo mobile'>어쩌면 가장 완벽한 방법.</div>
+                  <div className='sectionTwo mobile'>평범하지만</div>
                   <br />
                   <div className='sectionTwo mobile'>
-                    어떠한 질문 앞에서도 
+                    어쩌면 가장 완벽한 방법.
                   </div>
                   <br />
-                  <div className='sectionTwo mobile'>
-                  냉철할 수 있도록
-                  </div>
+                  <div className='sectionTwo mobile'>어떠한 질문 앞에서도</div>
                   <br />
-                  <div className='sectionTwo mobile'>
-                    매일 아침 여러분의
-                  </div>
+                  <div className='sectionTwo mobile'>냉철할 수 있도록</div>
                   <br />
-                  <div className='sectionTwo mobile'>
-                    습관에 투자하세요
-                  </div>
+                  <div className='sectionTwo mobile'>매일 아침 여러분의</div>
+                  <br />
+                  <div className='sectionTwo mobile'>습관에 투자하세요</div>
                 </ColorFont>
               </Animator>
             </ScrollPage>
@@ -158,22 +150,22 @@ const HomePage = () => {
                 <Describe>매일 아침 여러분의 메일로 받아보세요</Describe>
               </CardWrapper>
             </ScrollPage>
-            <ScrollPage page={3}>
+            <ScrollPage page={4}>
               <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200))}>
                 <></>
               </Animator>
             </ScrollPage>
-            <ScrollPage page={4}>
+            <ScrollPage page={5}>
               <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200))}>
                 <WhiteFont>
                   <div className='web'>날아오를 준비 완료.</div>
                   <div className='mobile'>날아오를</div>
-                  <br/>
+                  <br />
                   <div className='mobile'>준비 완료</div>
                 </WhiteFont>
               </Animator>
             </ScrollPage>
-            <ScrollPage page={5}>
+            <ScrollPage page={6}>
               <ProjectInfo themeState={themeState}>
                 <Animator>
                   <ProjectName themeState={themeState}>
@@ -223,12 +215,14 @@ const Container = styled.div`
   padding-top: 8rem;
   font-size: 1.3rem;
   font-family: 'Noto Sans KR', sans-serif;
-  background: ${(props) =>props.themeState === 'light' ? 'linear-gradient(black  50%, white)' :'linear-gradient(black  50%, var(--color-dark-bg-color) )'};
+  background: ${(props) =>
+    props.themeState === 'light'
+      ? 'linear-gradient(black  50%, white)'
+      : 'linear-gradient(black  50%, var(--color-dark-bg-color) )'};
 `;
 const Wrapper = styled.div`
   width: 100;
 `;
-
 
 const ProjectInfo = styled.div`
   display: flex;
@@ -240,47 +234,51 @@ const ProjectInfo = styled.div`
   font-size: 2rem;
   font-weight: bold;
   height: 100%;
-  a{
+  a {
     text-decoration: none;
   }
   svg {
     margin-left: 0.5rem;
     /* background-color: var(--color-black); */
     /* color: var(--color-white); */
-    color : ${(props)=>props.themeState==='light' ? 'var(--color-orange)' : 'var(--color-white)'}
+    color: ${(props) =>
+      props.themeState === 'light'
+        ? 'var(--color-black)'
+        : 'var(--color-white)'};
   }
-  .member{
-    color : ${(props)=>props.themeState==='light' ? 'var(--color-orange)' : 'var(--color-white)'}
+  .member {
+    color: ${(props) =>
+      props.themeState === 'light'
+        ? 'var(--color-black)'
+        : 'var(--color-white)'};
   }
 `;
 
 const ProjectName = styled.div`
   margin-bottom: 1rem;
   font-size: 300%;
-  color: ${(props)=>props.themeState==='light' ? 'var(--color-orange)' : 'var(--color-white)'};
+  color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-black)' : 'var(--color-white)'};
   @media screen and (max-width: 413px) {
     font-size: 100%;
   }
 `;
 
-
-
 const WhiteFont = styled.section`
   color: var(--color-white);
   font-size: 300%;
   font-weight: bold;
-  .mobile{
-    display:none
+  .mobile {
+    display: none;
   }
   @media screen and (max-width: 413px) {
-    .web{
-      display: none
+    .web {
+      display: none;
     }
-    .mobile{
-    display:block
+    .mobile {
+      display: block;
+    }
   }
-    }
-
 `;
 
 const CardWrapper = styled.div`
@@ -308,7 +306,7 @@ const Describe = styled.div`
   text-align: center;
   @media screen and (max-width: 413px) {
     font-size: 150%;
-    }
+  }
 `;
 
 const ColorFont = styled.div`
@@ -318,22 +316,25 @@ const ColorFont = styled.div`
     height: 100%;
     font-weight: bold;
     color: transparent;
-    background: ${(props)=>props.themeState === 'light' ? 'linear-gradient(40deg, #ff6c02, #ffa69e)' : 'linear-gradient(40deg, #000080, var(--color-white))'};
+    background: ${(props) =>
+      props.themeState === 'light'
+        ? 'linear-gradient(40deg, #ff6c02, #ffa69e)'
+        : 'linear-gradient(40deg, #000080, var(--color-white))'};
     -webkit-background-clip: text;
-    &.mobile{
-      display:none;
-    }
-    @media screen and (max-width: 413px) {
-    font-size: 1rem;
-    &.web {
+    &.mobile {
       display: none;
     }
-    &.mobile {
-      display: block;
-      font-size: 2rem;
+    @media screen and (max-width: 413px) {
+      font-size: 1rem;
+      &.web {
+        display: none;
+      }
+      &.mobile {
+        display: block;
+        font-size: 2rem;
+      }
     }
   }
-  }
-`
+`;
 
 export default HomePage;

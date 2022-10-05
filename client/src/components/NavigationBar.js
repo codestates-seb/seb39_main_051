@@ -5,10 +5,13 @@ import DarkModeSwitch from './DarkModeSwitch';
 import Logo from '../assets/Logo';
 import { deleteCookie } from '../utils/cookie';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const { isLoggedIn, nickName } = useSelector((state) => state.userInfoSlice);
+
+  const [userNickName, setUserNickName] = useState(nickName || '마이 페이지');
 
   const navigate = useNavigate();
 
@@ -33,6 +36,7 @@ const NavigationBar = () => {
             className='mobile'
             width='35rem'
             src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Font_Awesome_5_solid_bars.svg'
+            alt='메뉴버튼'
           />
           <DropDownMenu mobile themeState={themeState} />
         </DropDown>
@@ -48,7 +52,9 @@ const NavigationBar = () => {
           <NavBarRight web themeState={themeState}>
             <DarkModeSwitch>토글</DarkModeSwitch>
             <a href='/mypage'>
-              <NavBarButton themeState={themeState}>{nickName}</NavBarButton>
+              <NavBarButton themeState={themeState}>
+                {userNickName}
+              </NavBarButton>
             </a>
             <NavBarButton themeState={themeState} onClick={handleLogout}>
               로그아웃

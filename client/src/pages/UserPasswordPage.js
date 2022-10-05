@@ -78,10 +78,7 @@ const UserPasswordPage = () => {
           })
           .then((res) => {
             alert('비밀번호가 변경되었습니다.');
-            console.log(newPassword);
-            console.log(res);
-          })
-          .catch((err) => console.log(err));
+          });
       } catch (err) {
         alert('비밀 번호 조건에 따라 작성해주세요.');
       }
@@ -184,17 +181,6 @@ const UserPasswordPage = () => {
                   fontSize='1.8rem'
                   text='비밀번호 변경'
                   selected
-                />
-              </a>
-              <a>
-                <BasicButton
-                  themeState={themeState}
-                  width='100%'
-                  height='4rem'
-                  color='var(--color-white)'
-                  backGroundColor='var(--color-orange)'
-                  fontSize='1.8rem'
-                  text='회원 탈퇴'
                 />
               </a>
             </div>

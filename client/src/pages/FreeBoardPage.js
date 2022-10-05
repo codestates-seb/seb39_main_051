@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const FreeBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {isLoggedIn} = useSelector((state)=>state.userInfoSlice)
+  const { isLoggedIn } = useSelector((state) => state.userInfoSlice);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
@@ -55,15 +55,19 @@ const FreeBoardPage = () => {
   }, [category, page, value]);
 
   const handleOnClick = () => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       navigate('/post', {
         state: { type: 'free', category: category || '취업 정보' },
-      })
-    }else{
-      if(window.confirm('게시글을 작성하시려면 로그인이 필요합니다 로그인하시겠습니까?')){
-        navigate('/login')
-      }else{
-        return
+      });
+    } else {
+      if (
+        window.confirm(
+          '게시글을 작성하시려면 로그인이 필요합니다 로그인하시겠습니까?'
+        )
+      ) {
+        navigate('/login');
+      } else {
+        return;
       }
     }
   };
@@ -84,7 +88,7 @@ const FreeBoardPage = () => {
       } else {
         axios
           .get(
-            `/questions/search?type=자유게시판&keyword=${value}&page=${page}&size=10`
+            `/posts/search?type=자유게시판&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => {
             setData(res.data.data);

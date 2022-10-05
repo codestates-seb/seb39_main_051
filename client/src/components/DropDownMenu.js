@@ -12,6 +12,7 @@ const DropDownMenu = (props) => {
     deleteCookie('memberId');
     deleteCookie('role');
     alert('로그아웃 되셨습니다.');
+    window.location.reload();
   };
 
   return (

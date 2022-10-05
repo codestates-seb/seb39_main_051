@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux';
 
 const PostSummary = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const date = props.createdAt .split('.')[0].replace(/-/g, '.').replace(/T/,'/')
+  const date = props.createdAt
+    .split('.')[0]
+    .replace(/-/g, '.')
+    .replace(/T/, '/');
   return (
     <PostCardLayout themeState={themeState}>
       <PostCardWrapper>
@@ -12,7 +15,7 @@ const PostSummary = (props) => {
           <CategoryWrapper>{props.category}</CategoryWrapper>
           <WriterCreatedAt>
             {props.likes ? <div>❤️ {props.likes}</div> : <></>}
-            <img src={props.picture} />
+            <img src={`/default.png`} alt='유저 프로필' />
             <div>{props.writer}</div>
             <div>{date}</div>
           </WriterCreatedAt>
@@ -26,9 +29,9 @@ const PostCardLayout = styled.div`
   border-bottom: 1px solid #8d8d8d;
   background-color: ${(props) =>
     props.themeState === 'light' ? '#FEDD89' : 'var(--color-gray )'};
-    color: ${(props) =>
+  color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-gray)' : 'var(--color-white)'};
-    width: 100%;
+  width: 100%;
   @media screen and (max-width: 413px) {
     font-size: 1.5rem;
     width: 36rem;
@@ -40,13 +43,13 @@ const PostCardLayout = styled.div`
 const PostCardWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin:1%;
+  margin: 1%;
   /* border:1px solid blue; */
   @media screen and (max-width: 413px) {
-    align-items:stretch;
+    align-items: stretch;
     flex-direction: column;
     height: 100%;
-    margin:1%;
+    margin: 1%;
   }
 `;
 
@@ -84,6 +87,11 @@ const WriterCreatedAt = styled.div`
   align-items: center;
   div {
     margin-left: 1rem;
+  }
+
+  img {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 `;
 

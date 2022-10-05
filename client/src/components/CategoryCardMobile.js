@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import SubscribeMark from '../assets/SubscribeMark';
 import {
   faReact,
   faJava,
@@ -14,22 +13,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import SubscribeMarkMobile from '../assets/SubscribeMarkMobile';
 
-const CategoryCard = ({
+const CategoryCardMobile = ({
   categoryName,
   questionCategoryId,
   handleClick,
   isSubscribe,
 }) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = () => {
-    setIsHovering(true);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
 
   let content = null;
   switch (categoryName) {
@@ -61,55 +53,22 @@ const CategoryCard = ({
       content = null;
       break;
   }
+
   return (
     <>
       <CategoryCardLayout
         onClick={() =>
           handleClick(questionCategoryId, categoryName, isSubscribe)
         }
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
       >
-        {isHovering ? (
-          isSubscribe ? (
-            <>
-              <CategoryCardWrapper
-                themeState={themeState}
-                isSubscribe={isSubscribe}
-              >
-                <SubscribeMark />
-                <LogoLayout>
-                  <div>{categoryName}</div>
-                  <div>구독취소하기</div>
-                </LogoLayout>
-              </CategoryCardWrapper>
-              <div className='subscribe-web'>ㅤ</div>
-            </>
-          ) : (
-            <>
-              <CategoryCardWrapper
-                themeState={themeState}
-                isSubscribe={isSubscribe}
-              >
-                <LogoLayout>
-                  <div>{categoryName}</div>
-                  <div>구독하기</div>
-                </LogoLayout>
-              </CategoryCardWrapper>
-              <div className='subscribe-web'>ㅤ</div>
-            </>
-          )
-        ) : isSubscribe ? (
+        {isSubscribe ? (
           <>
             <CategoryCardWrapper
               themeState={themeState}
               isSubscribe={isSubscribe}
             >
-              <SubscribeMark />
-              <LogoLayout>
-                <div>{content}</div>
-                <NameWrapper>{categoryName}</NameWrapper>
-              </LogoLayout>
+              <SubscribeMarkMobile />
+              <div>{content}</div>
             </CategoryCardWrapper>
             <div className='subscribe-web'>구독 중</div>
           </>
@@ -119,10 +78,7 @@ const CategoryCard = ({
               themeState={themeState}
               isSubscribe={isSubscribe}
             >
-              <LogoLayout>
-                <div>{content}</div>
-                <NameWrapper>{categoryName}</NameWrapper>
-              </LogoLayout>
+              <div>{content}</div>
             </CategoryCardWrapper>
             <div className='subscribe-web'>ㅤ</div>
           </>
@@ -136,12 +92,12 @@ const CategoryCardLayout = styled.div`
   font-size: 1.7rem;
   font-weight: bold;
   position: relative;
-  width: 18.5rem;
   //회전 애니메이션
   .subscribe-web {
     text-align: center;
     margin-top: 1rem;
   }
+
   @media screen and (max-width: 412px) {
     display: flex;
     .subscribe-web {
@@ -149,36 +105,24 @@ const CategoryCardLayout = styled.div`
     }
   }
 `;
+
 const CategoryCardWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-width: 18.5rem;
-  height: 7.5rem;
-  border-radius: 1.5rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
   cursor: pointer;
   background-color: ${(props) =>
     props.themeState === 'light'
       ? props.isSubscribe
-        ? 'var(--color-orange)'
-        : 'var(--color-yellow)'
+        ? 'var(--color-yellow)'
+        : 'var(--color-orange)'
       : props.isSubscribe
       ? 'var(--color-navy)'
       : 'var(--color-black)'};
-  :hover {
-    background-color: ${(props) =>
-      props.themeState === 'light'
-        ? 'var(--color-orange)'
-        : 'var(--color-navy)'};
-  }
-`;
-const LogoLayout = styled.div`
-  @media screen and (max-width: 412px) {
-  }
-`;
-const NameWrapper = styled.div`
-  padding-top: 0.5rem;
 `;
 
-export default CategoryCard;
+export default CategoryCardMobile;
