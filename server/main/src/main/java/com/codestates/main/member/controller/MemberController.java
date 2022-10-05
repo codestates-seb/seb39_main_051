@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,6 +36,7 @@ public class MemberController {
     private final SubscriptionMapper subscriptionMapper;
 
     @PostMapping("/post")
+    //@Transactional
     public ResponseEntity<Object> postMember(@RequestBody MemberDTO.Post requestBody) throws BusinessLogicException {
         Member member = memberMapper.memberPostDTOToMember(requestBody);
         Member createdMember = memberService.createMember(member);
@@ -43,6 +45,7 @@ public class MemberController {
     }
 
     @PostMapping("/subscription")
+    //@Transactional
     public ResponseEntity postSubscription(@RequestBody SubscriptionDTO.Post requestBody){
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();

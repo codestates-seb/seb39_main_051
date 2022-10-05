@@ -84,6 +84,7 @@ public class Member {
 //    }
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<PostLike> postLikes = new ArrayList<>();
 
     public void setPostLikes(PostLike postLike) {
@@ -91,6 +92,7 @@ public class Member {
     }
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<CommentLike> commentLikes = new ArrayList<>();
 
     public void setCommentLikes(CommentLike commentLike) {
@@ -98,6 +100,7 @@ public class Member {
     }
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<AnswerLike> answerLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
