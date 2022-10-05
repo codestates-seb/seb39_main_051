@@ -39,7 +39,7 @@ public class InitDb {
 
     String[] categories = new String[]{"Java", "React", "Spring", "Data Structure", "Operating System", "Database", "Network", "Javascript"};
 
-//    @PostConstruct
+    //@PostConstruct
     public void init() throws IOException {
 
         Member member = Member.builder()

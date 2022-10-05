@@ -6,12 +6,14 @@ import com.codestates.main.subscription.entity.Subscription;
 import com.codestates.main.subscription.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+//@Transactional
 public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     public void createSubscription(Subscription subscription){
@@ -24,6 +26,10 @@ public class SubscriptionService {
     }
 
     public List<Subscription> findActiveMemberSubscriptions(Member member){
+
+        //System.out.println("find Active Member Subscription 호출");
+        //System.out.println("member: "+member);
+        //System.out.println("구독 정보: "+subscriptions);
         return subscriptionRepository.findSubscriptionsByMemberAndStatus(member, Subscription.STATUS.SUBSCRIPTION_ACTIVE);
     }
 

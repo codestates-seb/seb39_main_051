@@ -14,11 +14,13 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/member/**", config);
-        source.registerCorsConfiguration("/answer/**", config);
+        config.addExposedHeader("Authorization");
+        config.addExposedHeader("Refresh");
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }
