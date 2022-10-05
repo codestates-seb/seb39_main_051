@@ -1,5 +1,9 @@
 package com.codestates.main.member.controller;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.codestates.main.exception.BusinessLogicException;
 import com.codestates.main.exception.ExceptionCode;
 import com.codestates.main.jwt.JwtTokenizer;
@@ -19,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -28,7 +34,9 @@ import java.util.Objects;
 public class MyPageController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
-
+    private final AmazonS3Client amazonS3Client;
+    @Value("${cloud.aws.s3.url}")
+    private String s3Url;
     @GetMapping("/test")
     public String getTest(){
         return "security test";
@@ -56,49 +64,48 @@ public class MyPageController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+
     @PostMapping("/upload")
-    public ResponseEntity postImage(@RequestParam("files") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<Object> upload(@RequestParam("files") MultipartFile files) throws Exception {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         String email = String.valueOf(user.getPrincipal().toString());
-
         Member member = memberService.findMemberByEmail(email);
-        String filePath="resources"+File.separator+"images";
-        String contentType = multipartFile.getContentType();
+
+        String originalContentType = files.getContentType();
         String originalFileExtension;
-        String current = System.getProperty("user.dir");
-        String path = current+ File.separator+filePath+File.separator;  // 실제 파일이 저장되는 위치
-        File file = new File(path);
-        if(!file.exists()){
-            file.mkdirs();
-        }
-        if(ObjectUtils.isEmpty(contentType)){
+
+        if(ObjectUtils.isEmpty(originalContentType)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        else{
-            if(contentType.contains("image/jpeg")){
-                originalFileExtension = ".jpg";
-            }
-            else if(contentType.contains("image/png")){
-                originalFileExtension = ".png";
-            }
-            else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+        if(originalContentType.contains("image/jpeg")){
+            originalFileExtension = ".jpg";
+        }
+        else if(originalContentType.contains("image/png")){
+            originalFileExtension = ".png";
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        System.out.println(path);
+        String originalName = member.getMemberId()+originalFileExtension; // 파일 이름
+        long size = files.getSize(); // 파일 크기
 
-        file = new File(path, member.getMemberId()+originalFileExtension); // 경로/파일.type\
-        if(file.exists()){
-            System.out.println("exits");
-            if(file.delete()){
-                System.out.println("deleted");
-            }
-        }
-        multipartFile.transferTo(file);
-        member.setPicture(path+member.getMemberId()+originalFileExtension);
-        memberService.updateImage(member);
-        MemberDTO.Response response = memberMapper.memberToMemberResponseDTO(member);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+        ObjectMetadata objectMetaData = new ObjectMetadata();
+        objectMetaData.setContentType(files.getContentType());
+        objectMetaData.setContentLength(size);
+        System.out.println("Content Type: "+files.getContentType());
+        System.out.println("Original Name: "+originalName);
+        //S3에 업로드
+        String s3Bucket = "maeil-mail";
+        amazonS3Client.putObject(
+                new PutObjectRequest(s3Bucket, originalName, files.getInputStream(), objectMetaData)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
+
+        String imagePath = amazonS3Client.getUrl(s3Bucket, originalName).toString(); // 접근가능한 URL 가져오기
+        member.setPicture(s3Url+originalName);
+        memberService.updateMember(member);
+        return new ResponseEntity<>(imagePath, HttpStatus.OK);
     }
+
 }

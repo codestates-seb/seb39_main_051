@@ -41,17 +41,6 @@ public class InitDb {
 
 //    @PostConstruct
     public void init() throws IOException {
-/*        String filePath="resources"+File.separator+"images";
-        String current = System.getProperty("user.dir");
-        String path = current+ File.separator+filePath+File.separator;
-        ClassPathResource resource = new ClassPathResource("default.png");
-        String from = current+File.separator
-                +"src" +File.separator
-                +"main" +File.separator
-                +"resources"+File.separator;
-        File file = new File(from,"default.png");
-        File newFile = new File(path,"default.png");
-        Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);*/
 
         Member member = Member.builder()
                 .email("shb03207@naver.com")
@@ -59,14 +48,14 @@ public class InitDb {
                 .password("1234")
                 .role(Member.ROLE.ROLE_ADMIN)
                 .build();
-        memberService.createMember(member);
+        memberService.createAdmin(member);
 
         member = Member.builder()
                 .email("test@gmail.com")
                 .nickname("유저")
                 .password("1234")
                 .build();
-        memberService.createAdmin(member);
+        memberService.createMember(member);
 
         for(long i=0;i<categories.length;i++){
             QuestionCategory questionCategory = QuestionCategory.builder()
