@@ -9,13 +9,9 @@ import com.codestates.main.subscription.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +22,9 @@ public class MemberService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Value("${cloud.aws.s3.url}")
+    private String s3Url;
     private final SubscriptionService subscriptionService;
-    static String filePath="resources"+File.separator+"images";
-    static String current = System.getProperty("user.dir");
-    static String path = current+ File.separator+filePath+File.separator;
     public Member createMember(Member member) {
 
         String email = member.getEmail();
@@ -40,7 +35,7 @@ public class MemberService{
         String password = member.getPassword();
         member.setPassword(bCryptPasswordEncoder.encode(password));
         member.setRole(Member.ROLE.ROLE_USER);
-        member.setPicture(path+"default.png");
+        member.setPicture(s3Url+"default.png");
         return memberRepository.save(member);
     }
 
@@ -53,7 +48,7 @@ public class MemberService{
         String password = member.getPassword();
         member.setPassword(bCryptPasswordEncoder.encode(password));
         member.setRole(Member.ROLE.ROLE_ADMIN);
-        member.setPicture(path+"default.png");
+        member.setPicture(s3Url+"default.png");
         return memberRepository.save(member);
     }
 

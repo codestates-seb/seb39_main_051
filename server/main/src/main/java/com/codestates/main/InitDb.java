@@ -41,6 +41,7 @@ public class InitDb {
 
     @PostConstruct
     public void init() throws IOException {
+        /*
         String filePath="resources"+File.separator+"images";
         String current = System.getProperty("user.dir");
         String path = current+ File.separator+filePath+File.separator;
@@ -59,6 +60,7 @@ public class InitDb {
         File file = new File(from,"default.png");
         File newFile = new File(path,"default.png");
         Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        */
         Member member = Member.builder()
                 .email("shb03207@naver.com")
                 .nickname("관리자")
