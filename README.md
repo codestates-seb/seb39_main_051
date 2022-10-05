@@ -25,8 +25,8 @@
 
 | [한정윤](https://github.com/JungYunHan) | [이창훈](https://github.com/anotheranotherhoon) | [김충섭](https://github.com/kchs94) | [김수빈](https://github.com/soobinkim-kor) |
 | :---: | :---: | :---: | :---: |
-| Frontend(팀장) | Frontend | Backend | Backend |
 | ![](https://github.com/JungYunHan.png) | ![](https://github.com/anotheranotherhoon.png) | ![](https://github.com/kchs94.png) | ![](https://github.com/soobinkim-kor.png) |
+| Frontend(팀장) | Frontend | Backend | Backend |
 
 ## 기술 스택
 
