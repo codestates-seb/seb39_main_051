@@ -11,16 +11,13 @@ import axiosInstance from '../utils/axiosInstance';
 
 const QuestionPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const { isLoggedIn, userId, nickName } = useSelector(
-    (state) => state.userInfoSlice
-  );
+  const { isLoggedIn, userId } = useSelector((state) => state.userInfoSlice);
   const params = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
-  const [date, setDate] = useState([])
-  const [time, setTime] = useState([])
-  const [modifiedAt, setModifiedAt] = useState([]);
+  const [date, setDate] = useState([]);
+  const [time, setTime] = useState([]);
   const [answer, setAnswer] = useState([]);
   const [memberId, setMemberId] = useState('');
   const [nickname, setNickname] = useState('');
@@ -32,11 +29,8 @@ const QuestionPage = () => {
         const response = await axiosInstance.delete(`/questions/${params.id}`);
         navigate('/questions');
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
-
 
   const navigatePostAnswer = () => {
     if (isLoggedIn) {
@@ -59,111 +53,115 @@ const QuestionPage = () => {
   };
 
   useEffect(() => {
-    axiosInstance
-      .get(`/questions/${params.id}`)
-      .then((res) => {
-        console.log(res)
-        setContent(res.data.content);
-        setQuestionId(res.data.questionId);
-        setCategory(res.data.questionCategoryName);
-        const newDate = res.data.createdAt
-          .split('.')[0]
-          .replace(/-/g, '.')
-          .split('T')
-          setDate(newDate[0])
-          setTime(newDate[1])
-        // setModifiedAt(res.data.modifiedAt);
-        setMemberId(res.data.memberId);
-        setNickname(res.data.nickname);
-        const origin = res.data.answers;
-        const sortedByLikesAnswer = origin.sort((a, b) =>
-          a.likeCount > b.likeCount ? -1 : 1
-        );
-        setAnswer(sortedByLikesAnswer);
-      })
-      .catch((err) => console.log(err));
+    axiosInstance.get(`/questions/${params.id}`).then((res) => {
+      setContent(res.data.content);
+      setQuestionId(res.data.questionId);
+      setCategory(res.data.questionCategoryName);
+      const newDate = res.data.createdAt
+        .split('.')[0]
+        .replace(/-/g, '.')
+        .split('T');
+      setDate(newDate[0]);
+      setTime(newDate[1]);
+      setMemberId(res.data.memberId);
+      setNickname(res.data.nickname);
+      const origin = res.data.answers;
+      const sortedByLikesAnswer = origin.sort((a, b) =>
+        a.likeCount > b.likeCount ? -1 : 1
+      );
+      setAnswer(sortedByLikesAnswer);
+    });
   }, []);
 
   const navigateEditQuestion = () => {
-    navigate('/edit/question', {
-      state: {
-        questionId: questionId,
-        question: content,
-        category :category,
-      },
-    });
+    if (isLoggedIn) {
+      navigate('/edit/question', {
+        state: {
+          questionId: questionId,
+          question: content,
+          category: category,
+        },
+      });
+    } else {
+      if (
+        window.confirm(
+          '답변을 작성하기 위해서는 로그인이 필요합니다 로그인 하시겠습니까?'
+        )
+      ) {
+        navigate('/login');
+      } else {
+        return;
+      }
+    }
   };
   return (
     <>
       <BorderLayout>
-      <Toast />
+        <Toast />
         <Title themeState={themeState}>{content}</Title>
         <ContentInfo>
           <Category themeState={themeState}>{category}</Category>
           <Writer themeState={themeState}>
-            <img
-              src='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png'
-              alt='프로필사진'
-            />
+            <img src='/default.png' alt='프로필사진' />
             {nickname}
           </Writer>
-          <InfoWrapper>
-          <Date themeState={themeState}>{date}<span id='time'>{time}</span></Date>
-          {userId == memberId ? (
-            <>
-              <EditDelete onClick={() => navigateEditQuestion()}>
-                수정
+          <EventWrapper>
+            <div>{date}</div>
+            <div className='time'>/{time}</div>
+            {userId === memberId ? (
+              <EditDelete>
+                <div
+                  className='edit leftOne'
+                  onClick={() => navigateEditQuestion()}
+                >
+                  수정
+                </div>
+                <div className='edit' onClick={() => handleDeleteQuestion()}>
+                  삭제
+                </div>
               </EditDelete>
-              <EditDelete onClick={() => handleDeleteQuestion()}>
-                삭제
-              </EditDelete>
-            </>
-          ) : (
-            <></>
-          )}
-          </InfoWrapper>
+            ) : (
+              <></>
+            )}
+          </EventWrapper>
         </ContentInfo>
         <CenterWrapper>
-              <AnswerToTal themeState={themeState}>
-                답변 {answer.length}개
-              </AnswerToTal>
-              <BasicButton
-                width={'5%'}
-                height={'5%'}
-                color={'white'}
-                backGroundColor={'var(--color-orange)'}
-                fontSize={'1.3rem'}
-                padding={'1rem'}
-                onClick={navigatePostAnswer}
-                text={'답변등록'}
-              />
-            </CenterWrapper>
-            {answer.map((el, i) => (
-              <AnswerCard
-              key={el.answerId}
-                profileImg='https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-xl.png'
-                nickname={el.nickname}
-                createdAt={el.createdAt
-                  .split('.')[0]
-                  .replace(/-/g, '.')}
-                memberId={el.memberId}
-                // modifiedAt='2022.09.20'
-                content={el.content}
-                likeCount={el.likeCount}
-                comment={el.comments.sort((a, b) =>
-                  a.likeCount > b.likeCount ? -1 : 1
-                )}
-                answerId={el.answerId}
-                answer={answer}
-                setAnswer={setAnswer}
-              />
-            ))}
+          <AnswerToTal themeState={themeState}>
+            답변 {answer.length}개
+          </AnswerToTal>
+          <BasicButton
+            width={'5%'}
+            height={'5%'}
+            color={'white'}
+            backGroundColor={'var(--color-orange)'}
+            fontSize={'1.3rem'}
+            padding={'1rem'}
+            onClick={navigatePostAnswer}
+            text={'답변등록'}
+          />
+        </CenterWrapper>
+        {answer.map((el, i) => (
+          <AnswerCard
+            key={el.answerId}
+            profileImg='/default.png'
+            nickname={el.nickname}
+            createdAt={el.createdAt.split('.')[0].replace(/-/g, '.')}
+            memberId={el.memberId}
+            // modifiedAt='2022.09.20'
+            content={el.content}
+            likeCount={el.likeCount}
+            comment={el.comments.sort((a, b) =>
+              a.likeCount > b.likeCount ? -1 : 1
+            )}
+            answerId={el.answerId}
+            answer={answer}
+            setAnswer={setAnswer}
+          />
+        ))}
       </BorderLayout>
     </>
   );
 };
-
-
 
 const Title = styled.div`
   font-size: 2rem;
@@ -189,18 +187,14 @@ const Category = styled.div`
       : 'var(--color-gray)'};
   min-width: 8.8rem;
   @media screen and (max-width: 413px) {
-    padding:0.5rem;
+    padding: 0.5rem;
   }
 `;
-const EditDelete = styled.div`
-  color: #d2d2d2;
-  margin-right: 0.5%;
-  min-width:2.3rem;
-  cursor: pointer;
-`;
 const Writer = styled.div`
+  display: flex;
+  align-items: center;
   margin-right: 1rem;
-  min-width: 11.8rem;
+  max-width: 11.8rem;
   color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
   img {
@@ -210,17 +204,6 @@ const Writer = styled.div`
     border-radius: 0.3rem;
     margin-right: 0.3rem;
   }
-`;
-const Date = styled.div`
-  margin-right: 0.5%;
-  color: ${(props) =>
-    props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
-      @media screen and (max-width: 413px) {
-        span{
-          display:none;
-        }
-  }
-    
 `;
 
 const CenterWrapper = styled.section`
@@ -244,14 +227,33 @@ const AnswerToTal = styled.div`
   color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
 `;
-const InfoWrapper = styled.div`
-  display:flex;
-  @media screen and (max-width: 413px) {
-    flex-direction:column;
-    justify-content:flex-end;
+
+const EventWrapper = styled.div`
+  display: flex;
+  font-size: 1.2rem;
+  @media screen and (max-width: 412px) {
+    display: block;
+    .time {
+      display: none;
+    }
   }
+`;
 
-`
-
+const EditDelete = styled.div`
+  display: flex;
+  .edit {
+    min-width: 2.3rem;
+    color: #d4d4d4;
+    cursor: pointer;
+  }
+  .leftOne {
+    margin-right: 5%;
+  }
+  @media screen and (max-width: 412px) {
+    .edit {
+      margin-left: auto;
+    }
+  }
+`;
 
 export default QuestionPage;

@@ -35,6 +35,8 @@ public class PostService {
     public Post updatePost(Post post) {
         Post findPost = findVerifiedPost(post.getPostId());
 
+        Optional.ofNullable(post.getTitle())
+                        .ifPresent(title -> findPost.updateTitle(title));
         Optional.ofNullable(post.getContent())
                 .ifPresent(content -> findPost.updateContent(content));
         Optional.ofNullable(post.getCategory())
@@ -65,5 +67,13 @@ public class PostService {
     public void deletePost(Long postId) {
         Post findPost = findVerifiedPost(postId);
         postRepository.delete(findPost);
+    }
+
+    public Page<Post> searchByTypeAndKeyword(int page, int size, String type, String keyword) {
+        return postRepository.findAllByTypeAndTitleContaining(PageRequest.of(page,size), type, keyword);
+    }
+
+    public Page<Post> searchByCategoryAndKeyword(int page, int size, String category, String keyword) {
+        return postRepository.findAllByCategoryAndTitleContaining(PageRequest.of(page,size), category, keyword);
     }
 }

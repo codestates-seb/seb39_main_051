@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from './BasicButton';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setCookie } from '../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -85,7 +83,7 @@ const Form = (props) => {
     if (props.status === 'login') {
       //로그인 일시
       if (!email || !password) {
-        alert('Enter your Email and password!');
+        alert('이메일과 비밀번호를 작성해주세요!');
         return;
       }
 
@@ -96,11 +94,11 @@ const Form = (props) => {
         });
         const headers = await response.headers;
         setCookie('accessToken', headers.authorization, 60);
-        alert('Login Success');
+        alert('로그인이 되었습니다.');
         navigate('/');
         window.location.reload();
       } catch (err) {
-        alert('Check your Email and Password');
+        alert('이메일 또는 비밀번호를 확인해주세요.');
       }
     } else {
       //회원가입 일시
@@ -113,16 +111,16 @@ const Form = (props) => {
               nickname: nickName,
             })
             .then((res) => {
-              alert('SignUp Success');
+              alert('회원가입이 되었습니다.');
               navigate('/login');
               window.location.reload();
             })
             .catch((err) => alert('이미 존재하는 email입니다.'));
         } catch (err) {
-          alert('Check valid option');
+          alert('회원 가입 형식에 맞춰 작성해주세요.');
         }
       } else {
-        window.alert('Check valid option');
+        window.alert('회원 가입 형식에 맞춰 작성해주세요.');
       }
     }
   };
@@ -212,19 +210,11 @@ const Form = (props) => {
         />
         {props.status === 'login' ? (
           <Redirect themeState={themeState}>
-            <a href='/signup'>
-              <FontAwesomeIcon icon={faGoogle} size='2x' />
-              회원가입하러가기{' '}
-            </a>
-            <a href='/'>구글계정으로 가입하기</a>
+            <a href='/signup'>회원가입하러가기 </a>
           </Redirect>
         ) : (
           <Redirect themeState={themeState}>
             <a href='/login'>로그인하러가기 </a>
-            <a href='/'>
-              <FontAwesomeIcon icon={faGoogle} size='2x' />
-              구글계정으로 로그인하기
-            </a>
           </Redirect>
         )}
       </form>
@@ -287,6 +277,8 @@ const InputWrapper = styled.div`
         : 'var(--color-gray)'};
     border: 1px solid #d2d2d2;
     border-radius: 0.3rem;
+    color: ${(props) =>
+      props.themeState === 'light' ? 'var(--color-black)' : '#D2D2D2'};
   }
 `;
 const Redirect = styled.div`
@@ -305,4 +297,5 @@ const Redirect = styled.div`
     margin-right: 0.3rem;
   }
 `;
+
 export default Form;

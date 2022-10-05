@@ -1,18 +1,45 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { deleteCookie } from '../utils/cookie';
 import DarkModeSwitch from './DarkModeSwitch';
+
 const DropDownMenu = (props) => {
+  const { isLoggedIn } = useSelector((state) => state.userInfoSlice);
+
+  const handleLogout = () => {
+    deleteCookie('accessToken');
+    deleteCookie('nickname');
+    deleteCookie('memberId');
+    deleteCookie('role');
+    alert('로그아웃 되셨습니다.');
+    window.location.reload();
+  };
+
   return (
     <>
       {props.mobile ? (
         <ItemListWrapper mobile themeState={props.themeState}>
-          <ItemList mobile>
-            <a href='/questions'>질문 답변 공유 게시판</a>
-            <a href='/free'>자유 게시판</a>
-            <a href='/suggestion'>건의 게시판</a>
-            <a href='/login'>로그인</a>
-            <a href='/signup'>회원가입</a>
-            <DarkModeSwitch />
-          </ItemList>
+          {isLoggedIn ? (
+            <ItemList mobile>
+              <a href='/questions'>질문 답변 공유 게시판</a>
+              <a href='/free'>자유 게시판</a>
+              <a href='/suggestion'>건의 게시판</a>
+              <a href='/mypage'>마이 페이지</a>
+              <a href='/' onClick={handleLogout}>
+                로그아웃
+              </a>
+              <DarkModeSwitch />
+            </ItemList>
+          ) : (
+            <ItemList mobile>
+              <a href='/questions'>질문 답변 공유 게시판</a>
+              <a href='/free'>자유 게시판</a>
+              <a href='/suggestion'>건의 게시판</a>
+              <a href='/login'>로그인</a>
+              <a href='/signup'>회원가입</a>
+              <DarkModeSwitch />
+            </ItemList>
+          )}
         </ItemListWrapper>
       ) : (
         <ItemListWrapper themeState={props.themeState}>

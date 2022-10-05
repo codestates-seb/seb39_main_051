@@ -10,10 +10,9 @@ import axiosInstance from '../utils/axiosInstance';
 
 const PostPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const { userId } = useSelector((state) => state.userInfoSlice);
   const navigate = useNavigate();
   const { type, category } = useLocation().state;
-  const [categoryContent, setCategoryContent] = useState('');
+  const [categoryContent, setCategoryContent] = useState(1);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [seleted, setSelected] = useState('');
@@ -26,7 +25,6 @@ const PostPage = () => {
   };
 
   const handleCategory = (e) => {
-    console.log(e.target.innerText);
     switch (e.target.innerText) {
       case 'Java':
         setSelected(e.target.innerText);
@@ -80,15 +78,15 @@ const PostPage = () => {
         title,
         content,
         type: '자유게시판',
-        category: categoryContent,
-      })
+        category: seleted,
+      });
       navigate('/free');
     } else if (type === 'suggestion') {
       await axiosInstance.post(`/posts`, {
         title,
         content,
         type: '건의게시판',
-        category: categoryContent,
+        category: seleted,
       });
       navigate('/suggestion');
     }
@@ -149,53 +147,62 @@ const PostPage = () => {
               onChange={handleTitle}
               required
             />
-            <InputWrapper themeState={themeState}>
-              <label id='content'/>
-              {type === 'questions' ? (
-                              <textarea
-                              id='content'
-                              name='content'
-                              type='text'
-                              placeholder='제목'
-                              value={content}
-                              onChange={handleContent}
-                              required
-                            />
-              ) : (
-                <textarea
-                id='content'
-                name='content'
-                type='text'
-                placeholder='내용'
-                value={content}
-                onChange={handleContent}
-                required
-              />
-              )}
-            </InputWrapper>
-            <ButtonWrapper>
-              <BasicButton
-                themeState={themeState}
-                width='5.5rem'
-                height='4rem'
-                color='var(--color-white)'
-                backGroundColor='var(--color-orange)'
-                fontSize='1.8rem'
-                text='취소'
-                onClick={handleCancel}
-              />
-              <BasicButton
-                themeState={themeState}
-                width='5.5rem'
-                height='4rem'
-                color='var(--color-white)'
-                backGroundColor='var(--color-orange)'
-                fontSize='1.8rem'
-                text='등록'
-                onClick={handleSubmitPost}
-              />
-            </ButtonWrapper>
-          </form>
+          </InputWrapper>
+        )}
+        <DropDownList
+          type={type}
+          category={category}
+          seleted={seleted}
+          setSelected={setSelected}
+          handleCategory={handleCategory}
+        />
+        <InputWrapper themeState={themeState}>
+          <label id='content' />
+          {type === 'questions' ? (
+            <textarea
+              id='content'
+              name='content'
+              type='text'
+              placeholder='제목'
+              value={content}
+              onChange={handleContent}
+              required
+            />
+          ) : (
+            <textarea
+              id='content'
+              name='content'
+              type='text'
+              placeholder='내용'
+              value={content}
+              onChange={handleContent}
+              required
+            />
+          )}
+        </InputWrapper>
+        <ButtonWrapper>
+          <BasicButton
+            themeState={themeState}
+            width='5.5rem'
+            height='4rem'
+            color='var(--color-white)'
+            backGroundColor='var(--color-orange)'
+            fontSize='1.8rem'
+            text='취소'
+            onClick={handleCancel}
+          />
+          <BasicButton
+            themeState={themeState}
+            width='5.5rem'
+            height='4rem'
+            color='var(--color-white)'
+            backGroundColor='var(--color-orange)'
+            fontSize='1.8rem'
+            text='등록'
+            onClick={handleSubmitPost}
+          />
+        </ButtonWrapper>
+      </form>
     </BorderLayout>
   );
 };

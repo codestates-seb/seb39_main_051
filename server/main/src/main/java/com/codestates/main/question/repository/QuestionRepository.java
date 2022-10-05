@@ -16,4 +16,9 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     List<Question> findByQuestionCategory(QuestionCategory questionCategory);
 
     Page<Question> findAllByQuestionCategory(Pageable pageable, QuestionCategory questionCategory);
+
+    Page<Question> findAllByContentContaining(Pageable pageable, String keyword);
+
+    Page<Question> findAllByQuestionCategoryAndContentContaining(Pageable pageable, QuestionCategory questionCategory,
+                                                                 String keyword);
 }

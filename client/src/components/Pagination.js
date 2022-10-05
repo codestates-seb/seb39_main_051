@@ -5,18 +5,10 @@ import styled from 'styled-components';
 import BasicButton from './BasicButton';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const Pagination = ({
-  total,
-  size,
-  page,
-  setPage,
-  setSize,
-  setTotal,
-  type,
-}) => {
+const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
-  const numPages = Math.ceil(total / size);
+  const numPages = Math.ceil(total / 10);
 
   const questionCategoryArr = [
     'Java',
@@ -40,48 +32,84 @@ const Pagination = ({
 
   useEffect(() => {
     if (type === '질문 답변 공유 게시판') {
-      if (questionCategoryArr.indexOf(category) !== -1) {
+      if ((value !== '') & (questionCategoryArr.indexOf(category) !== -1)) {
+        axios
+          .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+          .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
+      } else if (value !== '') {
         axios
           .get(
-            `/questions?questionCategory=${category}&page=${page}&size=${size}`
+            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
+      } else if (questionCategoryArr.indexOf(category) !== -1) {
+        axios
+          .get(`/questions?questionCategory=${category}&page=${page}&size=10`)
+          .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
       } else {
-        axios.get(`/questions?page=${page}&size=${size}`).then((res) => {
+        axios.get(`/questions?page=${page}&size=10`).then((res) => {
           setTotal(Number(res.data.pageInfo.totalElements));
         });
         navigate('/questions');
       }
     } else if (type === '자유게시판') {
-      if (freeCategoryArr.indexOf(category) !== -1) {
+      if ((value !== '') & (freeCategoryArr.indexOf(category) !== -1)) {
         axios
-          .get(`/posts?category=${category}&page=${page}&size=${size}`)
+          .get(
+            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => {
+            setTotal(Number(res.data.pageInfo.totalElements));
+          });
+      } else if (value !== '') {
+        axios
+          .get(
+            `/posts/search?type=${type}&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => {
+            setTotal(Number(res.data.pageInfo.totalElements));
+          });
+      } else if (freeCategoryArr.indexOf(category) !== -1) {
+        axios
+          .get(`/posts?category=${category}&page=${page}&size=10`)
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
           });
       } else {
-        axios
-          .get(`/posts?type=자유게시판&page=${page}&size=${size}`)
-          .then((res) => {
-            setTotal(Number(res.data.pageInfo.totalElements));
-          });
+        axios.get(`/posts?type=자유게시판&page=${page}&size=10`).then((res) => {
+          setTotal(Number(res.data.pageInfo.totalElements));
+        });
         navigate('/free');
       }
     } else if (type === '건의게시판') {
-      if (suggestionCategoryArr.indexOf(category) !== -1) {
+      if ((value !== '') & (freeCategoryArr.indexOf(category) !== -1)) {
         axios
-          .get(`/posts?category=${category}&page=${page}&size=${size}`)
-          .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
-      } else {
-        axios
-          .get(`/posts?type=건의게시판&page=${page}&size=${size}`)
+          .get(
+            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+          )
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
           });
+      } else if (value !== '') {
+        axios
+          .get(
+            `/posts/search?type=${type}&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => {
+            setTotal(Number(res.data.pageInfo.totalElements));
+          });
+      } else if (suggestionCategoryArr.indexOf(category) !== -1) {
+        axios
+          .get(`/posts?category=${category}&page=${page}&size=10`)
+          .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
+      } else {
+        axios.get(`/posts?type=건의게시판&page=${page}&size=10`).then((res) => {
+          setTotal(Number(res.data.pageInfo.totalElements));
+        });
         navigate('/suggestion');
       }
     }
-  }, [page, size]);
+  }, [page, value]);
 
   return (
     <>

@@ -27,6 +27,8 @@ public class PostResponseDto2 {
 
     private Long memberId;
 
+    private String picture;
+
     private String email;
 
     private long likeCount;
@@ -41,6 +43,7 @@ public class PostResponseDto2 {
         this.category = post.getCategory();
         this.nickname = post.getMember().getNickname();
         this.memberId = post.getMember().getMemberId();
+        this.picture = post.getMember().getPicture();
         this.email = post.getMember().getEmail();
         this.likeCount = post.getLikeCount();
         this.createdAt = post.getCreatedAt();

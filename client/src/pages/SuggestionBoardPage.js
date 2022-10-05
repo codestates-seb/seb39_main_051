@@ -12,11 +12,12 @@ import axios from 'axios';
 
 const SuggestionBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-
+  const { isLoggedIn } = useSelector((state) => state.userInfoSlice);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(1);
   const [data, setData] = useState([]);
+  const [value, setValue] = useState('');
 
   const navigate = useNavigate();
 
@@ -25,7 +26,23 @@ const SuggestionBoardPage = () => {
   const { category } = useParams();
 
   useEffect(() => {
-    if (categoryArr.indexOf(category) !== -1) {
+    if ((value !== '') & (categoryArr.indexOf(category) !== -1)) {
+      axios
+        .get(
+          `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+        )
+        .then((res) => {
+          setData(res.data.data);
+        });
+    } else if (value !== '') {
+      axios
+        .get(
+          `/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
+        )
+        .then((res) => {
+          setData(res.data.data);
+        });
+    } else if (categoryArr.indexOf(category) !== -1) {
       axios
         .get(`/posts?category=${category}&page=${page}&size=${size}`)
         .then((res) => setData(res.data.data));
@@ -37,16 +54,49 @@ const SuggestionBoardPage = () => {
         });
       navigate('/suggestion');
     }
-  }, [category, page]);
+  }, [category, page, value]);
 
   const handleOnClick = () => {
-    navigate('/post', {
-      state: { type: 'suggestion', category: category || '질문 추가 요청' },
-    });
+    if (isLoggedIn) {
+      navigate('/post', {
+        state: { type: 'suggestion', category: category || '질문 추가 요청' },
+      });
+    } else {
+      if (
+        window.confirm(
+          '게시글을 작성하시려면 로그인이 필요합니다 로그인하시겠습니까?'
+        )
+      ) {
+        navigate('/login');
+      } else {
+        return;
+      }
+    }
   };
 
   const navigateToPostSumary = (id) => {
     navigate(`/board/${id}`);
+  };
+
+  const handleEnter = (e) => {
+    if (e.keyCode === 13) {
+      setValue(e.target.value);
+      if (categoryArr.indexOf(category) !== -1) {
+        axios
+          .get(
+            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => setData(res.data.data));
+      } else {
+        axios
+          .get(
+            `/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
+          )
+          .then((res) => {
+            setData(res.data.data);
+          });
+      }
+    }
   };
 
   return (
@@ -55,7 +105,7 @@ const SuggestionBoardPage = () => {
       <ContentWrapper>
         <MenuWrapper>
           <TapMenu themeState={themeState} />
-          <Search themeState={themeState} />
+          <Search themeState={themeState} handleEnter={handleEnter} />
         </MenuWrapper>
         <ButtonWrapper>
           <BasicButton
@@ -93,6 +143,7 @@ const SuggestionBoardPage = () => {
           setPage={setPage}
           setSize={setSize}
           setTotal={setTotal}
+          value={value}
         />
       </ContentWrapper>
     </>

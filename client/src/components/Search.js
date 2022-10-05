@@ -3,13 +3,18 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 
-const Search = () => {
+const Search = ({ handleEnter }) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   return (
     <>
       <SearchBar themeState={themeState}>
-        <SearchInput themeState={themeState} type='text' placeholder='검색' />
+        <SearchInput
+          themeState={themeState}
+          type='text'
+          placeholder='검색'
+          onKeyDown={handleEnter}
+        />
         <FontAwesomeIcon id='searchIcon' icon={faSearch} />
       </SearchBar>
     </>

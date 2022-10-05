@@ -3,6 +3,10 @@ import { useSelector } from 'react-redux';
 
 const PostSummary = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const date = props.createdAt
+    .split('.')[0]
+    .replace(/-/g, '.')
+    .replace(/T/, '/');
   return (
     <PostCardLayout themeState={themeState}>
       <PostCardWrapper>
@@ -11,9 +15,9 @@ const PostSummary = (props) => {
           <CategoryWrapper>{props.category}</CategoryWrapper>
           <WriterCreatedAt>
             {props.likes ? <div>❤️ {props.likes}</div> : <></>}
-            <img src={props.picture} />
+            <img src={`/default.png`} alt='유저 프로필' />
             <div>{props.writer}</div>
-            <div>{props.createdAt}</div>
+            <div>{date}</div>
           </WriterCreatedAt>
         </PostCardInfo>
       </PostCardWrapper>
@@ -21,27 +25,31 @@ const PostSummary = (props) => {
   );
 };
 const PostCardLayout = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   border-bottom: 1px solid #8d8d8d;
   background-color: ${(props) =>
-    props.themeState === 'light' ? '#FFE57A' : 'var(--color-gray )'};
-  padding: 0.3rem 0;
-  /* width: 80rem; */
+    props.themeState === 'light' ? '#FEDD89' : 'var(--color-gray )'};
+  color: ${(props) =>
+    props.themeState === 'light' ? 'var(--color-gray)' : 'var(--color-white)'};
   width: 100%;
-  padding: 1rem;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
+    font-size: 1.5rem;
     width: 36rem;
     height: 10rem;
+    padding: 3%;
   }
 `;
 
 const PostCardWrapper = styled.div`
   display: flex;
   align-items: center;
-  @media screen and (max-width: 412px) {
-    display: flex;
+  margin: 1%;
+  /* border:1px solid blue; */
+  @media screen and (max-width: 413px) {
+    align-items: stretch;
     flex-direction: column;
     height: 100%;
+    margin: 1%;
   }
 `;
 
@@ -50,8 +58,10 @@ const PostCardTitle = styled.a`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: bold;
+  /* border: 1px solid red; */
   cursor: pointer;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -66,8 +76,7 @@ const PostCardInfo = styled.div`
   display: flex;
   align-items: center;
   font-weight: bold;
-  @media screen and (max-width: 412px) {
-    display: flex;
+  @media screen and (max-width: 413px) {
     justify-content: space-between;
     font-size: 1.2rem;
   }
@@ -77,13 +86,18 @@ const WriterCreatedAt = styled.div`
   display: flex;
   align-items: center;
   div {
-    margin: 0 1rem;
+    margin-left: 1rem;
+  }
+
+  img {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 `;
 
 const CategoryWrapper = styled.div`
   margin: 0 1rem;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     margin: 0;
   }
 `;
