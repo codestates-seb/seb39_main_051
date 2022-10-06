@@ -142,7 +142,7 @@ const CategoryCardLayout = styled.div`
     text-align: center;
     margin-top: 1rem;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: flex;
     .subscribe-web {
       display: none;
@@ -174,8 +174,6 @@ const CategoryCardWrapper = styled.div`
   }
 `;
 const LogoLayout = styled.div`
-  @media screen and (max-width: 412px) {
-  }
 `;
 const NameWrapper = styled.div`
   padding-top: 0.5rem;

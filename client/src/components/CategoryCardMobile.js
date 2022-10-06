@@ -98,7 +98,7 @@ const CategoryCardLayout = styled.div`
     margin-top: 1rem;
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: flex;
     .subscribe-web {
       display: none;
