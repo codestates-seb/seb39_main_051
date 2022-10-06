@@ -76,7 +76,7 @@ const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
             setTotal(Number(res.data.pageInfo.totalElements));
           });
       } else {
-        axios.get(process.env.REACT_APP_API_URL+`/posts?type=free&page=${page}&size=10`).then((res) => {
+        axios.get(process.env.REACT_APP_API_URL+`/posts?type=자유게시판&page=${page}&size=10`).then((res) => {
           setTotal(Number(res.data.pageInfo.totalElements));
         });
         navigate('/free');
