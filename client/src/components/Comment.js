@@ -14,11 +14,11 @@ const Comment = ({
   memberId,
   createdAt,
   likeCount,
-  profileImg,
   postId,
   answerId,
   commentArr,
   setCommentArr,
+  picture
 }) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const { isLoggedIn, userId } = useSelector((state) => state.userInfoSlice);
@@ -85,14 +85,14 @@ const Comment = ({
       <Toast />
       <CommentInfo>
         <CommentWriter>
-          <img src={profileImg} alt='프로필 이미지' />
+          <img src={picture} alt='프로필 이미지' />
           {nickname}
         </CommentWriter>
         <CommentEvent>
           <EventWrapper>
             <div>{date}</div>
             <div className='time'>/{time}</div>
-            {userId === memberId ? (
+            {userId == memberId ? (
               isCommentEditMode ? (
                 <EditDelete>
                   <div
@@ -205,7 +205,7 @@ const CommentEvent = styled.div`
 
 const EventWrapper = styled.div`
   display: flex;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: block;
     .time {
       display: none;
@@ -222,7 +222,7 @@ const EditDelete = styled.div`
   .leftOne {
     margin-right: 5%;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     .edit {
       margin-left: auto;
     }
