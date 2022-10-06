@@ -28,17 +28,20 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private String type;
 
+    @Column(nullable = false)
     private String category;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @Column
     private long likeCount;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
