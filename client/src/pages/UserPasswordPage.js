@@ -10,6 +10,7 @@ import axiosInstance from '../utils/axiosInstance';
 
 const UserPasswordPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {userPicture} = useSelector((state) => state.userInfoSlice);
 
   const [passwordValid, setPasswordValid] = useState(false);
   const [rePasswordValid, setRePasswordValid] = useState(false);
@@ -98,7 +99,7 @@ const UserPasswordPage = () => {
                   className='icon'
                 />
               </a>
-              <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+              <UserProfileImage src={userPicture} />
               <form>
                 <UserPasswordInput
                   className='newPassword'
@@ -137,7 +138,7 @@ const UserPasswordPage = () => {
               </form>
             </div>
             <div className='web'>
-              <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+              <UserProfileImage src={userPicture} />
               <a href='/mypage'>
                 <BasicButton
                   themeState={themeState}

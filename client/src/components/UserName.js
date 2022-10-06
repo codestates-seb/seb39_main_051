@@ -7,6 +7,7 @@ import BasicButton from './BasicButton';
 
 const UserName = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {userPicture} = useSelector((state)=>state.userInfoSlice)
 
   const [nickName, setNickName] = useState(
     useSelector((state) => state.userInfoSlice).nickName
@@ -32,7 +33,7 @@ const UserName = () => {
     <>
       <Title>닉네임 변경</Title>
       <ContentWrapper>
-        <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+        <UserProfileImage src={userPicture} />
         <div>
           <UserNameInput
             themeState={themeState}

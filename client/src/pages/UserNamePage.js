@@ -8,6 +8,7 @@ import UserName from '../components/UserName';
 
 const UserNamePage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {userPicture} = useSelector((state)=>state.userInfoSlice);
 
   return (
     <>
@@ -22,7 +23,7 @@ const UserNamePage = () => {
                   className='icon'
                 />
               </a>
-              <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+              <UserProfileImage src={userPicture}/>
               <div>
                 <UserNameInput
                   themeState={themeState}
@@ -40,7 +41,7 @@ const UserNamePage = () => {
               </div>
             </div>
             <div className='web'>
-              <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+              <UserProfileImage src={userPicture} />
               <a href='/mypage'>
                 <BasicButton
                   themeState={themeState}

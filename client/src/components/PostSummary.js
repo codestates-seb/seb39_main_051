@@ -15,7 +15,7 @@ const PostSummary = (props) => {
           <CategoryWrapper>{props.category}</CategoryWrapper>
           <WriterCreatedAt>
             {props.likes ? <div>❤️ {props.likes}</div> : <></>}
-            <img src={`/default.png`} alt='유저 프로필' />
+            <img src={props.picture} alt='유저 프로필' />
             <div>{props.writer}</div>
             <div>{date}</div>
           </WriterCreatedAt>
@@ -34,7 +34,6 @@ const PostCardLayout = styled.div`
   width: 100%;
   @media screen and (max-width: 413px) {
     font-size: 1.5rem;
-    width: 36rem;
     height: 10rem;
     padding: 3%;
   }

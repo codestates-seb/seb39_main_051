@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 
 const AnswerCard = ({
-  profileImg,
+  picture,
   nickname,
   memberId,
   createdAt,
@@ -43,9 +43,9 @@ const AnswerCard = ({
 
   const handleSubmitAnswerComment = () => {
     if (isLoggedIn) {
-      axiosInstance
+      if(commentContent){
+        axiosInstance
         .post(`/answers/${answerId}/comments`, {
-          memberId: userId,
           content: commentContent,
         })
         .then((res) => {
@@ -55,6 +55,10 @@ const AnswerCard = ({
           setAnswerComment(arr);
           setCommentContent('');
         });
+      }else{
+        alert('댓글을 입력해주세요!')
+        return
+      }
     } else {
       if (
         window.confirm(
@@ -112,14 +116,14 @@ const AnswerCard = ({
       <Toast />
       <AnswerInfo>
         <AnswerWriter>
-          <img src={profileImg} alt='유저 프로필' />
+          <img src={picture} alt='유저 프로필' />
           {nickname}
         </AnswerWriter>
         <AnswerEvent>
           <EventWrapper>
             <div>{date}</div>
             <div className='time'>/{time}</div>
-            {userId === memberId ? (
+            {userId == memberId ? (
               isAnswerEditMode ? (
                 <EditDelete>
                   <div
@@ -203,7 +207,7 @@ const AnswerCard = ({
               content={el.content}
               createdAt={el.createdAt.split('.')[0].replace(/-/g, '.')}
               likeCount={el.likeCount}
-              profileImg={el.profileImg}
+              picture={el.picture}
               commentArr={answerComment}
               setCommentArr={setAnswerComment}
             />
@@ -292,7 +296,7 @@ const AnswerContent = styled.div`
     min-width: 5%;
     cursor: pointer;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     margin-right: 1rem;
   }
 `;
@@ -314,7 +318,7 @@ const AnswerCommentInput = styled.div`
   button {
     width: 5%;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: flex;
     margin: 1rem 0;
     input {
@@ -337,7 +341,7 @@ const ToggleComment = styled.div`
 
 const EventWrapper = styled.div`
   display: flex;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: block;
     .time {
       display: none;
@@ -354,7 +358,7 @@ const EditDelete = styled.div`
   .leftOne {
     margin-right: 5%;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     .edit {
       margin-left: auto;
     }

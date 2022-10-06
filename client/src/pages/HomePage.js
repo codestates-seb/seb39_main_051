@@ -39,6 +39,7 @@ const HomePage = () => {
         setCookie('memberId', res.data.id, 60);
         setCookie('nickname', res.data.nickname, 60);
         setCookie('role', res.data.role, 60);
+        setCookie('picture', res.data.picture, 60);
       });
     }
   }, []);
@@ -169,7 +170,7 @@ const HomePage = () => {
               <ProjectInfo themeState={themeState}>
                 <Animator>
                   <ProjectName themeState={themeState}>
-                    CODESTATES SEB 39기 <br /> 51조 Main Project 매일매일
+                    CODESTATES SEB 39기 <br /> 51조 Main Project 매일메일
                     <a href='https://github.com/codestates-seb/seb39_main_051'>
                       <FontAwesomeIcon icon={faGithub} />
                     </a>
@@ -239,8 +240,6 @@ const ProjectInfo = styled.div`
   }
   svg {
     margin-left: 0.5rem;
-    /* background-color: var(--color-black); */
-    /* color: var(--color-white); */
     color: ${(props) =>
       props.themeState === 'light'
         ? 'var(--color-black)'
@@ -319,7 +318,7 @@ const ColorFont = styled.div`
     background: ${(props) =>
       props.themeState === 'light'
         ? 'linear-gradient(40deg, #ff6c02, #ffa69e)'
-        : 'linear-gradient(40deg, #000080, var(--color-white))'};
+        : 'linear-gradient(40deg, #0f52ba, #89CFF0)'};
     -webkit-background-clip: text;
     &.mobile {
       display: none;
