@@ -8,6 +8,8 @@ import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.subscription.entity.Subscription;
 import com.codestates.main.subscription.service.SubscriptionService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,9 +29,10 @@ import java.util.List;
 //@Transactional
 public class MailService {
     private JavaMailSender javaMailSender;
-    private MemberService memberService;
-    private SubscriptionService subscriptionService;
-    private QuestionService questionService;
+    private final MemberService memberService;
+    private final SubscriptionService subscriptionService;
+    private final QuestionService questionService;
+
     @Scheduled(cron = "*/30 * * * * *")     // 00/20/40 초 마다
     //@Scheduled(cron = "0 0 8 ? * MON-SUN") //실제 서비스 시 (주말 제외 모든 요일에 아침 8시)
     //@Transactional
@@ -86,7 +89,8 @@ public class MailService {
                 sb.append("<ol>");
                 //System.out.println("보낼 문제들: "+sendQuestions);
                 for(Question question : sendQuestions){
-                    sb.append("<li>").append(question.getContent()).append(" &nbsp;<a href=\"http://www.google.com\">답변하러 가기</a></li>");
+                    String url = "http://maeilmail051.s3-website.ap-northeast-2.amazonaws.com/";
+                    sb.append("<li>").append(question.getContent()).append(" &nbsp;<a href=").append(url).append("question/").append(question.getQuestionId()).append(">답변하러 가기</a></li>");
                     // 이곳에서 주소 추가
                 }
                 sb.append("</ol>");
