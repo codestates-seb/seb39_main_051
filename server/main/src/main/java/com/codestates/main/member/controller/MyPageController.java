@@ -104,7 +104,7 @@ public class MyPageController {
 
         String imagePath = amazonS3Client.getUrl(s3Bucket, originalName).toString(); // 접근가능한 URL 가져오기
         member.setPicture(s3Url+originalName);
-        memberService.updateMember(member);
+        memberService.updateImage(member);
         return new ResponseEntity<>(imagePath, HttpStatus.OK);
     }
 
