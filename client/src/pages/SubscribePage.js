@@ -65,7 +65,7 @@ const SubscribePage = () => {
       <Message themeState={themeState}>
         <section>
           <div>주제를 클릭하여 구독해주세요</div>
-          <div>매일 아침 9시 이메일로 </div>
+          <div>매일 아침 7시 이메일로 </div>
           <div>구독중인 모든 주제의 면접 질문이 전달됩니다</div>
         </section>
       </Message>

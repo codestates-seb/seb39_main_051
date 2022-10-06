@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
-import NavigationBar from '../components/NavigationBar';
+import NavigationBar from '../../components/NavigationBar';
 import { useSelector } from 'react-redux';
-import Form from '../components/Form';
+import Form from '../../components/Form';
 import { useState } from 'react';
 const LoginPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
