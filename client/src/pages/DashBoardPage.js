@@ -10,7 +10,7 @@ import axiosInstance from '../utils/axiosInstance';
 
 const DashBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-
+const {userPicture} = useSelector((state)=>state.userInfoSlice)
   const [subscribeArr, setSubscribeArr] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
 
   const category = [
@@ -68,7 +68,7 @@ const DashBoardPage = () => {
       <BorderLayout>
         <Layout>
           <LeftContent themeState={themeState}>
-            <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+            <UserProfileImage src={userPicture} />
             <a href='/mypage' className='web'>
               <BasicButton
                 themeState={themeState}

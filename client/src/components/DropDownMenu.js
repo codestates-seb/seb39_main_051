@@ -1,19 +1,14 @@
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { deleteCookie } from '../utils/cookie';
+import { handleLogout } from '../redux/slice/userInfoSlice';
 import DarkModeSwitch from './DarkModeSwitch';
+import { useNavigate } from 'react-router-dom';
 
 const DropDownMenu = (props) => {
   const { isLoggedIn } = useSelector((state) => state.userInfoSlice);
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    deleteCookie('accessToken');
-    deleteCookie('nickname');
-    deleteCookie('memberId');
-    deleteCookie('role');
-    alert('로그아웃 되셨습니다.');
-    window.location.reload();
-  };
 
   return (
     <>
@@ -25,7 +20,7 @@ const DropDownMenu = (props) => {
               <a href='/free'>자유 게시판</a>
               <a href='/suggestion'>건의 게시판</a>
               <a href='/mypage'>마이 페이지</a>
-              <a href='/' onClick={handleLogout}>
+              <a href='/' onClick={()=>dispatch(handleLogout({home:navigate}))}>
                 로그아웃
               </a>
               <DarkModeSwitch />

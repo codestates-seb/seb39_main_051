@@ -34,20 +34,20 @@ const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
     if (type === '질문 답변 공유 게시판') {
       if ((value !== '') & (questionCategoryArr.indexOf(category) !== -1)) {
         axios
-          .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+          .get(process.env.REACT_APP_API_URL+`/questions/search?keyword=${value}&page=${page}&size=10`)
           .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
       } else if (value !== '') {
         axios
           .get(
-            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
       } else if (questionCategoryArr.indexOf(category) !== -1) {
         axios
-          .get(`/questions?questionCategory=${category}&page=${page}&size=10`)
+          .get(process.env.REACT_APP_API_URL+`/questions?questionCategory=${category}&page=${page}&size=10`)
           .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
       } else {
-        axios.get(`/questions?page=${page}&size=10`).then((res) => {
+        axios.get(process.env.REACT_APP_API_URL+`/questions?page=${page}&size=10`).then((res) => {
           setTotal(Number(res.data.pageInfo.totalElements));
         });
         navigate('/questions');
@@ -56,7 +56,7 @@ const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
       if ((value !== '') & (freeCategoryArr.indexOf(category) !== -1)) {
         axios
           .get(
-            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
@@ -64,19 +64,19 @@ const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
       } else if (value !== '') {
         axios
           .get(
-            `/posts/search?type=${type}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/posts/search?type=${type}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
           });
       } else if (freeCategoryArr.indexOf(category) !== -1) {
         axios
-          .get(`/posts?category=${category}&page=${page}&size=10`)
+          .get(process.env.REACT_APP_API_URL+`/posts?category=${category}&page=${page}&size=10`)
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
           });
       } else {
-        axios.get(`/posts?type=자유게시판&page=${page}&size=10`).then((res) => {
+        axios.get(process.env.REACT_APP_API_URL+`/posts?type=free&page=${page}&size=10`).then((res) => {
           setTotal(Number(res.data.pageInfo.totalElements));
         });
         navigate('/free');
@@ -85,7 +85,7 @@ const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
       if ((value !== '') & (freeCategoryArr.indexOf(category) !== -1)) {
         axios
           .get(
-            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
@@ -93,17 +93,17 @@ const Pagination = ({ total, page, setPage, setTotal, type, value }) => {
       } else if (value !== '') {
         axios
           .get(
-            `/posts/search?type=${type}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/posts/search?type=${type}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => {
             setTotal(Number(res.data.pageInfo.totalElements));
           });
       } else if (suggestionCategoryArr.indexOf(category) !== -1) {
         axios
-          .get(`/posts?category=${category}&page=${page}&size=10`)
+          .get(process.env.REACT_APP_API_URL+`/posts?category=${category}&page=${page}&size=10`)
           .then((res) => setTotal(Number(res.data.pageInfo.totalElements)));
       } else {
-        axios.get(`/posts?type=건의게시판&page=${page}&size=10`).then((res) => {
+        axios.get(process.env.REACT_APP_API_URL+`/posts?type=건의게시판&page=${page}&size=10`).then((res) => {
           setTotal(Number(res.data.pageInfo.totalElements));
         });
         navigate('/suggestion');

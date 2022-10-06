@@ -88,11 +88,13 @@ const Form = (props) => {
       }
 
       try {
-        const response = await axios.post('/member/login', {
+        const response = await axios.post(process.env.REACT_APP_API_URL+'/member/login', {
           email: email,
           password: password,
-        });
-        const headers = await response.headers;
+        },{ headers:{
+          withCredentials: true 
+        }});
+        const headers =  response.headers;
         setCookie('accessToken', headers.authorization, 60);
         alert('로그인이 되었습니다.');
         navigate('/');
@@ -105,11 +107,13 @@ const Form = (props) => {
       if (emailValid && passwordValid && rePasswordValid) {
         try {
           axios
-            .post('/member/post', {
+            .post(process.env.REACT_APP_API_URL+'/member/post', {
               email: email,
               password: password,
               nickname: nickName,
-            })
+            },{ headers:{
+              withCredentials: true 
+            }})
             .then((res) => {
               alert('회원가입이 되었습니다.');
               navigate('/login');
@@ -248,7 +252,7 @@ const Layout = styled.div`
       margin: 2rem 0;
     }
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     min-width: 0;
     width: 34rem;
   }

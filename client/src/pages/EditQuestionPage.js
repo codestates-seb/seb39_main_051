@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
 import { useLocation, useNavigate } from 'react-router-dom';
-import DropDownList from '../components/DropDownList';
 import BorderLayout from '../components/BorderLayout';
+import axiosInstance from '../utils/axiosInstance';
 
 const EditQuestionPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
@@ -25,7 +25,7 @@ const EditQuestionPage = () => {
     
   }
   const handleSubmitEditQuestion = async() => {
-    await axios.patch(`/questions/${state.questionId}`,{
+    await axiosInstance.patch(`/questions/${state.questionId}`,{
       content : editedQuestion})
       alert('질문이 수정되었습니다!')
       navigate('/questions')

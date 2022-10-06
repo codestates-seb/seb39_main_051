@@ -29,7 +29,7 @@ const SuggestionBoardPage = () => {
     if ((value !== '') & (categoryArr.indexOf(category) !== -1)) {
       axios
         .get(
-          `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+          process.env.REACT_APP_API_URL+`/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
         )
         .then((res) => {
           setData(res.data.data);
@@ -37,18 +37,18 @@ const SuggestionBoardPage = () => {
     } else if (value !== '') {
       axios
         .get(
-          `/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
+          process.env.REACT_APP_API_URL+`/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
         )
         .then((res) => {
           setData(res.data.data);
         });
     } else if (categoryArr.indexOf(category) !== -1) {
       axios
-        .get(`/posts?category=${category}&page=${page}&size=${size}`)
+        .get(process.env.REACT_APP_API_URL+`/posts?category=${category}&page=${page}&size=${size}`)
         .then((res) => setData(res.data.data));
     } else {
       axios
-        .get(`/posts?type=건의게시판&page=${page}&size=${size}`)
+        .get(process.env.REACT_APP_API_URL+`/posts?type=건의게시판&page=${page}&size=${size}`)
         .then((res) => {
           setData(res.data.data);
         });
@@ -84,13 +84,13 @@ const SuggestionBoardPage = () => {
       if (categoryArr.indexOf(category) !== -1) {
         axios
           .get(
-            `/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/posts/search?category=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => setData(res.data.data));
       } else {
         axios
           .get(
-            `/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL+`/posts/search?type=건의게시판&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => {
             setData(res.data.data);
@@ -166,7 +166,7 @@ const MenuWrapper = styled.div`
   justify-content: space-between;
   width: 80%;
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

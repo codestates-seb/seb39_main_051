@@ -6,9 +6,11 @@ import BasicButton from '../components/BasicButton';
 import BorderLayout from '../components/BorderLayout';
 import UserImg from '../components/UserImg';
 import axiosInstance from '../utils/axiosInstance';
+import { setCookie } from '../utils/cookie';
 
 const UserImgPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
+  const {userPicture} = useSelector((state)=>state.userInfoSlice)
 
   const formData = new FormData();
 
@@ -19,7 +21,12 @@ const UserImgPage = () => {
   };
 
   const handleOnClick = () => {
-    axiosInstance.post('/my-page/upload', formData);
+    axiosInstance.post('/my-page/upload', formData)
+    .then((res)=>{
+      setCookie('picture',res.data, 60)
+      alert('프로필 사진이 변경되었습니다.')
+      window.location.reload()
+    })
   };
 
   return (
@@ -35,7 +42,7 @@ const UserImgPage = () => {
                   className='icon'
                 />
               </a>
-              <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+              <UserProfileImage src={userPicture} />
               <div>
                 <span>사진을 드래그해주세요.</span>
                 <InputImgWrapper themeState={themeState}>
@@ -58,7 +65,7 @@ const UserImgPage = () => {
               </div>
             </div>
             <div className='web'>
-              <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+              <UserProfileImage src={userPicture}/>
               <a href='/mypage'>
                 <BasicButton
                   themeState={themeState}

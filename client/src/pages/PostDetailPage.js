@@ -28,9 +28,10 @@ const PostDetailPage = () => {
   const [likeCount, setLikeCount] = useState('');
   const [type, setType] = useState('');
   const [postCommentContent, setPostCommentContent] = useState('');
+  const[picture, setPicture] = useState('https://maeil-mail.s3.ap-northeast-2.amazonaws.com/1.png')
 
   useEffect(() => {
-    axios.get(`/posts/${params.id}`).then((res) => {
+    axios.get(process.env.REACT_APP_API_URL+`/posts/${params.id}`).then((res) => {
       setTitle(res.data.title);
       setCategory(res.data.category);
       setMemberId(res.data.memberId);
@@ -47,6 +48,7 @@ const PostDetailPage = () => {
       setNickname(res.data.nickname);
       setPostId(res.data.postId);
       setLikeCount(res.data.likeCount);
+      setPicture(res.data.picture)
       if (
         res.data.category === '취업 정보' ||
         '고민 상담' ||
@@ -69,7 +71,8 @@ const PostDetailPage = () => {
   };
   const handleSubmitPostComment = async () => {
     if (isLoggedIn) {
-      await axiosInstance
+      if(postCommentContent){
+        await axiosInstance
         .post(`/posts/${params.id}/comments`, {
           content: postCommentContent,
         })
@@ -80,6 +83,11 @@ const PostDetailPage = () => {
           setComments(arr);
           setPostCommentContent('');
         });
+      }
+      else{
+        alert('댓글을 입력해주세요!')
+        return
+      }
     } else {
       if (
         window.confirm(
@@ -135,13 +143,13 @@ const PostDetailPage = () => {
       <ContentInfo>
         <Category themeState={themeState}>{category}</Category>
         <Writer themeState={themeState}>
-          <img src='/default.png' alt='프로필사진' />
+          <img src={picture} alt='프로필사진' />
           {nickname}
         </Writer>
         <EventWrapper>
           <div>{date}</div>
           <div className='time'>/{time}</div>
-          {userId === memberId ? (
+          {userId == memberId ? (
             <EditDelete>
               <div className='edit leftOne' onClick={() => navigateEditPost()}>
                 수정
@@ -185,7 +193,7 @@ const PostDetailPage = () => {
           memberId={el.memberId}
           nickname={el.nickname}
           content={el.content}
-          profileImg='/default.png'
+          picture={el.picture}
           createdAt={el.createdAt
             .split('.')[0]
             .replace(/-/g, '.')
@@ -280,7 +288,7 @@ const PostCommentInput = styled.div`
   button {
     width: 5%;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: flex;
     margin: 1rem 0;
     input {
@@ -298,7 +306,7 @@ const PostCommentInput = styled.div`
 const EventWrapper = styled.div`
   display: flex;
   font-size: 1.2rem;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: block;
     .time {
       display: none;
@@ -316,7 +324,7 @@ const EditDelete = styled.div`
   .leftOne {
     margin-right: 5%;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     .edit {
       margin-left: auto;
     }

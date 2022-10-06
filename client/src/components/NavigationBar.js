@@ -1,29 +1,19 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import DropDownMenu from './DropDownMenu';
 import DarkModeSwitch from './DarkModeSwitch';
 import Logo from '../assets/Logo';
-import { deleteCookie } from '../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { handleLogout } from '../redux/slice/userInfoSlice';
 
 const NavigationBar = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const { isLoggedIn, nickName } = useSelector((state) => state.userInfoSlice);
-
   const [userNickName, setUserNickName] = useState(nickName || '마이 페이지');
-
+  const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    deleteCookie('accessToken');
-    deleteCookie('nickname');
-    deleteCookie('memberId');
-    deleteCookie('role');
-    alert('로그아웃 되셨습니다.');
-    navigate('/');
-    window.location.reload();
-  };
 
   return (
     <>
@@ -56,7 +46,7 @@ const NavigationBar = () => {
                 {userNickName}
               </NavBarButton>
             </a>
-            <NavBarButton themeState={themeState} onClick={handleLogout}>
+            <NavBarButton themeState={themeState} onClick={()=>dispatch(handleLogout({home:navigate}))}>
               로그아웃
             </NavBarButton>
           </NavBarRight>
@@ -110,9 +100,10 @@ const NavBarLogo = styled.a`
   height: 6rem;
   text-decoration: none;
 
-  @media screen and (min-width: 413px) {
-    width: 38.3rem;
-  }
+  @media screen and (max-width: 413px) {
+    width:14rem;
+    /* border:1px solid blue; */
+  } 
 `;
 
 const NavBarMenu = styled.div`
@@ -131,7 +122,7 @@ const NavBarMenu = styled.div`
     text-decoration: none;
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     ${(props) => {
       if (props.web) {
         return css`
@@ -156,7 +147,7 @@ const NavBarRight = styled.div`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     ${(props) => {
       if (props.web) {
         return css`
@@ -190,7 +181,7 @@ const DropDown = styled.div`
     }
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     ${(props) => {
       if (props.web) {
         return css`

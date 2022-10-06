@@ -4,12 +4,12 @@ import BasicButton from './BasicButton';
 
 const UserImg = ({ handleImgInput, handleOnClick }) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-
+  const {userPicture} = useSelector((state)=>state.userInfoSlice)
   return (
     <>
       <Title>프로필 사진 변경</Title>
       <ContentWrapper>
-        <UserProfileImage src='https://lh3.googleusercontent.com/a-/AFdZucpIQ6i4DewU4N2dncFukPbb0eF3gkIB9xOsdEFNCw=k-s256' />
+        <UserProfileImage src={userPicture}/>
         <div>
           <span>사진을 드래그해주세요.</span>
           <InputImgWrapper themeState={themeState}>

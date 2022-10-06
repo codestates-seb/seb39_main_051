@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import Toast from '../components/Toast';
 import axiosInstance from '../utils/axiosInstance';
-
+import axios from 'axios';
 const QuestionPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
   const { isLoggedIn, userId } = useSelector((state) => state.userInfoSlice);
@@ -22,6 +22,7 @@ const QuestionPage = () => {
   const [memberId, setMemberId] = useState('');
   const [nickname, setNickname] = useState('');
   const [questionId, setQuestionId] = useState('');
+  const[picture, setPicture] = useState('https://maeil-mail.s3.ap-northeast-2.amazonaws.com/1.png')
 
   const handleDeleteQuestion = async () => {
     try {
@@ -53,7 +54,7 @@ const QuestionPage = () => {
   };
 
   useEffect(() => {
-    axiosInstance.get(`/questions/${params.id}`).then((res) => {
+    axios.get(process.env.REACT_APP_API_URL+`/questions/${params.id}`).then((res) => {
       setContent(res.data.content);
       setQuestionId(res.data.questionId);
       setCategory(res.data.questionCategoryName);
@@ -70,6 +71,7 @@ const QuestionPage = () => {
         a.likeCount > b.likeCount ? -1 : 1
       );
       setAnswer(sortedByLikesAnswer);
+      setPicture(res.data.picture)
     });
   }, []);
 
@@ -102,13 +104,13 @@ const QuestionPage = () => {
         <ContentInfo>
           <Category themeState={themeState}>{category}</Category>
           <Writer themeState={themeState}>
-            <img src='/default.png' alt='프로필사진' />
+            <img src={picture} alt='프로필사진' />
             {nickname}
           </Writer>
           <EventWrapper>
             <div>{date}</div>
             <div className='time'>/{time}</div>
-            {userId === memberId ? (
+            {userId == memberId ? (
               <EditDelete>
                 <div
                   className='edit leftOne'
@@ -147,13 +149,13 @@ const QuestionPage = () => {
             nickname={el.nickname}
             createdAt={el.createdAt.split('.')[0].replace(/-/g, '.')}
             memberId={el.memberId}
-            // modifiedAt='2022.09.20'
             content={el.content}
             likeCount={el.likeCount}
             comment={el.comments.sort((a, b) =>
               a.likeCount > b.likeCount ? -1 : 1
             )}
             answerId={el.answerId}
+            picture={el.picture}
             answer={answer}
             setAnswer={setAnswer}
           />
@@ -231,7 +233,7 @@ const AnswerToTal = styled.div`
 const EventWrapper = styled.div`
   display: flex;
   font-size: 1.2rem;
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: block;
     .time {
       display: none;
@@ -249,7 +251,7 @@ const EditDelete = styled.div`
   .leftOne {
     margin-right: 5%;
   }
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     .edit {
       margin-left: auto;
     }

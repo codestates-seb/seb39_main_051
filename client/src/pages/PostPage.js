@@ -68,28 +68,43 @@ const PostPage = () => {
   const handleSubmitPost = async (e) => {
     e.preventDefault();
     if (type === 'questions') {
-      await axiosInstance.post(`/questions`, {
-        questionCategoryId: categoryContent,
-        content,
-      });
-      navigate('/questions');
+      if(content){
+        await axiosInstance.post(`/questions`, {
+          questionCategoryId: categoryContent,
+          content,
+        });
+        navigate('/questions');
+      }else{
+        alert('질문을 입력해주세요')
+        return
+      }
     } else if (type === 'free') {
-      await axiosInstance.post(`/posts`, {
-        title,
-        content,
-        type: '자유게시판',
-        category: seleted,
-      });
-      navigate('/free');
+      if(title&&content){
+        await axiosInstance.post(`/posts`, {
+          title,
+          content,
+          type: '자유게시판',
+          category: seleted,
+        })
+        navigate('/free');
+      }else{
+        alert('제목과 내용을 모두 입력해주세요')
+        return
+      }
     } else if (type === 'suggestion') {
-      await axiosInstance.post(`/posts`, {
-        title,
-        content,
-        type: '건의게시판',
-        category: seleted,
-      });
-      navigate('/suggestion');
-    }
+      if(title&&content){
+        await axiosInstance.post(`/posts`, {
+          title,
+          content,
+          type: '건의게시판',
+          category: seleted,
+        });
+        navigate('/suggestion');
+      }else{
+        alert('제목과 내용을 모두 입력해주세요')
+        return
+      }
+      }
   };
 
   useEffect(() => {
