@@ -2,13 +2,32 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import BasicButton from '../components/BasicButton';
-import BorderLayout from '../components/BorderLayout';
-import UserName from '../components/UserName';
+import BasicButton from '../../components/BasicButton'
+import BorderLayout from '../../components/BorderLayout';
+import UserImg from '../../components/UserImg';
+import axiosInstance from '../../utils/axiosInstance';
+import { setCookie } from '../../utils/cookie';
 
-const UserNamePage = () => {
+const UserImgPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {userPicture} = useSelector((state)=>state.userInfoSlice);
+  const {userPicture} = useSelector((state)=>state.userInfoSlice)
+
+  const formData = new FormData();
+
+  const handleImgInput = (e) => {
+    if (e.target.files) {
+      formData.append('files', e.target.files[0]);
+    }
+  };
+
+  const handleOnClick = () => {
+    axiosInstance.post('/my-page/upload', formData)
+    .then((res)=>{
+      setCookie('picture',res.data, 60)
+      alert('프로필 사진이 변경되었습니다.')
+      window.location.reload()
+    })
+  };
 
   return (
     <>
@@ -23,25 +42,30 @@ const UserNamePage = () => {
                   className='icon'
                 />
               </a>
-              <UserProfileImage src={userPicture}/>
+              <UserProfileImage src={userPicture} />
               <div>
-                <UserNameInput
-                  themeState={themeState}
-                  placeholder='변경할 닉네임을 입력하세요.'
-                />
+                <span>사진을 드래그해주세요.</span>
+                <InputImgWrapper themeState={themeState}>
+                  <InputImg
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImgInput}
+                  />
+                </InputImgWrapper>
                 <BasicButton
                   themeState={themeState}
                   width='30%'
-                  height='3rem'
+                  height='4rem'
                   color='var(--color-white)'
                   backGroundColor='var(--color-orange)'
                   fontSize='1.3rem'
                   text='변경하기'
+                  onClick={handleOnClick}
                 />
               </div>
             </div>
             <div className='web'>
-              <UserProfileImage src={userPicture} />
+              <UserProfileImage src={userPicture}/>
               <a href='/mypage'>
                 <BasicButton
                   themeState={themeState}
@@ -62,6 +86,7 @@ const UserNamePage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='프로필 사진 변경'
+                  selected
                 />
               </a>
               <a href='/username'>
@@ -73,7 +98,6 @@ const UserNamePage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='닉네임 변경'
-                  selected
                 />
               </a>
               <a href='/userpassword'>
@@ -90,7 +114,10 @@ const UserNamePage = () => {
             </div>
           </LeftContent>
           <RightContent themeState={themeState}>
-            <UserName />
+            <UserImg
+              handleImgInput={handleImgInput}
+              handleOnClick={handleOnClick}
+            />
           </RightContent>
         </Layout>
       </BorderLayout>
@@ -113,6 +140,7 @@ const LeftContent = styled.div`
   flex-direction: column;
   align-items: center;
   width: 20%;
+  height: 100%;
   min-width: 25rem;
   margin-right: 5rem;
 
@@ -145,9 +173,15 @@ const LeftContent = styled.div`
       div {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: flex-end;
-        height: 100%;
+        height: 90%;
+
+        & span {
+          position: relative;
+          color: var(--color-white);
+          top: 43%;
+          right: 26%;
+        }
       }
     }
   }
@@ -191,20 +225,23 @@ const RightContent = styled.div`
   }
 `;
 
-const UserNameInput = styled.input`
+const InputImgWrapper = styled.div`
   width: 100%;
-  height: 3rem;
+  height: 30%;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   color: var(--color-white);
-  border: none;
   border-radius: 1.5rem;
-  font-size: 1.3rem;
-  margin-bottom: 5rem;
-  padding-left: 1rem;
-  ::placeholder {
-    color: var(--color-white);
-  }
+  margin-bottom: 3rem;
 `;
 
-export default UserNamePage;
+const InputImg = styled.input`
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 1.5rem;
+  opacity: 0;
+  cursor: pointer;
+`;
+
+export default UserImgPage;

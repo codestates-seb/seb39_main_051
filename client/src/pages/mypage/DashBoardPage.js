@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import BasicButton from '../components/BasicButton';
-import BorderLayout from '../components/BorderLayout';
-import CategoryCardMobile from '../components/CategoryCardMobile';
-import DashBoard from '../components/DashBoard';
-import axiosInstance from '../utils/axiosInstance';
+import BasicButton from '../../components/BasicButton';
+import BorderLayout from '../../components/BorderLayout';
+import CategoryCardMobile from '../../components/CategoryCardMobile';
+import DashBoard from '../../components/DashBoard';
+import axiosInstance from '../../utils/axiosInstance';
 
 const DashBoardPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;

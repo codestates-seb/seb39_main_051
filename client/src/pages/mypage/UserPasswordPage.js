@@ -1,32 +1,89 @@
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import BasicButton from '../components/BasicButton';
-import BorderLayout from '../components/BorderLayout';
-import UserImg from '../components/UserImg';
-import axiosInstance from '../utils/axiosInstance';
-import { setCookie } from '../utils/cookie';
+import BasicButton from '../../components/BasicButton';
+import BorderLayout from '../../components/BorderLayout';
+import UserPassword from '../../components/UserPassword';
+import axiosInstance from '../../utils/axiosInstance';
 
-const UserImgPage = () => {
+const UserPasswordPage = () => {
   const themeState = useSelector((state) => state.themeSlice).theme;
-  const {userPicture} = useSelector((state)=>state.userInfoSlice)
+  const {userPicture} = useSelector((state) => state.userInfoSlice);
 
-  const formData = new FormData();
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [rePasswordValid, setRePasswordValid] = useState(false);
+  const [passwordDesc, setPasswordDesc] = useState('');
+  const [rePasswordDesc, setRePasswordDesc] = useState('');
+  const [inputValue, setInputValue] = useState({
+    newPassword: '',
+    checkPassword: '',
+  });
+  const { newPassword, checkPassword } = inputValue;
 
-  const handleImgInput = (e) => {
-    if (e.target.files) {
-      formData.append('files', e.target.files[0]);
+  const regNumber = /[0-9]/g;
+  const regString = /[a-zA-Z]/g;
+  const regSpecialCharacter =
+    /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+
+  const passwordValidation = () => {
+    if (
+      7 < newPassword.length &&
+      newPassword.length < 21 &&
+      regNumber.test(newPassword) &&
+      regString.test(newPassword) &&
+      regSpecialCharacter.test(newPassword)
+    ) {
+      setPasswordValid(true);
+      setPasswordDesc('');
+    } else {
+      setPasswordValid(false);
+      setPasswordDesc(
+        '8~20자 영문 대 소문자, 숫자, 특수문자를 포함하여야 합니다. '
+      );
     }
   };
 
-  const handleOnClick = () => {
-    axiosInstance.post('/my-page/upload', formData)
-    .then((res)=>{
-      setCookie('picture',res.data, 60)
-      alert('프로필 사진이 변경되었습니다.')
-      window.location.reload()
-    })
+  const rePasswordValidation = () => {
+    if (checkPassword === newPassword) {
+      setRePasswordValid(true);
+      setRePasswordDesc('');
+    } else {
+      setRePasswordValid(false);
+      setRePasswordDesc('비밀번호가 일치하지 않습니다.');
+    }
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+  const handleOnClick = async (e) => {
+    e.preventDefault();
+
+    if (!newPassword || !checkPassword) {
+      alert('새 비밀번호를 작성해주세요.');
+      return;
+    }
+
+    if (passwordValid & rePasswordValid) {
+      try {
+        axiosInstance
+          .patch('/my-page/patch', {
+            password: newPassword,
+          })
+          .then((res) => {
+            alert('비밀번호가 변경되었습니다.');
+          });
+      } catch (err) {
+        alert('비밀 번호 조건에 따라 작성해주세요.');
+      }
+    }
   };
 
   return (
@@ -43,29 +100,45 @@ const UserImgPage = () => {
                 />
               </a>
               <UserProfileImage src={userPicture} />
-              <div>
-                <span>사진을 드래그해주세요.</span>
-                <InputImgWrapper themeState={themeState}>
-                  <InputImg
-                    type='file'
-                    accept='image/*'
-                    onChange={handleImgInput}
-                  />
-                </InputImgWrapper>
+              <form>
+                <UserPasswordInput
+                  className='newPassword'
+                  name='newPassword'
+                  themeState={themeState}
+                  type='password'
+                  placeholder='새 비밀번호'
+                  onChange={handleInput}
+                  onKeyUp={passwordValidation}
+                />
+                <div className='warning'>
+                  <span>{passwordDesc}</span>
+                </div>
+                <UserPasswordInput
+                  className='checkPassword'
+                  name='checkPassword'
+                  themeState={themeState}
+                  type='password'
+                  placeholder='새 비밀번호 확인'
+                  onChange={handleInput}
+                  onKeyUp={rePasswordValidation}
+                />
+                <div className='warning'>
+                  <span>{rePasswordDesc}</span>
+                </div>
                 <BasicButton
                   themeState={themeState}
                   width='30%'
-                  height='4rem'
+                  height='3rem'
                   color='var(--color-white)'
                   backGroundColor='var(--color-orange)'
                   fontSize='1.3rem'
                   text='변경하기'
                   onClick={handleOnClick}
                 />
-              </div>
+              </form>
             </div>
             <div className='web'>
-              <UserProfileImage src={userPicture}/>
+              <UserProfileImage src={userPicture} />
               <a href='/mypage'>
                 <BasicButton
                   themeState={themeState}
@@ -86,7 +159,6 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='프로필 사진 변경'
-                  selected
                 />
               </a>
               <a href='/username'>
@@ -109,14 +181,19 @@ const UserImgPage = () => {
                   backGroundColor='var(--color-orange)'
                   fontSize='1.8rem'
                   text='비밀번호 변경'
+                  selected
                 />
               </a>
             </div>
           </LeftContent>
           <RightContent themeState={themeState}>
-            <UserImg
-              handleImgInput={handleImgInput}
+            <UserPassword
+              handleInput={handleInput}
               handleOnClick={handleOnClick}
+              passwordValidation={passwordValidation}
+              rePasswordValidation={rePasswordValidation}
+              passwordDesc={passwordDesc}
+              rePasswordDesc={rePasswordDesc}
             />
           </RightContent>
         </Layout>
@@ -140,7 +217,6 @@ const LeftContent = styled.div`
   flex-direction: column;
   align-items: center;
   width: 20%;
-  height: 100%;
   min-width: 25rem;
   margin-right: 5rem;
 
@@ -170,17 +246,18 @@ const LeftContent = styled.div`
         margin-bottom: 2rem;
       }
 
-      div {
+      form {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        height: 90%;
+        height: 100%;
 
-        & span {
+        .warning {
           position: relative;
-          color: var(--color-white);
-          top: 43%;
-          right: 26%;
+          bottom: 3rem;
+          display: flex;
+          justify-content: start;
+          width: 100%;
         }
       }
     }
@@ -225,23 +302,20 @@ const RightContent = styled.div`
   }
 `;
 
-const InputImgWrapper = styled.div`
+const UserPasswordInput = styled.input`
   width: 100%;
-  height: 30%;
+  height: 3rem;
   background-color: ${(props) =>
     props.themeState === 'light' ? 'var(--color-orange)' : 'var(--color-gray)'};
   color: var(--color-white);
-  border-radius: 1.5rem;
-  margin-bottom: 3rem;
-`;
-
-const InputImg = styled.input`
-  width: 100%;
-  height: 100%;
   border: none;
   border-radius: 1.5rem;
-  opacity: 0;
-  cursor: pointer;
+  font-size: 1.3rem;
+  margin-bottom: 5rem;
+  padding-left: 1rem;
+  ::placeholder {
+    color: var(--color-white);
+  }
 `;
 
-export default UserImgPage;
+export default UserPasswordPage;
