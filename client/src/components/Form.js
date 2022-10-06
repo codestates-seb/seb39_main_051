@@ -10,17 +10,21 @@ const Form = (props) => {
   const themeState = useSelector((state) => state.themeSlice).theme;
 
   const navigate = useNavigate();
-
+  const [certificationBtn, setCertificationBtn] = useState('인증번호보내기');
   const [inputValue, setInputValue] = useState({
     nickName: '',
     email: '',
+    certification: '',
     password: '',
     rePassword: '',
+    certificationNumber: '',
   });
-  const { nickName, email, password, rePassword } = inputValue;
+  const { nickName, email, password, rePassword, certificationNumber } =
+    inputValue;
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
   const [rePasswordValid, setRePasswordValid] = useState(false);
+  const [emailCertification, setEmailCertification] = useState(false);
   const [emailDesc, setEmailDesc] = useState('');
   const [passwordDesc, setPasswordDesc] = useState('');
   const [rePasswordDesc, setRePasswordDesc] = useState('');
@@ -88,13 +92,19 @@ const Form = (props) => {
       }
 
       try {
-        const response = await axios.post(process.env.REACT_APP_API_URL+'/member/login', {
-          email: email,
-          password: password,
-        },{ headers:{
-          withCredentials: true 
-        }});
-        const headers =  response.headers;
+        const response = await axios.post(
+          process.env.REACT_APP_API_URL + '/member/login',
+          {
+            email: email,
+            password: password,
+          },
+          {
+            headers: {
+              withCredentials: true,
+            },
+          }
+        );
+        const headers = response.headers;
         setCookie('accessToken', headers.authorization, 60);
         alert('로그인이 되었습니다.');
         navigate('/');
@@ -104,16 +114,27 @@ const Form = (props) => {
       }
     } else {
       //회원가입 일시
-      if (emailValid && passwordValid && rePasswordValid) {
+      if (
+        emailValid &&
+        passwordValid &&
+        rePasswordValid &&
+        emailCertification
+      ) {
         try {
           axios
-            .post(process.env.REACT_APP_API_URL+'/member/post', {
-              email: email,
-              password: password,
-              nickname: nickName,
-            },{ headers:{
-              withCredentials: true 
-            }})
+            .post(
+              process.env.REACT_APP_API_URL + '/member/post',
+              {
+                email: email,
+                password: password,
+                nickname: nickName,
+              },
+              {
+                headers: {
+                  withCredentials: true,
+                },
+              }
+            )
             .then((res) => {
               alert('회원가입이 되었습니다.');
               navigate('/login');
@@ -126,6 +147,41 @@ const Form = (props) => {
       } else {
         window.alert('회원 가입 형식에 맞춰 작성해주세요.');
       }
+    }
+  };
+  const handleSertificationPost = async () => {
+    console.log(email);
+    await axios
+      .post(process.env.REACT_APP_API_URL + `/mailAuth/createMailAuth`, {
+        email,
+      })
+      .then((res) => {
+        setCertificationBtn('인증번호다시보내기');
+        alert(
+          '기입하신 이메일로 인증번호가 발송되었습니다. 인증번호를 입력해주세요'
+        );
+      });
+  };
+
+  const handleCheckCertification = async () => {
+    if(certificationNumber){
+      await axios
+      .post(process.env.REACT_APP_API_URL + `/mailAuth/verifyMailAuth`, {
+        email,
+        certificationNumber,
+      })
+      .then((res) => {
+        if (res.data.certified === 'CERTIFIED') {
+          setEmailCertification(true);
+          alert('이메일인증에 성공하셨습니다.');
+        } else {
+          setEmailCertification(false);
+          alert('이메일인증에 실패하셨습니다.');
+        }
+      })
+      .catch((err) => alert(err));
+    }else{
+      alert('이메일 인증 번호를 입력해주세요!')
     }
   };
 
@@ -170,12 +226,35 @@ const Form = (props) => {
             <InputWrapper themeState={themeState}>
               <label id='email'>이메일</label>
               <span>{emailDesc}</span>
+              <Certification
+                className='beforeMail'
+                onClick={() => handleSertificationPost()}
+                emailValid={emailValid}
+              >
+                {certificationBtn}
+              </Certification>
               <input
                 id='email'
                 name='email'
                 type='email'
                 onChange={handleInput}
                 onKeyUp={emailValidation}
+                required
+              />
+            </InputWrapper>
+            <InputWrapper themeState={themeState}>
+              <label id='certificationNumber'>이메일 인증번호</label>
+              <Certification
+                className='beforeMail'
+                onClick={() => handleCheckCertification()}
+                emailValid={emailValid}
+              >
+                인증번호확인
+              </Certification>
+              <input
+                id='certificationNumber'
+                name='certificationNumber'
+                onChange={handleInput}
                 required
               />
             </InputWrapper>
@@ -302,4 +381,11 @@ const Redirect = styled.div`
   }
 `;
 
+const Certification = styled.span`
+  display: ${(props) => (props.emailValid ? 'inline' : 'none')};
+  margin: 0 0 0 0;
+  font-size: 1rem;
+  cursor: pointer;
+`;
+const CountDown = styled.span``;
 export default Form;
