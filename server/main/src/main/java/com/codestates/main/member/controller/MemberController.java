@@ -1,6 +1,8 @@
 package com.codestates.main.member.controller;
 
 import com.codestates.main.exception.BusinessLogicException;
+import com.codestates.main.mail.mapper.MailMapper;
+import com.codestates.main.mail.service.MailService;
 import com.codestates.main.member.dto.MemberDTO;
 import com.codestates.main.member.entity.Member;
 import com.codestates.main.member.mapper.MemberMapper;
@@ -18,8 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController
@@ -28,13 +30,14 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
-
+    private final MailMapper mailMapper;
     private final QuestionCategoryService questionCategoryService;
 
     private final SubscriptionService subscriptionService;
 
     private final SubscriptionMapper subscriptionMapper;
 
+    private final MailService mailService;
     @PostMapping("/post")
     //@Transactional
     public ResponseEntity<Object> postMember(@RequestBody MemberDTO.Post requestBody) throws BusinessLogicException {
@@ -60,4 +63,6 @@ public class MemberController {
         SubscriptionDTO.Response response = subscriptionMapper.subscriptionToSubscriptionResponseDTO(subscription);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
+
+
 }

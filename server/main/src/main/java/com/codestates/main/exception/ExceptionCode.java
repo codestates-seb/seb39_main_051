@@ -10,8 +10,8 @@ public enum ExceptionCode {
     POST_NOT_FOUND(404, "Post not found"),
     COMMENT_NOT_FOUND(404, "Comment not found"),
     QUESTION_NOT_FOUND(404, "Question not found"),
-
-    ANSWER_NOT_FOUND(404, "Answer not found");
+    ANSWER_NOT_FOUND(404, "Answer not found"),
+    AUTH_NOT_FOUND(400,"Invalid Auth Request");
     @Getter
     private int status;
 
