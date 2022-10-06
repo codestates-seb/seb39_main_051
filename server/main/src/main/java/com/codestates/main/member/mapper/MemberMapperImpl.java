@@ -125,4 +125,6 @@ public class MemberMapperImpl implements MemberMapper{
         picture = member.getPicture();
         return new MemberDTO.JwtResponse(memberId, email, nickname, picture, role);
     }
+
+
 }

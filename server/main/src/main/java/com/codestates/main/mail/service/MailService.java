@@ -1,6 +1,8 @@
-package com.codestates.main.mail;
+package com.codestates.main.mail.service;
 
+import com.codestates.main.mail.entity.MailAuth;
 import com.codestates.main.member.entity.Member;
+import com.codestates.main.mail.repository.MailAuthRepository;
 import com.codestates.main.member.service.MemberService;
 import com.codestates.main.question.entity.Question;
 import com.codestates.main.question.service.QuestionService;
@@ -8,21 +10,15 @@ import com.codestates.main.questionCategory.entity.QuestionCategory;
 import com.codestates.main.subscription.entity.Subscription;
 import com.codestates.main.subscription.service.SubscriptionService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -32,9 +28,51 @@ public class MailService {
     private final MemberService memberService;
     private final SubscriptionService subscriptionService;
     private final QuestionService questionService;
+    private final MailAuthRepository mailAuthRepository;
 
-    @Scheduled(cron = "*/30 * * * * *")     // 00/20/40 초 마다
-    //@Scheduled(cron = "0 0 8 ? * MON-SUN") //실제 서비스 시 (주말 제외 모든 요일에 아침 8시)
+    public MailAuth sendAuthMail(MailAuth mailAuth) throws MessagingException {
+        Random random = new Random();
+        String certificationNumber = String.valueOf(random.nextInt(88888)+11111);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mailHelper = new MimeMessageHelper(mimeMessage,true,"UTF-8");
+        mailHelper.setFrom("MaeilMail <shb03207@naver.com>");
+        mailHelper.setTo(mailAuth.getEmail());
+        String mailContent = "인증번호: "+certificationNumber+" 입니다.";
+        mailHelper.setText(mailContent);
+        javaMailSender.send(mimeMessage);
+        mailAuth.setCertificationNumber(certificationNumber);
+        return createMailAuth(mailAuth);
+    }
+
+    public MailAuth createMailAuth(MailAuth mailAuth){
+        Optional<MailAuth> foundMailAuth = Optional.ofNullable(mailAuthRepository.findByEmail(mailAuth.getEmail()));
+        foundMailAuth.ifPresent(mailAuthRepository::delete);
+        return mailAuthRepository.save(mailAuth);
+    }
+
+    public MailAuth authMail(MailAuth mailAuth) {
+        String email = mailAuth.getEmail();
+        String certificationNumber = mailAuth.getCertificationNumber();
+        MailAuth foundMailAuth = mailAuthRepository.findByEmail(email);
+
+        if(foundMailAuth!=null){
+            if(certificationNumber.equals(foundMailAuth.getCertificationNumber())){
+                Objects.requireNonNull(foundMailAuth).setAuthed(MailAuth.Authed.UNCERTIFIED);
+                foundMailAuth.setAuthed(MailAuth.Authed.CERTIFIED);
+            }
+            return foundMailAuth;
+        }
+
+
+        return null;
+    }
+
+    public boolean keyMatches(String s1, String s2){
+        return Objects.equals(s1, s2);
+    }
+
+    //Scheduled(cron = "*/30 * * * * *")     // 00/20/40 초 마다
+    @Scheduled(cron = "0 0 7 ? * MON-SUN") //실제 서비스 시 (주말 제외 모든 요일에 아침 8시)
     //@Transactional
     public void scheduleTest() throws MessagingException {
         /*
@@ -108,4 +146,5 @@ public class MailService {
 
         System.out.println(LocalDateTime.now());
     }
+
 }
