@@ -58,7 +58,7 @@ const PostCardTitle = styled.a`
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: bold;
-  /* border: 1px solid red; */
+  line-height: normal;
   cursor: pointer;
   @media screen and (max-width: 413px) {
     white-space: normal;
