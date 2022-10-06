@@ -38,27 +38,38 @@ const QuestionBoardPage = () => {
     if ((value !== '') & (categoryArr.indexOf(category) !== -1)) {
       axios
         .get(
-          `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+          process.env.REACT_APP_API_URL +
+            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
         )
         .then((res) => {
           setData(res.data.data);
         });
     } else if (value !== '') {
       axios
-        .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+        .get(
+          process.env.REACT_APP_API_URL +
+            `/questions/search?keyword=${value}&page=${page}&size=10`
+        )
         .then((res) => {
           setData(res.data.data);
         });
     } else if (categoryArr.indexOf(category) !== -1) {
       axios
         .get(
-          `/questions?questionCategory=${category}&page=${page}&size=${size}`
+          process.env.REACT_APP_API_URL +
+            `/questions?questionCategory=${category}&page=${page}&size=${size}`
         )
-        .then((res) => setData(res.data.data));
+        .then((res) => {
+          setData(res.data.data);
+        });
     } else {
-      axios.get(`/questions?page=${page}&size=${size}`).then((res) => {
-        setData(res.data.data);
-      });
+      axios
+        .get(
+          process.env.REACT_APP_API_URL + `/questions?page=${page}&size=${size}`
+        )
+        .then((res) => {
+          setData(res.data.data);
+        });
       navigate('/questions');
     }
   }, [category, page, value]);
@@ -79,12 +90,16 @@ const QuestionBoardPage = () => {
       if (categoryArr.indexOf(category) !== -1) {
         axios
           .get(
-            `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
+            process.env.REACT_APP_API_URL +
+              `/questions/search?questionCategory=${category}&keyword=${value}&page=${page}&size=10`
           )
           .then((res) => setData(res.data.data));
       } else {
         axios
-          .get(`/questions/search?keyword=${value}&page=${page}&size=10`)
+          .get(
+            process.env.REACT_APP_API_URL +
+              `/questions/search?keyword=${value}&page=${page}&size=10`
+          )
           .then((res) => {
             setData(res.data.data);
           });
@@ -125,6 +140,7 @@ const QuestionBoardPage = () => {
               category={el.questionCategory.name}
               writer={el.member.nickname}
               createdAt={el.createdAt}
+              picture={el.member.picture}
               onClick={() => navigateToQuestionPage(el.questionId)}
             />
           ))}
@@ -161,7 +177,7 @@ const MenuWrapper = styled.div`
   justify-content: space-between;
   width: 80%;
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 413px) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

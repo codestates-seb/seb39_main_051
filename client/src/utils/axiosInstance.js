@@ -3,13 +3,12 @@ import { getCookie } from './cookie';
 
 const isTokenAlive = getCookie('accessToken') || null;
 let token;
-
 if (isTokenAlive) {
   token = isTokenAlive;
 }
 
 const axiosInstance = axios.create({
-  baseUrl: 'http://3.86.101.132:8080',
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 axiosInstance.defaults.headers.common['Authorization'] = token;
