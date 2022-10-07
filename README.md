@@ -56,10 +56,12 @@
 - `Lombok`
 - `Mapstruct`
 - `Swagger`
+- `Google SMTP`
 
 ### **배포**
 - `AWS EC2`
 - `AWS amplify`
+- `AWS S3`
 
 ### **문서/협업**
 
