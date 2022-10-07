@@ -107,6 +107,8 @@
 
 - 질문, 답변 좋아요
 
+- 회원 구독 카테고리 메일 전송
+
 ## API 문서
 회원 관련 API
 https://documenter.getpostman.com/view/21358738/2s83mbpjZN
