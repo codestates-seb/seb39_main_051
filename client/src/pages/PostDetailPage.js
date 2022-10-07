@@ -254,6 +254,8 @@ const Content = styled.div`
   margin: 1% 0;
   border: 1px solid #d4d4d4;
   min-height: 20rem;
+  white-space: pre-line;
+  padding: 1rem;
 `;
 const LikesWrapper = styled.div`
   display: flex;

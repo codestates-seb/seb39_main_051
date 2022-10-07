@@ -291,6 +291,8 @@ const AnswerContent = styled.div`
     font-size: 2rem;
     width: 85%;
     margin-right: 0.5%;
+    line-height:normal;
+    white-space: pre-line;
   }
   .answerLikes {
     min-width: 5%;

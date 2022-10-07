@@ -54,7 +54,7 @@ const HomePage = () => {
               <Animator animation={batch(Sticky(), Fade(), MoveOut(0, -200))}>
                 <WhiteFont>
                   <Logo />
-                  <div className='web'>구독형 면접 질문 테스트</div>
+                  <div className='web'>구독형 면접 질문</div>
                   <div className='web'>메일 서비스</div>
                   <div className='web'>MAEILMAIL</div>
                   <div className='web'>매일메일</div>

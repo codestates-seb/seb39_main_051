@@ -109,7 +109,7 @@ const PostPage = () => {
 
   useEffect(() => {
     if ((type === 'questions') & !category) {
-      setSelected('자바');
+      setSelected('Java');
     } else if ((type === 'free') & !category) {
       setSelected('취업 정보');
     } else if ((type === 'suggestion') & !category) {
