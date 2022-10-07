@@ -189,6 +189,7 @@ const CommentContent = styled.div`
   }
   .commentContent {
     width: 85%;
+    white-space: pre-line;
   }
   .commentlikes {
     width: 5%;
