@@ -2,6 +2,109 @@
 
 코드스테이츠 seb39_main_051팀 
 
+매일 아침 면접 질문을 이메일로 받아보는 구독 서비스 - 매일 메일
+
+## 시연화면
+
+### 랜딩 페이지
+<p align="center">
+  <br>
+  <img src="./client/images/landing Page.gif">
+  <br>
+</p>
+
+### 회원 가입
+<p align="center">
+  <br>
+  <img src="./client/images/signup.gif">
+  <br>
+</p>
+
+### 로그인
+<p align="center">
+  <br>
+  <img src="./client/images/signin.gif">
+  <br>
+</p>
+
+### 구독페이지
+<p align="center">
+  <br>
+  <img src="./client/images/subscribe.gif">
+  <br>
+</p>
+
+### 메일 확인
+<p align="center">
+  <br>
+  <img src="./client/images/email.gif">
+  <br>
+</p>
+
+### 질문 답변 게시판
+<p align="center">
+  <br>
+  <img src="./client/images/question.gif">
+  <br>
+</p>
+
+### 답변 페이지
+<p align="center">
+  <br>
+  <img src="./client/images/answer.gif">
+  <br>
+</p>
+
+### 자유 게시판
+<p align="center">
+  <br>
+  <img src="./client/images/answer.gif">
+  <br>
+</p>
+
+### 건의 게시판
+<p align="center">
+  <br>
+  <img src="./client/images/suggestion.gif">
+  <br>
+</p>
+
+### 게시글 작성 화면
+<p align="center">
+  <br>
+  <img src="./client/images/write.gif">
+  <br>
+</p>
+
+### 마이 페이지 - 대시보드
+<p align="center">
+  <br>
+  <img src="./client/images/dashboard.gif">
+  <br>
+</p>
+
+### 마이 페이지 - 프로필 사진 변경
+<p align="center">
+  <br>
+  <img src="./client/images/picture.gif">
+  <br>
+</p>
+
+### 마이 페이지 - 닉네임 변경 변경
+<p align="center">
+  <br>
+  <img src="./client/images/nickname.gif">
+  <br>
+</p>
+
+### 마이 페이지 - 비밀 번호 변경
+<p align="center">
+  <br>
+  <img src="./client/images/password.gif">
+  <br>
+</p>
+
+
 ## 프로젝트 요약
 
 기술 면접 대비를 위한 예상 질문을 매일 메일을 보내주는 서비스입니다.
