@@ -9,7 +9,7 @@
 ### 랜딩 페이지
 <p align="center">
   <br>
-  <img src="./client/images/landing Page.gif">
+  <img src="./client/images/landingPage.gif">
   <br>
 </p>
 
